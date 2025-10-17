@@ -1,4 +1,4 @@
-// Arweave deployment configuration for Glyph Potluck
+// Arweave deployment configuration for Lattelier
 const path = require('path');
 
 module.exports = {
@@ -10,20 +10,20 @@ module.exports = {
   buildCommand: 'npm run build',
   
   // Deployment settings
-  appName: 'Glyph Potluck',
-  description: 'Convert hand-drawn glyphs to vector fonts',
+  appName: 'Lattelier',
+  description: 'Professional lattice distortion and pattern generation tool',
   
   // ArNS configuration (optional)
-  arnsName: 'glyph-potluck', // Reserve this name for later
+  arnsName: 'lattelier', // Reserve this name for later
   
   // Tags for discovery
   tags: [
-    { name: 'App-Name', value: 'Glyph-Potluck' },
+    { name: 'App-Name', value: 'Lattelier' },
     { name: 'App-Version', value: process.env.npm_package_version || '0.1.0' },
     { name: 'Content-Type', value: 'text/html' },
     { name: 'App-Type', value: 'web-app' },
-    { name: 'Category', value: 'font-tools' },
-    { name: 'Keywords', value: 'fonts,typography,vector,handwriting' }
+    { name: 'Category', value: 'design-tools' },
+    { name: 'Keywords', value: 'lattice,grid,distortion,pattern,design,generative,art' }
   ],
   
   // Deployment options

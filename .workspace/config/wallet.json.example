@@ -1,0 +1,12 @@
+{
+  "kty": "RSA",
+  "n": "YOUR_WALLET_N_VALUE_HERE",
+  "e": "AQAB",
+  "d": "YOUR_WALLET_D_VALUE_HERE",
+  "p": "YOUR_WALLET_P_VALUE_HERE",
+  "q": "YOUR_WALLET_Q_VALUE_HERE",
+  "dp": "YOUR_WALLET_DP_VALUE_HERE",
+  "dq": "YOUR_WALLET_DQ_VALUE_HERE",
+  "qi": "YOUR_WALLET_QI_VALUE_HERE"
+}
+

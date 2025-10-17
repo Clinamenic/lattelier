@@ -39,6 +39,10 @@ tsconfig.tsbuildinfo
 .specstory/
 .obsidian/
 
+# Arweave deployment (NEVER commit wallet or deployment history)
+.workspace/config/wallet.json
+.workspace/config/deployments.json
+
 # Python virtual environments
 .venv/
 python-env/

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Glyph Potluck - Streamlined Arweave Deployment Script
+# Lattelier - Streamlined Arweave Deployment Script
 # Usage: ./deploy-to-arweave.sh [--dev|--prod]
 
 set -e  # Exit on any error
@@ -101,12 +101,12 @@ deploy() {
     local version=$(node -p "require('./package.json').version" 2>/dev/null || echo "unknown")
     
     # Create deployment tags
-    local tags="--tag App-Name Glyph-Potluck"
+    local tags="--tag App-Name Lattelier"
     tags="$tags --tag App-Version $version"
     tags="$tags --tag Content-Type text/html"
     tags="$tags --tag App-Type web-app"
-    tags="$tags --tag Category font-tools"
-    tags="$tags --tag Keywords fonts,typography,vector,handwriting"
+    tags="$tags --tag Category design-tools"
+    tags="$tags --tag Keywords lattice,grid,distortion,pattern,design,generative,art"
     
     if [[ "$env_flag" == "--dev" ]]; then
         tags="$tags --tag Environment development"
@@ -184,8 +184,8 @@ EOF
 
 # Main execution
 main() {
-    log_info "🚀 Glyph Potluck - Arweave Deployment"
-    log_info "======================================"
+    log_info "🚀 Lattelier - Arweave Deployment"
+    log_info "=================================="
     
     local env_flag="${1:---prod}"
     

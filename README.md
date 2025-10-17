@@ -55,29 +55,45 @@ The built files will be in the `dist` directory.
 
 Lattelier is designed to be deployed to [Arweave](https://arweave.org), a permanent, decentralized storage network.
 
-**Quick Deployment:**
+**Automated Deployment (Recommended):**
 
-1. Build the production assets:
-   ```bash
-   npm run build
-   ```
+Lattelier includes pre-configured deployment scripts:
 
-2. Deploy the `dist/` folder to Arweave using one of these tools:
-   - **[ArDrive](https://ardrive.io)**: Drag and drop the `dist/` folder
-   - **[Arkb](https://github.com/textury/arkb)**: CLI tool for batch uploads
-   - **[Bundlr](https://bundlr.network)**: Fast, reliable uploads
-   - **[ar.io](https://ar.io)**: Decentralized gateways
-
-3. Access your permanent application via the Arweave transaction ID or gateway URL
-
-**Example using Arkb:**
 ```bash
-# Install arkb
-npm install -g arkb
+# Production deployment with confirmation
+npm run deploy
 
-# Deploy (requires Arweave wallet)
-arkb deploy dist/ --wallet-file ./wallet.json
+# Development deployment
+npm run deploy:dev
+
+# Quick deployment (minimal logging)
+npm run deploy:quick
 ```
+
+**Prerequisites:**
+1. Install [arkb](https://github.com/textury/arkb): `npm install -g arkb`
+2. Get an [Arweave wallet](https://arweave.app) with AR tokens
+3. Save your wallet to `.workspace/config/wallet.json`
+
+**Manual Deployment:**
+
+```bash
+# 1. Build the app
+npm run build
+
+# 2. Deploy with arkb
+arkb deploy dist/ --wallet .workspace/config/wallet.json
+```
+
+**Deployment Guide:**
+
+For detailed instructions, troubleshooting, and best practices, see:
+- [Arweave Deployment Guide](.workspace/docs/temp/arweave-deployment-guide.md)
+
+**Alternative Tools:**
+- **[ArDrive](https://ardrive.io)**: Drag and drop the `dist/` folder
+- **[Bundlr](https://bundlr.network)**: Fast, reliable uploads
+- **[ar.io](https://ar.io)**: Decentralized gateways and ArNS names
 
 Your Lattelier deployment will be **permanently accessible** and **immutable** on the permaweb!
 

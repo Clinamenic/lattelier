@@ -1,0 +1,68 @@
+{
+    "version": "1.0.0",
+    "metadata": {
+        "name": "Simple Test Pattern",
+        "description": "A basic square grid with one attraction well for testing import functionality",
+        "createdAt": "2025-10-16T21:00:00.000Z",
+        "modifiedAt": "2025-10-16T21:00:00.000Z",
+        "tags": [
+            "test",
+            "simple"
+        ],
+        "author": "Grid Pincher Test Suite"
+    },
+    "grid": {
+        "type": "square",
+        "rows": 20,
+        "columns": 20,
+        "spacing": 25,
+        "points": {
+            "show": true,
+            "size": 2,
+            "color": "#1f2937",
+            "opacity": 0.8
+        },
+        "lines": {
+            "show": true,
+            "width": 1.5,
+            "frequency": 1.0,
+            "curvature": 0.0,
+            "color": "#6366f1",
+            "opacity": 0.8
+        },
+        "fill": {
+            "show": false,
+            "frequency": 1.0,
+            "color": "#3b82f6",
+            "opacity": 0.3,
+            "blendMode": "source-over"
+        },
+        "canvas": {
+            "backgroundColor": "#ffffff"
+        }
+    },
+    "distortion": {
+        "globalStrength": 1,
+        "wells": [
+            {
+                "id": "well-test-1",
+                "position": {
+                    "x": 250,
+                    "y": 250
+                },
+                "strength": 0.7,
+                "radius": 150,
+                "falloff": "smooth",
+                "distortion": 0,
+                "enabled": true,
+                "showRadialLines": false
+            }
+        ]
+    },
+    "viewport": {
+        "x": 50,
+        "y": 50,
+        "zoom": 1,
+        "includeInExport": true
+    }
+}

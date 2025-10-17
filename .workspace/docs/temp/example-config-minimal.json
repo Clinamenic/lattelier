@@ -1,0 +1,42 @@
+{
+    "version": "1.0.0",
+    "metadata": {
+        "name": "Simple Square Grid",
+        "createdAt": "2025-10-16T14:00:00.000Z",
+        "modifiedAt": "2025-10-16T14:00:00.000Z"
+    },
+    "grid": {
+        "type": "square",
+        "rows": 30,
+        "columns": 30,
+        "spacing": 20,
+        "points": {
+            "show": true,
+            "size": 2,
+            "color": "#1f2937",
+            "opacity": 0.8
+        },
+        "lines": {
+            "show": true,
+            "width": 1.5,
+            "frequency": 1.0,
+            "curvature": 0.0,
+            "color": "#6366f1",
+            "opacity": 0.8
+        },
+        "fill": {
+            "show": false,
+            "frequency": 1.0,
+            "color": "#3b82f6",
+            "opacity": 0.3,
+            "blendMode": "normal"
+        },
+        "canvas": {
+            "backgroundColor": "#f9fafb"
+        }
+    },
+    "distortion": {
+        "globalStrength": 1.0,
+        "wells": []
+    }
+}

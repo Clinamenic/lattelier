@@ -1,0 +1,148 @@
+{
+    "version": "1.0.0",
+    "metadata": {
+        "name": "Psychedelic Chaos Mesh",
+        "description": "High-density triangular grid with multiple chaotic distortions, thick curved lines, and multiply blend mode for layered depth. Inspired by 60s poster art.",
+        "createdAt": "2025-10-16T09:15:30.789Z",
+        "modifiedAt": "2025-10-16T11:42:18.234Z",
+        "tags": [
+            "complex",
+            "artistic",
+            "psychedelic",
+            "high-density",
+            "colorful"
+        ],
+        "author": "ArtistExplorer"
+    },
+    "grid": {
+        "type": "triangular",
+        "rows": 120,
+        "columns": 120,
+        "spacing": 12,
+        "points": {
+            "show": false,
+            "size": 1,
+            "color": "#ff00ff",
+            "opacity": 0.6
+        },
+        "lines": {
+            "show": true,
+            "width": 4.5,
+            "frequency": 0.65,
+            "curvature": 0.85,
+            "color": "#00ffff",
+            "opacity": 0.75
+        },
+        "fill": {
+            "show": true,
+            "frequency": 0.25,
+            "color": "#ff6600",
+            "opacity": 0.4,
+            "blendMode": "multiply"
+        },
+        "canvas": {
+            "backgroundColor": "#0a0a0a"
+        }
+    },
+    "distortion": {
+        "globalStrength": 1.0,
+        "wells": [
+            {
+                "id": "well-1697450130789",
+                "position": {
+                    "x": 250,
+                    "y": 300
+                },
+                "strength": 0.92,
+                "radius": 280,
+                "falloff": "smooth",
+                "distortion": 0.75,
+                "enabled": true,
+                "showRadialLines": false
+            },
+            {
+                "id": "well-1697450130790",
+                "position": {
+                    "x": 750,
+                    "y": 400
+                },
+                "strength": -0.88,
+                "radius": 250,
+                "falloff": "exponential",
+                "distortion": 0.9,
+                "enabled": true,
+                "showRadialLines": true
+            },
+            {
+                "id": "well-1697450130791",
+                "position": {
+                    "x": 450,
+                    "y": 700
+                },
+                "strength": 0.65,
+                "radius": 320,
+                "falloff": "linear",
+                "distortion": 0.55,
+                "enabled": true,
+                "showRadialLines": false
+            },
+            {
+                "id": "well-1697450130792",
+                "position": {
+                    "x": 900,
+                    "y": 800
+                },
+                "strength": -0.45,
+                "radius": 200,
+                "falloff": "quadratic",
+                "distortion": 0.8,
+                "enabled": true,
+                "showRadialLines": false
+            },
+            {
+                "id": "well-1697450130793",
+                "position": {
+                    "x": 600,
+                    "y": 200
+                },
+                "strength": 0.35,
+                "radius": 380,
+                "falloff": "smooth",
+                "distortion": 0.2,
+                "enabled": true,
+                "showRadialLines": false
+            },
+            {
+                "id": "well-1697450130794",
+                "position": {
+                    "x": 1100,
+                    "y": 500
+                },
+                "strength": -0.7,
+                "radius": 190,
+                "falloff": "exponential",
+                "distortion": 0.95,
+                "enabled": true,
+                "showRadialLines": true
+            },
+            {
+                "id": "well-1697450130795",
+                "position": {
+                    "x": 350,
+                    "y": 950
+                },
+                "strength": 0.55,
+                "radius": 240,
+                "falloff": "smooth",
+                "distortion": 0.4,
+                "enabled": false
+            }
+        ]
+    },
+    "viewport": {
+        "x": -200,
+        "y": -150,
+        "zoom": 0.8,
+        "includeInExport": true
+    }
+}

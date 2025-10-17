@@ -1,0 +1,16 @@
+{
+    "version": "1.0.0",
+    "metadata": {
+        "description": "Missing required name field"
+    },
+    "grid": {
+        "type": "square",
+        "rows": 250,
+        "columns": 10,
+        "spacing": 25
+    },
+    "distortion": {
+        "globalStrength": 1,
+        "wells": []
+    }
+}

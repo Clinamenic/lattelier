@@ -1,0 +1,95 @@
+{
+    "version": "1.0.0",
+    "metadata": {
+        "name": "Complex Hexagonal Pattern",
+        "description": "Hexagonal grid with curved lines, fill, and multiple attraction/repulsion wells",
+        "createdAt": "2025-10-16T21:30:00.000Z",
+        "modifiedAt": "2025-10-16T21:45:00.000Z",
+        "tags": [
+            "test",
+            "complex",
+            "hexagonal"
+        ],
+        "author": "Grid Pincher Test Suite"
+    },
+    "grid": {
+        "type": "hexagonal",
+        "rows": 40,
+        "columns": 40,
+        "spacing": 18,
+        "points": {
+            "show": true,
+            "size": 1.5,
+            "color": "#374151",
+            "opacity": 0.6
+        },
+        "lines": {
+            "show": true,
+            "width": 3,
+            "frequency": 0.7,
+            "curvature": 0.5,
+            "color": "#8b5cf6",
+            "opacity": 0.9
+        },
+        "fill": {
+            "show": true,
+            "frequency": 0.4,
+            "color": "#a78bfa",
+            "opacity": 0.2,
+            "blendMode": "multiply"
+        },
+        "canvas": {
+            "backgroundColor": "#f3f4f6"
+        }
+    },
+    "distortion": {
+        "globalStrength": 1,
+        "wells": [
+            {
+                "id": "well-attract-1",
+                "position": {
+                    "x": 200,
+                    "y": 200
+                },
+                "strength": 0.8,
+                "radius": 180,
+                "falloff": "smooth",
+                "distortion": 0.2,
+                "enabled": true,
+                "showRadialLines": false
+            },
+            {
+                "id": "well-repel-1",
+                "position": {
+                    "x": 500,
+                    "y": 200
+                },
+                "strength": -0.6,
+                "radius": 200,
+                "falloff": "exponential",
+                "distortion": 0.1,
+                "enabled": true,
+                "showRadialLines": true
+            },
+            {
+                "id": "well-attract-2",
+                "position": {
+                    "x": 350,
+                    "y": 450
+                },
+                "strength": 0.5,
+                "radius": 150,
+                "falloff": "quadratic",
+                "distortion": 0.3,
+                "enabled": true,
+                "showRadialLines": false
+            }
+        ]
+    },
+    "viewport": {
+        "x": 100,
+        "y": 100,
+        "zoom": 1.2,
+        "includeInExport": true
+    }
+}

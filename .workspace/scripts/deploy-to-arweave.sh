@@ -120,6 +120,7 @@ deploy() {
     log_info "Uploading to Arweave network..."
     local deploy_output=$(arkb deploy "$BUILD_DIR" \
         --wallet "$WALLET_PATH" \
+        --auto-confirm \
         --verbose 2>&1)
     
     if [[ $? -eq 0 ]]; then

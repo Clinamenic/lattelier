@@ -36,6 +36,6 @@ fi
 
 # Deploy directly with arkb for maximum speed
 echo -e "${GREEN}Deploying to Arweave with arkb...${NC}"
-arkb deploy dist --wallet .workspace/config/wallet.json
+arkb deploy dist --wallet .workspace/config/wallet.json --auto-confirm
 
 echo -e "${GREEN}✅ Quick deployment complete!${NC}"

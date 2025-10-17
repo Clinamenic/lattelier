@@ -4,18 +4,18 @@ const path = require('path');
 module.exports = {
   // Wallet configuration
   walletPath: path.join(__dirname, 'wallet.json'),
-  
+
   // Build configuration
   buildDir: 'dist',
   buildCommand: 'npm run build',
-  
+
   // Deployment settings
   appName: 'Lattelier',
   description: 'Professional lattice distortion and pattern generation tool',
-  
+
   // ArNS configuration (optional)
   arnsName: 'lattelier', // Reserve this name for later
-  
+
   // Tags for discovery
   tags: [
     { name: 'App-Name', value: 'Lattelier' },
@@ -25,15 +25,15 @@ module.exports = {
     { name: 'Category', value: 'design-tools' },
     { name: 'Keywords', value: 'lattice,grid,distortion,pattern,design,generative,art' }
   ],
-  
+
   // Deployment options
   options: {
     // Automatically open the deployed app after upload
     openAfterDeploy: true,
-    
+
     // Show verbose output during deployment
     verbose: true,
-    
+
     // Retry failed uploads
     retryAttempts: 3
   }

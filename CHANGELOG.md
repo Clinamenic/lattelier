@@ -5,6 +5,32 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.2.0 - 2025-10-17
+
+### Added
+- **Complete CSS Architecture Overhaul**: Replaced Tailwind CSS with custom, semantic CSS system
+- **Component-Based Styling**: Implemented isolated CSS files for each component
+- **Design System**: Comprehensive design tokens with CSS custom properties
+- **Enhanced UI Components**: Redesigned all components with consistent styling patterns
+- **Performance Optimizations**: Reduced bundle size and improved rendering performance
+- **Planning Documentation**: Added comprehensive planning documents for future features
+  - Partial fill patterns planning document
+  - Alternative grid types implementation guide
+  - Component migration strategies
+  - CSS architecture design documentation
+
+### Changed
+- **Styling System**: Complete migration from Tailwind CSS to custom CSS architecture
+- **Component Structure**: Updated all React components with new CSS classes
+- **Build Configuration**: Updated PostCSS configuration for custom CSS processing
+- **Bundle Size**: Significantly reduced JavaScript bundle size by removing Tailwind dependency
+
+### Technical
+- **CSS Architecture**: Implemented semantic, maintainable CSS with component isolation
+- **Design Tokens**: Established comprehensive design system with CSS variables
+- **Build System**: Updated build pipeline for custom CSS processing
+- **Performance**: Improved rendering performance and reduced memory usage
+
 ## 0.1.0 - 2025-10-17
 
 ### Added

@@ -53,6 +53,12 @@ interface AppState {
     setActiveTool: (tool: Tool) => void;
     toggleLeftSidebar: () => void;
     toggleRightSidebar: () => void;
+
+    // Shuffle action
+    shuffleSettings: () => void;
+
+    // Viewport adjustment
+    adjustViewportToFit: () => void;
 }
 
 const gridEngine = new GridEngine();
@@ -82,7 +88,7 @@ const defaultGridConfig: GridConfig = {
     fillOpacity: 0.3,
     showPoints: true,
     showLines: true,
-    showFill: false,
+    showFill: true,
     pointColor: '#1f2937',
     lineColor: '#6366f1',
     fillColor: '#3b82f6',
@@ -170,7 +176,6 @@ export const useAppStore = create<AppState>((set, get) => ({
                 falloff: well.falloff,
                 distortion: Math.max(0, Math.min(1, well.distortion)),
                 enabled: well.enabled,
-                showRadialLines: well.showRadialLines,
             }));
 
             set((state) => ({
@@ -195,7 +200,6 @@ export const useAppStore = create<AppState>((set, get) => ({
             radius: 150,
             falloff: 'smooth',
             enabled: true,
-            showRadialLines: false,
             distortion: 0,
         };
 
@@ -305,6 +309,148 @@ export const useAppStore = create<AppState>((set, get) => ({
             const newValue = !state.rightSidebarCollapsed;
             localStorage.setItem('rightSidebarCollapsed', JSON.stringify(newValue));
             return { rightSidebarCollapsed: newValue };
+        });
+    },
+
+    // Shuffle action
+    shuffleSettings: () => {
+        const { gridConfig, baseGrid } = get();
+
+        // Helper functions for random generation
+        const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const randomFloat = (min: number, max: number) => Math.random() * (max - min) + min;
+        const randomChoice = <T>(choices: T[]): T => choices[Math.floor(Math.random() * choices.length)];
+        const randomHexColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+
+        // Calculate actual grid bounds from baseGrid points
+        const calculateGridBounds = (points: GridPoint[]) => {
+            if (points.length === 0) {
+                return { minX: 0, minY: 0, maxX: 100, maxY: 100 };
+            }
+
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+            for (const point of points) {
+                const { x, y } = point.originalPosition;
+                minX = Math.min(minX, x);
+                minY = Math.min(minY, y);
+                maxX = Math.max(maxX, x);
+                maxY = Math.max(maxY, y);
+            }
+
+            return { minX, minY, maxX, maxY };
+        };
+
+        // Generate random grid config (preserving dimensions)
+        const newGridConfig: GridConfig = {
+            ...gridConfig,
+            // Randomize visual settings
+            gridType: randomChoice(['square', 'triangular']),
+            spacing: randomInt(5, 100),
+            pointSize: randomFloat(0.5, 5),
+            pointOpacity: randomFloat(0, 1),
+            lineWidth: randomFloat(0.5, 10),
+            lineFrequency: randomFloat(0, 1),
+            lineCurvature: randomFloat(0, 1),
+            lineOpacity: randomFloat(0, 1),
+            fillFrequency: randomFloat(0, 1),
+            fillOpacity: randomFloat(0, 1),
+            pointColor: randomHexColor(),
+            lineColor: randomHexColor(),
+            fillColor: randomHexColor(),
+            canvasBackgroundColor: randomHexColor(),
+            blendMode: randomChoice(['normal', 'multiply', 'screen', 'overlay']),
+        };
+
+        // Generate random wells (0-8 wells) within actual grid bounds
+        const wellCount = randomInt(0, 8);
+        const wells: Well[] = [];
+
+        // Calculate bounds for the NEW grid configuration
+        // We need to generate a temporary grid to get the correct bounds
+        const tempGrid = gridEngine.generateGrid(newGridConfig);
+        const gridBounds = calculateGridBounds(tempGrid);
+
+        for (let i = 0; i < wellCount; i++) {
+            const well: Well = {
+                id: `well-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                position: {
+                    x: randomFloat(gridBounds.minX, gridBounds.maxX),
+                    y: randomFloat(gridBounds.minY, gridBounds.maxY),
+                },
+                strength: randomFloat(-1, 1),
+                radius: randomFloat(50, 500),
+                falloff: randomChoice(['linear', 'quadratic', 'exponential', 'smooth']),
+                distortion: randomFloat(0, 1),
+                enabled: Math.random() < 0.8, // 80% enabled
+            };
+            wells.push(well);
+        }
+
+        // Apply all changes atomically
+        set({
+            gridConfig: newGridConfig,
+            deformation: {
+                wells,
+                globalStrength: randomFloat(0.5, 2.0),
+            },
+            selectedWellId: null, // Clear selection
+        });
+
+        // Regenerate grids with new settings
+        get().regenerateGrid();
+
+        // Auto-adjust viewport to fit the new pattern
+        get().adjustViewportToFit();
+    },
+
+    // Viewport adjustment
+    adjustViewportToFit: () => {
+        const { deformedGrid } = get();
+
+        if (deformedGrid.length === 0) return;
+
+        // Calculate grid bounds with padding
+        const padding = 50; // Extra padding around the pattern
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+        for (const point of deformedGrid) {
+            const { x, y } = point.currentPosition;
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+        }
+
+        const patternWidth = maxX - minX + (padding * 2);
+        const patternHeight = maxY - minY + (padding * 2);
+        const patternCenterX = (minX + maxX) / 2;
+        const patternCenterY = (minY + maxY) / 2;
+
+        // Get actual canvas dimensions from the DOM
+        const canvas = document.querySelector('canvas');
+        const canvasWidth = canvas?.clientWidth || 1200; // Fallback to reasonable default
+        const canvasHeight = canvas?.clientHeight || 800; // Fallback to reasonable default
+
+        // Calculate optimal zoom to fit the pattern with more breathing room
+        const zoomX = canvasWidth / patternWidth;
+        const zoomY = canvasHeight / patternHeight;
+        const baseZoom = Math.min(zoomX, zoomY, 2.0); // Cap at 2x zoom max
+
+        // Apply a zoom-out factor to give more breathing room (0.8 = 20% more zoomed out)
+        const optimalZoom = baseZoom * 0.8;
+
+        // Center the pattern in the viewport
+        const newViewportX = (canvasWidth / 2) - (patternCenterX * optimalZoom);
+        const newViewportY = (canvasHeight / 2) - (patternCenterY * optimalZoom);
+
+        // Apply the new viewport
+        set({
+            viewport: {
+                x: newViewportX,
+                y: newViewportY,
+                zoom: Math.max(0.1, optimalZoom), // Ensure minimum zoom
+            }
         });
     },
 }));

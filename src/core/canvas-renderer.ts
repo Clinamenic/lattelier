@@ -89,25 +89,21 @@ export class CanvasRenderer {
             ? wells.filter(w => w.id === hoveredWellId)
             : wells;
 
-        // Render radial lines first (behind everything)
-        if (shouldShowWells) {
-            this.renderRadialLines(points, wellsToShow);
-        }
 
-        if (config.showFill) {
+        if (config.fillOpacity > 0) {
             this.renderFill(points, config);
         }
 
-        if (config.showLines) {
+        if (config.lineOpacity > 0) {
             this.renderLines(points, config);
         }
 
-        if (config.showPoints) {
+        if (config.pointOpacity > 0) {
             this.renderPoints(points, config);
         }
 
         if (shouldShowWells) {
-            this.renderWells(wellsToShow);
+            this.renderWells(wellsToShow, hoveredWellId);
         }
 
         // Restore the transform applied by applyTransform()
@@ -272,10 +268,10 @@ export class CanvasRenderer {
         return (Math.abs(hash) % 1000) / 1000; // Normalize to 0-1
     }
 
-        private renderFill(points: GridPoint[], config: GridConfig): void {
-            this.ctx.fillStyle = config.fillColor;
-            this.ctx.globalAlpha = config.fillOpacity;
-            this.ctx.globalCompositeOperation = config.blendMode as GlobalCompositeOperation;
+    private renderFill(points: GridPoint[], config: GridConfig): void {
+        this.ctx.fillStyle = config.fillColor;
+        this.ctx.globalAlpha = config.fillOpacity;
+        this.ctx.globalCompositeOperation = config.blendMode as GlobalCompositeOperation;
 
         const pointMap = new Map<string, GridPoint>();
         for (const point of points) {
@@ -286,19 +282,17 @@ export class CanvasRenderer {
             this.renderSquareFaces(points, pointMap, config);
         } else if (config.gridType === 'triangular') {
             this.renderTriangularFaces(points, pointMap, config);
-        } else if (config.gridType === 'hexagonal') {
-            this.renderHexagonalFaces(points, pointMap, config);
         }
 
         this.ctx.globalAlpha = 1;
         this.ctx.globalCompositeOperation = 'source-over'; // Reset blend mode
     }
 
-        private renderSquareFaces(
-            _points: GridPoint[],
-            pointMap: Map<string, GridPoint>,
-            config: GridConfig
-        ): void {
+    private renderSquareFaces(
+        _points: GridPoint[],
+        pointMap: Map<string, GridPoint>,
+        config: GridConfig
+    ): void {
         // For square grids, draw quads formed by each cell
         for (let row = 0; row < config.rows - 1; row++) {
             for (let col = 0; col < config.columns - 1; col++) {
@@ -325,11 +319,11 @@ export class CanvasRenderer {
         }
     }
 
-        private renderTriangularFaces(
-            _points: GridPoint[],
-            pointMap: Map<string, GridPoint>,
-            config: GridConfig
-        ): void {
+    private renderTriangularFaces(
+        _points: GridPoint[],
+        pointMap: Map<string, GridPoint>,
+        config: GridConfig
+    ): void {
         // For triangular grids, we have two types of triangles per cell
         for (let row = 0; row < config.rows - 1; row++) {
             for (let col = 0; col < config.columns - 1; col++) {
@@ -406,109 +400,120 @@ export class CanvasRenderer {
         }
     }
 
-        private renderHexagonalFaces(
-            _points: GridPoint[],
-            pointMap: Map<string, GridPoint>,
-            config: GridConfig
-        ): void {
-        // For hexagonal grids, render hexagons
-        // This is complex - for now, let's use a simpler approach with triangulation
-        for (let row = 0; row < config.rows - 1; row++) {
-            for (let col = 0; col < config.columns - 1; col++) {
-                const faceId = `${row}-${col}`;
-                const fillHash = this.hashPair(faceId, 'fill');
-                if (fillHash > config.fillFrequency) continue;
 
-                const isEvenRow = row % 2 === 0;
 
-                // Draw diamond-shaped faces between hexagons
-                if (isEvenRow) {
-                    const pt1 = pointMap.get(`${row}-${col}`);
-                    const pt2 = pointMap.get(`${row}-${col + 1}`);
-                    const pt3 = pointMap.get(`${row + 1}-${col}`);
-
-                    if (pt1 && pt2 && pt3) {
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(pt1.currentPosition.x, pt1.currentPosition.y);
-                        this.ctx.lineTo(pt2.currentPosition.x, pt2.currentPosition.y);
-                        this.ctx.lineTo(pt3.currentPosition.x, pt3.currentPosition.y);
-                        this.ctx.closePath();
-                        this.ctx.fill();
-                    }
-                } else {
-                    const pt1 = pointMap.get(`${row}-${col}`);
-                    const pt2 = pointMap.get(`${row}-${col + 1}`);
-                    const pt3 = pointMap.get(`${row + 1}-${col + 1}`);
-
-                    if (pt1 && pt2 && pt3) {
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(pt1.currentPosition.x, pt1.currentPosition.y);
-                        this.ctx.lineTo(pt2.currentPosition.x, pt2.currentPosition.y);
-                        this.ctx.lineTo(pt3.currentPosition.x, pt3.currentPosition.y);
-                        this.ctx.closePath();
-                        this.ctx.fill();
-                    }
-                }
-            }
-        }
-    }
-
-    private renderRadialLines(points: GridPoint[], wells: Well[]): void {
-        for (const well of wells) {
-            if (!well.enabled || !well.showRadialLines) continue;
-
-            this.ctx.strokeStyle = well.strength >= 0 ? 'rgba(59, 130, 246, 0.3)' : 'rgba(239, 68, 68, 0.3)';
-            this.ctx.lineWidth = 0.5;
-
-            for (const point of points) {
-                const dist = distance(
-                    point.currentPosition.x,
-                    point.currentPosition.y,
-                    well.position.x,
-                    well.position.y
-                );
-
-                if (dist < well.radius) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(point.currentPosition.x, point.currentPosition.y);
-                    this.ctx.lineTo(well.position.x, well.position.y);
-                    this.ctx.stroke();
-                }
-            }
-        }
-    }
-
-    private renderWells(wells: Well[]): void {
+    private renderWells(wells: Well[], hoveredWellId?: string | null): void {
         for (const well of wells) {
             if (!well.enabled) continue;
 
-            this.ctx.strokeStyle = well.strength >= 0 ? '#3b82f6' : '#ef4444';
-            this.ctx.fillStyle = well.strength >= 0 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.1)';
-            this.ctx.lineWidth = 2;
+            const isHovered = hoveredWellId === well.id;
+            const isAttract = well.strength >= 0;
 
-            this.ctx.beginPath();
-            this.ctx.arc(
-                well.position.x,
-                well.position.y,
-                well.radius,
-                0,
-                Math.PI * 2
-            );
-            this.ctx.fill();
-            this.ctx.stroke();
-
-            // Center point - larger for better grabbability
-            this.ctx.fillStyle = well.strength >= 0 ? '#3b82f6' : '#ef4444';
-            this.ctx.beginPath();
-            this.ctx.arc(
-                well.position.x,
-                well.position.y,
-                10, // Increased from 6 to 10 for easier interaction
-                0,
-                Math.PI * 2
-            );
-            this.ctx.fill();
+            if (isHovered) {
+                this.renderHoveredWell(well, isAttract);
+            } else {
+                this.renderNormalWell(well, isAttract);
+            }
         }
+    }
+
+    private renderNormalWell(well: Well, isAttract: boolean): void {
+        this.ctx.strokeStyle = isAttract ? '#3b82f6' : '#ef4444';
+        this.ctx.fillStyle = isAttract ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+        this.ctx.lineWidth = 2;
+
+        this.ctx.beginPath();
+        this.ctx.arc(
+            well.position.x,
+            well.position.y,
+            well.radius,
+            0,
+            Math.PI * 2
+        );
+        this.ctx.fill();
+        this.ctx.stroke();
+
+        // Center point - larger for better grabbability
+        this.ctx.fillStyle = isAttract ? '#3b82f6' : '#ef4444';
+        this.ctx.beginPath();
+        this.ctx.arc(
+            well.position.x,
+            well.position.y,
+            10, // Increased from 6 to 10 for easier interaction
+            0,
+            Math.PI * 2
+        );
+        this.ctx.fill();
+    }
+
+    private renderHoveredWell(well: Well, isAttract: boolean): void {
+        // Create animated striped pattern
+        const time = Date.now() * 0.0008; // Much slower animation speed
+        const stripeWidth = 12;
+        const radius = well.radius;
+
+        // Save context for clipping
+        this.ctx.save();
+
+        // Create clipping path for the well circle
+        this.ctx.beginPath();
+        this.ctx.arc(well.position.x, well.position.y, radius, 0, Math.PI * 2);
+        this.ctx.clip();
+
+        // Draw animated stripes with lighter, more transparent colors
+        const baseColor = isAttract ? '#3b82f6' : '#ef4444';
+        const lightColor = isAttract ? 'rgba(96, 165, 250, 0.3)' : 'rgba(248, 113, 113, 0.3)';
+        const darkColor = isAttract ? 'rgba(29, 78, 216, 0.2)' : 'rgba(220, 38, 38, 0.2)';
+
+        // Calculate smooth sliding offset
+        const offset = (time * 30) % (stripeWidth * 2);
+
+        // Draw stripes at their actual animated positions
+        const startX = well.position.x - radius - stripeWidth;
+        const endX = well.position.x + radius + stripeWidth;
+
+        for (let x = startX; x < endX; x += stripeWidth) {
+            // Calculate the actual position of this stripe with offset
+            const actualX = x - offset;
+            const stripeIndex = Math.floor((x - startX) / stripeWidth);
+            const isEvenStripe = stripeIndex % 2 === 0;
+
+            this.ctx.fillStyle = isEvenStripe ? lightColor : darkColor;
+            this.ctx.fillRect(
+                actualX,
+                well.position.y - radius,
+                stripeWidth,
+                radius * 2
+            );
+        }
+
+        // Restore context
+        this.ctx.restore();
+
+        // Draw border
+        this.ctx.strokeStyle = baseColor;
+        this.ctx.lineWidth = 3;
+        this.ctx.beginPath();
+        this.ctx.arc(
+            well.position.x,
+            well.position.y,
+            radius,
+            0,
+            Math.PI * 2
+        );
+        this.ctx.stroke();
+
+        // Center point - larger for better grabbability
+        this.ctx.fillStyle = baseColor;
+        this.ctx.beginPath();
+        this.ctx.arc(
+            well.position.x,
+            well.position.y,
+            10,
+            0,
+            Math.PI * 2
+        );
+        this.ctx.fill();
     }
 
     screenToWorld(screenX: number, screenY: number): { x: number; y: number } {

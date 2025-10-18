@@ -32,6 +32,22 @@ export function useCanvas() {
         };
 
         render();
+
+        // Add animation loop for hovered wells
+        let animationId: number;
+        if (hoveredWellId) {
+            const animate = () => {
+                render();
+                animationId = requestAnimationFrame(animate);
+            };
+            animationId = requestAnimationFrame(animate);
+        }
+
+        return () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        };
     }, [deformedGrid, gridConfig, wells, viewport, showWells, hoveredWellId]);
 
     useEffect(() => {

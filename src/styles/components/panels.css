@@ -1,0 +1,127 @@
+/* Panel components */
+.panel {
+    position: relative;
+    height: 100%;
+    pointer-events: none;
+    border: 0px solid var(--color-border);
+    margin: 0 !important;
+}
+
+.panel-content {
+    height: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    transition: all var(--transition-slow);
+    pointer-events: auto;
+}
+
+.panel-left {
+    border-right: 1px solid var(--color-border);
+}
+
+.panel-right {
+    border-left: 1px solid var(--color-border);
+}
+
+.panel-collapsed {
+    width: 0;
+    border: none !important;
+    margin: var(--space-sm) 0 !important;
+}
+
+.panel-expanded {
+    width: 12rem;
+    margin: var(--space-sm) 0 !important;
+}
+
+.panel-inner {
+    width: 12rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.panel-title {
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+}
+
+.panel-toggle {
+    padding: var(--space-xs);
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.panel-toggle:hover {
+    background-color: var(--color-gray-100);
+}
+
+.panel-toggle-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-text-muted);
+}
+
+.panel-content-area {
+    padding: var(--space-md);
+}
+
+/* Overhanging expand buttons positioned at panel header level */
+.panel-expand-button {
+    position: absolute;
+    top: 0;
+    height: 51px;
+    /* Height of panel header */
+    width: 2rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--transition);
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+}
+
+.panel-expand-button:hover {
+    background-color: var(--color-gray-50);
+    box-shadow: var(--shadow-lg);
+}
+
+.panel-expand-button-left {
+    right: -2rem;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    border-left: none;
+}
+
+.panel-expand-button-right {
+    left: -2rem;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    border-right: none;
+}
+
+.panel-expand-button-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-text-muted);
+}

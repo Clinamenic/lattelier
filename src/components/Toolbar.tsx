@@ -6,6 +6,7 @@ import { GridPincherConfig } from '../types/config';
 import { ImportPreviewModal } from './ImportPreviewModal';
 import { ErrorModal } from './ErrorModal';
 import { GuideModal } from './GuideModal';
+import { generateStateHash } from '../utils/state-hash';
 import { useState, useEffect, useRef } from 'react';
 
 const exportManager = new ExportManager();
@@ -18,6 +19,7 @@ export function Toolbar() {
     const deformedGrid = useAppStore((state) => state.deformedGrid);
     const gridConfig = useAppStore((state) => state.gridConfig);
     const viewport = useAppStore((state) => state.viewport);
+    const shuffleSettings = useAppStore((state) => state.shuffleSettings);
 
     const [showDownloadMenu, setShowDownloadMenu] = useState(false);
     const downloadMenuRef = useRef<HTMLDivElement>(null);
@@ -29,6 +31,7 @@ export function Toolbar() {
     const [maxScale, setMaxScale] = useState<number>(16);
 
     const [showGuide, setShowGuide] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
 
     const calculateGridBounds = (padding: number = 20) => {
         if (deformedGrid.length === 0) {
@@ -94,8 +97,14 @@ export function Toolbar() {
 
     const handleDownloadPNG = async (scale: number, _label: string) => {
         try {
+            setIsExporting(true);
             const bounds = calculateGridBounds(20);
             const wells = useAppStore.getState().deformation.wells;
+            const deformation = useAppStore.getState().deformation;
+
+            // Generate state-based hash for consistent naming
+            const stateHash = generateStateHash(gridConfig, deformation, viewport);
+
             const blob = await exportManager.exportPNG(
                 deformedGrid,
                 gridConfig,
@@ -104,27 +113,34 @@ export function Toolbar() {
                 { scale }
             );
             if (blob) {
-                // No filename - will auto-generate from content hash
-                await exportManager.downloadBlob(blob, undefined, 'image/png');
+                // Use state-based hash for consistent naming
+                await exportManager.downloadBlob(blob, undefined, 'image/png', stateHash);
             } else {
                 console.error('Failed to create blob');
             }
             setShowDownloadMenu(false);
         } catch (error) {
             console.error('Error downloading PNG:', error);
+        } finally {
+            setIsExporting(false);
         }
     };
 
     const handleDownloadSVG = async () => {
         try {
             const bounds = calculateGridBounds(20);
+            const deformation = useAppStore.getState().deformation;
+
+            // Generate state-based hash for consistent naming
+            const stateHash = generateStateHash(gridConfig, deformation, viewport);
+
             const svgContent = exportManager.exportSVG(
                 deformedGrid,
                 gridConfig,
                 bounds
             );
-            // No filename - will auto-generate from content hash
-            await exportManager.downloadText(svgContent, undefined, 'image/svg+xml');
+            // Use state-based hash for consistent naming
+            await exportManager.downloadText(svgContent, undefined, 'image/svg+xml', stateHash);
             setShowDownloadMenu(false);
         } catch (error) {
             console.error('Error downloading SVG:', error);
@@ -132,15 +148,20 @@ export function Toolbar() {
     };
 
     const handleExportConfig = async () => {
+        const deformation = useAppStore.getState().deformation;
+
+        // Generate state-based hash for consistent naming
+        const stateHash = generateStateHash(gridConfig, deformation, viewport);
+
         const config = configManager.exportConfig(
             gridConfig,
-            useAppStore.getState().deformation,
+            deformation,
             viewport,
             {
                 name: `Grid Pattern ${new Date().toLocaleDateString()}`,
             }
         );
-        await configManager.downloadConfig(config);
+        await configManager.downloadConfig(config, undefined, stateHash);
     };
 
     const handleImportClick = async () => {
@@ -236,94 +257,81 @@ export function Toolbar() {
 
     return (
         <>
-            <div className="h-14 bg-white border-b border-gray-200 px-4 flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                        <h1 className="text-xl font-bold text-gray-800">Lattelier</h1>
+            <div className="toolbar">
+                <div className="toolbar-left">
+                    <div className="toolbar-brand">
+                        <h1 className="toolbar-title">Lattelier</h1>
                         <button
                             onClick={() => setShowGuide(true)}
-                            className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 flex items-center justify-center text-sm font-bold transition-colors"
+                            className="toolbar-help"
                             title="Open Guide"
                             aria-label="Open guide"
                         >
                             ?
                         </button>
                     </div>
-                    <span className="text-sm text-gray-500">
-                        {wellCount} {wellCount === 1 ? 'well' : 'wells'}
-                    </span>
                 </div>
 
-                <div className="flex items-center space-x-3">
-                    <button
-                        onClick={() => setShowWells(!showWells)}
-                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showWells
-                            ? 'bg-blue-500 text-white hover:bg-blue-600'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                            }`}
-                    >
-                        {showWells ? 'Hide' : 'Show'} Wells
-                    </button>
-
-                    <button
-                        onClick={handleReset}
-                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium"
-                    >
-                        Clear All
-                    </button>
+                <div className="toolbar-right">
 
                     <button
                         onClick={handleExportConfig}
-                        className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors text-sm font-medium"
+                        className="btn btn-purple"
                     >
                         Export Config
                     </button>
 
                     <button
                         onClick={handleImportClick}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors text-sm font-medium"
+                        className="btn btn-indigo"
                     >
                         Import Config
                     </button>
 
-                    <div className="relative" ref={downloadMenuRef}>
+                    <button
+                        onClick={shuffleSettings}
+                        className="btn btn-purple"
+                        title="Randomize settings within current dimensions"
+                    >
+                        🔄 Shuffle
+                    </button>
+
+                    <div className="dropdown" ref={downloadMenuRef}>
                         <button
                             onClick={() => setShowDownloadMenu(!showDownloadMenu)}
-                            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors text-sm font-medium"
+                            className="btn btn-success"
+                            disabled={isExporting}
                         >
-                            Download
+                            {isExporting ? 'Exporting...' : 'Download'}
                         </button>
 
                         {showDownloadMenu && (
-                            <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                            <div className="dropdown-menu">
                                 {/* Summary Header */}
                                 {maxScale && (
-                                    <div className="px-3 py-2 bg-blue-50 border-b border-blue-200">
-                                        <div className="text-xs text-blue-900">
+                                    <div className="dropdown-header">
+                                        <div className="text-xs">
                                             <span className="font-semibold">Max PNG Resolution:</span>{' '}
                                             <span className="font-bold">{maxScale}×</span>
                                         </div>
                                     </div>
                                 )}
 
-                                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase border-b border-gray-200">
+                                <div className="dropdown-section">
                                     PNG Resolution
                                 </div>
                                 {/* 1× Standard */}
                                 <button
                                     onClick={() => handleDownloadPNG(1, '1x')}
-                                    disabled={exportFeasibility.get(1)?.status === 'disabled'}
-                                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${exportFeasibility.get(1)?.status === 'disabled'
-                                        ? 'text-gray-400 cursor-not-allowed bg-gray-50'
-                                        : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
+                                    disabled={exportFeasibility.get(1)?.status === 'disabled' || isExporting}
+                                    className={`dropdown-item ${exportFeasibility.get(1)?.status === 'disabled' || isExporting ? 'cursor-not-allowed' : ''}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="dropdown-item-status">
                                         <span>Standard (1×)</span>
                                         <span className={getStatusColor(1)}>{getStatusIcon(1)}</span>
                                     </div>
                                     {exportFeasibility.get(1)?.message && (
-                                        <div className="text-xs text-gray-500 mt-1">
+                                        <div className="dropdown-item-message">
                                             {exportFeasibility.get(1)?.message}
                                         </div>
                                     )}
@@ -332,18 +340,15 @@ export function Toolbar() {
                                 {/* 2× High Quality */}
                                 <button
                                     onClick={() => handleDownloadPNG(2, '2x')}
-                                    disabled={exportFeasibility.get(2)?.status === 'disabled'}
-                                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${exportFeasibility.get(2)?.status === 'disabled'
-                                        ? 'text-gray-400 cursor-not-allowed bg-gray-50'
-                                        : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
+                                    disabled={exportFeasibility.get(2)?.status === 'disabled' || isExporting}
+                                    className={`dropdown-item ${exportFeasibility.get(2)?.status === 'disabled' || isExporting ? 'cursor-not-allowed' : ''}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="dropdown-item-status">
                                         <span>High Quality (2×)</span>
                                         <span className={getStatusColor(2)}>{getStatusIcon(2)}</span>
                                     </div>
                                     {exportFeasibility.get(2)?.message && (
-                                        <div className="text-xs text-gray-500 mt-1">
+                                        <div className="dropdown-item-message">
                                             {exportFeasibility.get(2)?.message}
                                         </div>
                                     )}
@@ -352,18 +357,15 @@ export function Toolbar() {
                                 {/* 4× Very High Quality */}
                                 <button
                                     onClick={() => handleDownloadPNG(4, '4x')}
-                                    disabled={exportFeasibility.get(4)?.status === 'disabled'}
-                                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${exportFeasibility.get(4)?.status === 'disabled'
-                                        ? 'text-gray-400 cursor-not-allowed bg-gray-50'
-                                        : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
+                                    disabled={exportFeasibility.get(4)?.status === 'disabled' || isExporting}
+                                    className={`dropdown-item ${exportFeasibility.get(4)?.status === 'disabled' || isExporting ? 'cursor-not-allowed' : ''}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="dropdown-item-status">
                                         <span>Very High Quality (4×)</span>
                                         <span className={getStatusColor(4)}>{getStatusIcon(4)}</span>
                                     </div>
                                     {exportFeasibility.get(4)?.message && (
-                                        <div className="text-xs text-gray-500 mt-1">
+                                        <div className="dropdown-item-message">
                                             {exportFeasibility.get(4)?.message}
                                         </div>
                                     )}
@@ -372,23 +374,20 @@ export function Toolbar() {
                                 {/* 8× Ultra High Quality */}
                                 <button
                                     onClick={() => handleDownloadPNG(8, '8x')}
-                                    disabled={exportFeasibility.get(8)?.status === 'disabled'}
-                                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${exportFeasibility.get(8)?.status === 'disabled'
-                                        ? 'text-gray-400 cursor-not-allowed bg-gray-50'
-                                        : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
+                                    disabled={exportFeasibility.get(8)?.status === 'disabled' || isExporting}
+                                    className={`dropdown-item ${exportFeasibility.get(8)?.status === 'disabled' || isExporting ? 'cursor-not-allowed' : ''}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="dropdown-item-status">
                                         <span>Ultra High Quality (8×)</span>
                                         <span className={getStatusColor(8)}>{getStatusIcon(8)}</span>
                                     </div>
                                     {exportFeasibility.get(8)?.message && (
-                                        <div className="text-xs text-gray-500 mt-1">
+                                        <div className="dropdown-item-message">
                                             {exportFeasibility.get(8)?.message}
                                         </div>
                                     )}
                                     {exportFeasibility.get(8)?.recommendation && (
-                                        <div className="text-xs text-blue-600 mt-1">
+                                        <div className="dropdown-item-recommendation">
                                             💡 {exportFeasibility.get(8)?.recommendation}
                                         </div>
                                     )}
@@ -397,23 +396,20 @@ export function Toolbar() {
                                 {/* 16× Print Quality */}
                                 <button
                                     onClick={() => handleDownloadPNG(16, '16x')}
-                                    disabled={exportFeasibility.get(16)?.status === 'disabled'}
-                                    className={`w-full text-left px-4 py-2 text-sm transition-colors border-b border-gray-200 ${exportFeasibility.get(16)?.status === 'disabled'
-                                        ? 'text-gray-400 cursor-not-allowed bg-gray-50'
-                                        : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
+                                    disabled={exportFeasibility.get(16)?.status === 'disabled' || isExporting}
+                                    className={`dropdown-item border-b border-gray-200 ${exportFeasibility.get(16)?.status === 'disabled' || isExporting ? 'cursor-not-allowed' : ''}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="dropdown-item-status">
                                         <span>Print Quality (16×)</span>
                                         <span className={getStatusColor(16)}>{getStatusIcon(16)}</span>
                                     </div>
                                     {exportFeasibility.get(16)?.message && (
-                                        <div className="text-xs text-gray-500 mt-1">
+                                        <div className="dropdown-item-message">
                                             {exportFeasibility.get(16)?.message}
                                         </div>
                                     )}
                                     {exportFeasibility.get(16)?.recommendation && (
-                                        <div className="text-xs text-blue-600 mt-1">
+                                        <div className="dropdown-item-recommendation">
                                             💡 {exportFeasibility.get(16)?.recommendation}
                                         </div>
                                     )}
@@ -421,13 +417,13 @@ export function Toolbar() {
                                 {/* SVG - Highlighted */}
                                 <button
                                     onClick={handleDownloadSVG}
-                                    className="w-full text-left px-4 py-2 text-sm bg-purple-50 hover:bg-purple-100 border-l-4 border-purple-500 rounded-b-md transition-colors"
+                                    className="dropdown-item dropdown-item-highlighted"
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-medium text-purple-900">✨ Vector (SVG)</span>
-                                        <span className="text-purple-600 font-bold">∞</span>
+                                    <div className="dropdown-item-status">
+                                        <span className="font-medium">✨ Vector (SVG)</span>
+                                        <span className="font-bold">∞</span>
                                     </div>
-                                    <div className="text-xs text-purple-700 mt-1">
+                                    <div className="dropdown-item-message">
                                         Unlimited resolution · Best for print
                                     </div>
                                 </button>

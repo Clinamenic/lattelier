@@ -12,8 +12,16 @@ export function DistortionPanel() {
     const setHoveredWell = useAppStore((state) => state.setHoveredWell);
     const isCollapsed = useAppStore((state) => state.rightSidebarCollapsed);
     const toggleCollapse = useAppStore((state) => state.toggleRightSidebar);
+    const showWells = useAppStore((state) => state.showWells);
+    const setShowWells = useAppStore((state) => state.setShowWells);
 
     const selectedWell = wells.find((w) => w.id === selectedWellId);
+
+    const handleReset = () => {
+        if (confirm('Clear all wells?')) {
+            wells.forEach(w => removeWell(w.id));
+        }
+    };
 
     return (
         <CollapsiblePanel
@@ -22,26 +30,20 @@ export function DistortionPanel() {
             isCollapsed={isCollapsed}
             onToggle={toggleCollapse}
         >
-            <div className="space-y-6">
+            <div className="space-y-4">
                 {/* Tools Section - Always Visible */}
-                <section>
-                    <h3 className="text-sm font-semibold text-gray-800 mb-3">Tools</h3>
-                    <div className="space-y-2">
+                <section className="distortion-section">
+                    <h3 className="distortion-section-title">Tools</h3>
+                    <div className="tool-buttons">
                         <button
                             onClick={() => setActiveTool('pan')}
-                            className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTool === 'pan'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                            className={`tool-button ${activeTool === 'pan' ? 'tool-button-active' : 'tool-button-inactive'}`}
                         >
                             Pan & Navigate
                         </button>
                         <button
                             onClick={() => setActiveTool('placeWell')}
-                            className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTool === 'placeWell'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                            className={`tool-button ${activeTool === 'placeWell' ? 'tool-button-active' : 'tool-button-inactive'}`}
                         >
                             Place Well
                         </button>
@@ -49,20 +51,36 @@ export function DistortionPanel() {
                 </section>
 
                 {/* Wells Section */}
-                <section className="border-t border-gray-200 pt-4">
-                    <h3 className="text-sm font-semibold text-gray-800 mb-3">Wells</h3>
+                <section className="distortion-section">
+                    <h3 className="distortion-section-title">Wells</h3>
+
+                    {/* Wells Control Buttons */}
+                    <div className="tool-buttons">
+                        <button
+                            onClick={() => setShowWells(!showWells)}
+                            className={`tool-button ${showWells ? 'tool-button-active' : 'tool-button-inactive'}`}
+                        >
+                            {showWells ? 'Hide' : 'Show'} Wells
+                        </button>
+                        <button
+                            onClick={handleReset}
+                            className="tool-button tool-button-inactive"
+                        >
+                            Clear All
+                        </button>
+                    </div>
 
                     {!selectedWell ? (
                         <>
-                            <p className="text-sm text-gray-500 mb-4">
+                            <p className="help-text">
                                 Use the Place Well tool to add wells, or select an existing one to edit its properties.
                             </p>
 
-                            <div className="mt-4">
-                                <h4 className="text-xs font-semibold text-gray-700 mb-2">
+                            <div className="controls-section">
+                                <h4 className="controls-title">
                                     Controls
                                 </h4>
-                                <ul className="text-xs text-gray-600 space-y-1">
+                                <ul className="controls-list">
                                     <li><strong>Pan Tool:</strong> Click & drag to navigate</li>
                                     <li><strong>Well Tool:</strong> Click to place, drag to move</li>
                                     <li><strong>Scroll:</strong> Zoom in/out</li>
@@ -71,35 +89,47 @@ export function DistortionPanel() {
                             </div>
 
                             {wells.length > 0 && (
-                                <div className="mt-4">
-                                    <h4 className="text-xs font-semibold text-gray-700 mb-2">
+                                <div className="controls-section">
+                                    <h4 className="controls-title">
                                         All Wells ({wells.length})
                                     </h4>
-                                    <div className="space-y-1">
+                                    <ul className="wells-list">
                                         {wells.map((well, index) => (
-                                            <button
-                                                key={well.id}
-                                                onClick={() => selectWell(well.id)}
-                                                onMouseEnter={() => setHoveredWell(well.id)}
-                                                onMouseLeave={() => setHoveredWell(null)}
-                                                className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100 transition-colors"
-                                            >
-                                                Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
-                                            </button>
+                                            <li key={well.id} className="well-list-item">
+                                                <button
+                                                    onClick={() => selectWell(well.id)}
+                                                    onMouseEnter={() => setHoveredWell(well.id)}
+                                                    onMouseLeave={() => setHoveredWell(null)}
+                                                    className="well-item"
+                                                >
+                                                    Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
+                                                </button>
+                                                <label className="form-checkbox">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={well.enabled}
+                                                        onChange={(e) =>
+                                                            updateWell(well.id, { enabled: e.target.checked })
+                                                        }
+                                                        className="form-checkbox"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </label>
+                                            </li>
                                         ))}
-                                    </div>
+                                    </ul>
                                 </div>
                             )}
                         </>
                     ) : (
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <div className="space-y-3">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Position
                                 </label>
                                 <div className="grid grid-cols-2 gap-2">
                                     <div>
-                                        <label className="text-xs text-gray-500">X</label>
+                                        <label className="text-xs text-light">X</label>
                                         <input
                                             type="number"
                                             value={Math.round(selectedWell.position.x)}
@@ -108,11 +138,11 @@ export function DistortionPanel() {
                                                     position: { ...selectedWell.position, x: parseFloat(e.target.value) },
                                                 })
                                             }
-                                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                                            className="form-input"
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-xs text-gray-500">Y</label>
+                                        <label className="text-xs text-light">Y</label>
                                         <input
                                             type="number"
                                             value={Math.round(selectedWell.position.y)}
@@ -121,14 +151,14 @@ export function DistortionPanel() {
                                                     position: { ...selectedWell.position, y: parseFloat(e.target.value) },
                                                 })
                                             }
-                                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                                            className="form-input"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Strength: {selectedWell.strength.toFixed(2)}
                                 </label>
                                 <input
@@ -140,16 +170,16 @@ export function DistortionPanel() {
                                     onChange={(e) =>
                                         updateWell(selectedWell.id, { strength: parseFloat(e.target.value) })
                                     }
-                                    className="w-full"
+                                    className="form-range"
                                 />
-                                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                <div className="settings-range-labels">
                                     <span>Repel</span>
                                     <span>Attract</span>
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Radius: {Math.round(selectedWell.radius)}
                                 </label>
                                 <input
@@ -160,12 +190,12 @@ export function DistortionPanel() {
                                     onChange={(e) =>
                                         updateWell(selectedWell.id, { radius: parseFloat(e.target.value) })
                                     }
-                                    className="w-full"
+                                    className="form-range"
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Falloff
                                 </label>
                                 <select
@@ -173,7 +203,7 @@ export function DistortionPanel() {
                                     onChange={(e) =>
                                         updateWell(selectedWell.id, { falloff: e.target.value as any })
                                     }
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    className="form-select"
                                 >
                                     <option value="linear">Linear</option>
                                     <option value="quadratic">Quadratic</option>
@@ -182,8 +212,8 @@ export function DistortionPanel() {
                                 </select>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Distortion: {selectedWell.distortion.toFixed(2)}
                                 </label>
                                 <input
@@ -195,68 +225,52 @@ export function DistortionPanel() {
                                     onChange={(e) =>
                                         updateWell(selectedWell.id, { distortion: parseFloat(e.target.value) })
                                     }
-                                    className="w-full"
+                                    className="form-range"
                                 />
-                                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                <div className="settings-range-labels">
                                     <span>None</span>
                                     <span>Chaos</span>
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedWell.enabled}
-                                        onChange={(e) =>
-                                            updateWell(selectedWell.id, { enabled: e.target.checked })
-                                        }
-                                        className="mr-2"
-                                    />
-                                    <span className="text-sm text-gray-700">Enabled</span>
-                                </label>
-
-                                <label className="flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedWell.showRadialLines}
-                                        onChange={(e) =>
-                                            updateWell(selectedWell.id, { showRadialLines: e.target.checked })
-                                        }
-                                        className="mr-2"
-                                    />
-                                    <span className="text-sm text-gray-700">Show Radial Lines</span>
-                                </label>
-                            </div>
 
                             <button
                                 onClick={() => removeWell(selectedWell.id)}
-                                className="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors text-sm font-medium"
+                                className="btn btn-error"
                             >
                                 Delete Well
                             </button>
 
                             {wells.length > 1 && (
-                                <div className="border-t border-gray-200 pt-4">
-                                    <h4 className="text-xs font-semibold text-gray-700 mb-2">
+                                <div className="controls-section">
+                                    <h4 className="controls-title">
                                         All Wells ({wells.length})
                                     </h4>
-                                    <div className="space-y-1">
+                                    <ul className="wells-list">
                                         {wells.map((well, index) => (
-                                            <button
-                                                key={well.id}
-                                                onClick={() => selectWell(well.id)}
-                                                onMouseEnter={() => setHoveredWell(well.id)}
-                                                onMouseLeave={() => setHoveredWell(null)}
-                                                className={`w-full text-left px-2 py-1 text-sm rounded transition-colors ${well.id === selectedWellId
-                                                    ? 'bg-blue-100 text-blue-800'
-                                                    : 'hover:bg-gray-100'
-                                                    }`}
-                                            >
-                                                Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
-                                            </button>
+                                            <li key={well.id} className="well-list-item">
+                                                <button
+                                                    onClick={() => selectWell(well.id)}
+                                                    onMouseEnter={() => setHoveredWell(well.id)}
+                                                    onMouseLeave={() => setHoveredWell(null)}
+                                                    className={`well-item ${well.id === selectedWellId ? 'well-item-selected' : ''}`}
+                                                >
+                                                    Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
+                                                </button>
+                                                <label className="form-checkbox">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={well.enabled}
+                                                        onChange={(e) =>
+                                                            updateWell(well.id, { enabled: e.target.checked })
+                                                        }
+                                                        className="form-checkbox"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </label>
+                                            </li>
                                         ))}
-                                    </div>
+                                    </ul>
                                 </div>
                             )}
                         </div>

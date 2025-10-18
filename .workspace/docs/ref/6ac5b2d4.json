@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "name": "Grid Pattern 10/17/2025",
+    "createdAt": "2025-10-18T00:29:59.568Z",
+    "modifiedAt": "2025-10-18T00:29:59.568Z"
+  },
+  "grid": {
+    "type": "triangular",
+    "rows": 30,
+    "columns": 30,
+    "spacing": 19,
+    "points": {
+      "show": true,
+      "size": 0.6176505481735675,
+      "color": "#bcb24a",
+      "opacity": 0.49432389389151055
+    },
+    "lines": {
+      "show": true,
+      "width": 9.309828346081025,
+      "frequency": 0.8929184039531229,
+      "curvature": 0.9582408651473954,
+      "color": "#326100",
+      "opacity": 0.2585918102014615
+    },
+    "fill": {
+      "show": true,
+      "frequency": 0.18690640881884057,
+      "color": "#2b6790",
+      "opacity": 0.07981890138262027,
+      "blendMode": "normal"
+    },
+    "canvas": {
+      "backgroundColor": "#ec2a10"
+    }
+  },
+  "distortion": {
+    "globalStrength": 1.4779268715965168,
+    "wells": [
+      {
+        "id": "well-1760747387998-9run3o3xg",
+        "position": {
+          "x": 879.734375795627,
+          "y": 891.3086782136739
+        },
+        "strength": 0.12142360465204027,
+        "radius": 141.84980046492637,
+        "falloff": "exponential",
+        "distortion": 0.9524559373057329,
+        "enabled": false
+      },
+      {
+        "id": "well-1760747387998-1h2gleor4",
+        "position": {
+          "x": 454.20795521012604,
+          "y": 1.5054508441533856
+        },
+        "strength": 0.3746585257252637,
+        "radius": 460.07951791122605,
+        "falloff": "linear",
+        "distortion": 0.5098173965440569,
+        "enabled": true
+      },
+      {
+        "id": "well-1760747387998-1f5c4hu8u",
+        "position": {
+          "x": 428.36779741523065,
+          "y": 832.8574283523301
+        },
+        "strength": 0.7460983942277906,
+        "radius": 256.207928775601,
+        "falloff": "smooth",
+        "distortion": 0.23136015573999913,
+        "enabled": true
+      },
+      {
+        "id": "well-1760747387998-2sb7aatck",
+        "position": {
+          "x": 299.2208751579017,
+          "y": 404.4442914792977
+        },
+        "strength": 0.05960051512827347,
+        "radius": 350.6533312542438,
+        "falloff": "quadratic",
+        "distortion": 0.17207252473567713,
+        "enabled": true
+      },
+      {
+        "id": "well-1760747387998-84xevn1pr",
+        "position": {
+          "x": 1021.9949096072379,
+          "y": 644.9411769927692
+        },
+        "strength": 0.9505294832266411,
+        "radius": 217.85828472315612,
+        "falloff": "linear",
+        "distortion": 0.8222383928363449,
+        "enabled": true
+      }
+    ]
+  },
+  "viewport": {
+    "x": 690.4164794007488,
+    "y": 385.19919101123594,
+    "zoom": 0.7653333333333334,
+    "includeInExport": true
+  }
+}

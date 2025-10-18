@@ -9,12 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of Lattelier (formerly Grid Pincher)
-- Interactive grid generation with square, triangular, and hexagonal patterns
+- Interactive grid generation with square and triangular patterns
 - Well-based deformation system with attract/repel forces
 - Advanced distortion controls:
   - Multiple falloff curves (linear, quadratic, exponential, smooth)
   - Adjustable distortion/scrambling within well radius
-  - Radial line visualization
 - Flexible styling system:
   - Individual opacity controls for points, lines, and fill
   - Line frequency and curvature controls

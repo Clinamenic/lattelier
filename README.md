@@ -4,12 +4,11 @@ A professional, client-side web application for creating distorted lattice patte
 
 ## Features
 
-- **Interactive Grid Generation**: Square, triangular, and hexagonal patterns with up to 200×200 points
+- **Interactive Grid Generation**: Square and triangular patterns with up to 200×200 points
 - **Well-Based Deformation**: Attract or repel points to create organic distortions
 - **Advanced Distortion Controls**:
   - Multiple falloff curves (linear, quadratic, exponential, smooth)
   - Adjustable distortion/scrambling within well radius
-  - Radial line visualization
 - **Flexible Styling**:
   - Configurable points, lines, and fill with individual opacity controls
   - Line frequency and curvature for sparse or filled patterns
@@ -112,7 +111,7 @@ Your Lattelier deployment will be **permanently accessible** and **immutable** o
 ### Canvas Settings (Left Sidebar)
 
 **Grid:**
-- Type: Square, triangular, or hexagonal patterns
+- Type: Square or triangular patterns
 - Rows/Columns: 5-200 (higher = denser grid)
 - Spacing: Distance between points
 
@@ -142,7 +141,6 @@ Your Lattelier deployment will be **permanently accessible** and **immutable** o
 - **Radius**: Area of influence (50-500px)
 - **Falloff**: How strength diminishes with distance
 - **Distortion**: Random scrambling within radius (0-100%)
-- **Radial Lines**: Toggle lines from affected points to well center
 
 **Hover over wells** in the list to preview them on canvas!
 

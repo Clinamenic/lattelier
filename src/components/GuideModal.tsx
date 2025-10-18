@@ -158,7 +158,6 @@ export function GuideModal({ onClose }: GuideModalProps) {
                                     <li><strong>Radius:</strong> Area of influence (50-500px)</li>
                                     <li><strong>Falloff:</strong> How strength diminishes with distance (Linear, Quadratic, Exponential, Smooth)</li>
                                     <li><strong>Distortion:</strong> Random scrambling of point positions within the well (0-100%)</li>
-                                    <li><strong>Radial Lines:</strong> Toggle lines from affected points to well center</li>
                                 </ul>
                             </div>
                         </div>

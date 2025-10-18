@@ -39,7 +39,7 @@ You'll see three main panels:
 ### 3. Customize Your Grid
 
 Use the **left panel** to configure:
-- **Grid Type**: Switch between square, triangular, or hexagonal
+- **Grid Type**: Switch between square or triangular
 - **Dimensions**: Adjust rows and columns
 - **Spacing**: Change the distance between points
 - **Display**: Toggle points, lines, or fill
@@ -62,7 +62,7 @@ Use the **left panel** to configure:
 
 ### Creating Interesting Effects
 
-**Radial Burst**
+**Well Effects**
 - Add one well in the center
 - Set strength to 0.8, radius to 300
 - Use "smooth" falloff
@@ -125,7 +125,7 @@ Try these color combinations:
 2. Use "Place Well" tool to add a single well
 3. Adjust parameters and observe the effect
 4. Add more wells gradually
-5. Experiment with different grid types (square, triangular, hexagonal)
+5. Experiment with different grid types (square, triangular)
 6. Try different line frequencies and curvatures
 
 ### For Animation Concepts
@@ -161,7 +161,7 @@ Try these color combinations:
 ## Next Steps
 
 Now that you've learned the basics:
-1. Experiment with different grid types (square, triangular, hexagonal)
+1. Experiment with different grid types (square, triangular)
 2. Try combining multiple wells with opposite forces
 3. Explore line curvature and frequency for artistic effects
 4. Create and export your designs as PNG or SVG

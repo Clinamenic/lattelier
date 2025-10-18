@@ -174,7 +174,7 @@ export function Canvas() {
     return (
         <canvas
             ref={canvasRef}
-            className={`w-full h-full ${getCursorClass()}`}
+            className={`canvas ${getCursorClass()}`}
         />
     );
 }

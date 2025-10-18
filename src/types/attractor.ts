@@ -7,13 +7,12 @@ export interface Well {
   radius: number;
   falloff: FalloffType;
   enabled: boolean;
-  showRadialLines: boolean;
   distortion: number;
 }
 
 export interface DeformationConfig {
-    wells: Well[];
-    globalStrength: number;
+  wells: Well[];
+  globalStrength: number;
 }
 
 // Legacy alias for backward compatibility

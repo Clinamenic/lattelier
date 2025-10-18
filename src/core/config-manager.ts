@@ -1,6 +1,7 @@
 import { GridConfig, Viewport } from '../types/grid';
 import { DeformationConfig } from '../types/attractor';
 import { GridPincherConfig, ConfigMetadata, GridSettings, DistortionSettings } from '../types/config';
+import { generateStateHash } from '../utils/state-hash';
 
 export class ConfigManager {
     /**
@@ -85,7 +86,6 @@ export class ConfigManager {
                 falloff: well.falloff,
                 distortion: well.distortion,
                 enabled: well.enabled,
-                showRadialLines: well.showRadialLines,
             })),
         };
     }
@@ -114,13 +114,17 @@ export class ConfigManager {
     /**
      * Download configuration as JSON file
      * Uses modern File System Access API when available, falls back to legacy download method
-     * Default filename is a short content hash, which the user can edit in the save dialog
+     * Default filename is a state-based hash, which the user can edit in the save dialog
      */
-    async downloadConfig(config: GridPincherConfig, filename?: string): Promise<void> {
+    async downloadConfig(
+        config: GridPincherConfig,
+        filename?: string,
+        stateHash?: string
+    ): Promise<void> {
         const json = this.serializeConfig(config);
 
-        // Generate default filename from content hash if not provided
-        const defaultFilename = filename || `${this.hashContent(json)}.json`;
+        // Generate default filename from state hash if not provided
+        const defaultFilename = filename || `${stateHash || this.hashContent(json)}.json`;
 
         // Try modern File System Access API (Chrome, Edge, Opera)
         if ('showSaveFilePicker' in window) {
@@ -214,7 +218,6 @@ export class ConfigManager {
                 falloff: well.falloff,
                 distortion: Math.max(0, Math.min(1, well.distortion)),
                 enabled: well.enabled,
-                showRadialLines: well.showRadialLines,
             })),
         };
     }
@@ -242,8 +245,8 @@ export class ConfigManager {
         }
 
         // Check grid structure
-        if (!config.grid.type || !['square', 'triangular', 'hexagonal'].includes(config.grid.type)) {
-            errors.push('Invalid or missing grid.type (must be square, triangular, or hexagonal)');
+        if (!config.grid.type || !['square', 'triangular'].includes(config.grid.type)) {
+            errors.push('Invalid or missing grid.type (must be square or triangular)');
         }
         if (typeof config.grid.rows !== 'number' || config.grid.rows < 5 || config.grid.rows > 200) {
             errors.push('Invalid grid.rows (must be number between 5 and 200)');

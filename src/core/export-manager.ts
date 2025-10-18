@@ -1,7 +1,8 @@
 import { GridPoint, GridConfig, Viewport } from '../types/grid';
 import { ExportConfig } from '../types/export';
 import { CanvasRenderer } from './canvas-renderer';
-import { Well } from '../types/attractor';
+import { Well, DeformationConfig } from '../types/attractor';
+import { generateStateHash } from '../utils/state-hash';
 
 export class ExportManager {
     /**
@@ -33,20 +34,88 @@ export class ExportManager {
         bounds: { minX: number; minY: number; maxX: number; maxY: number },
         config: Partial<ExportConfig> = {}
     ): Promise<Blob | null> {
-        try {
-            const scale = config.scale || 1;
+        return new Promise((resolve) => {
+            try {
+                const scale = config.scale || 1;
 
-            // Calculate dimensions in world space
-            const worldWidth = bounds.maxX - bounds.minX;
-            const worldHeight = bounds.maxY - bounds.minY;
+                // Calculate dimensions in world space
+                const worldWidth = bounds.maxX - bounds.minX;
+                const worldHeight = bounds.maxY - bounds.minY;
 
-            // Calculate target canvas size
-            const targetWidth = Math.round(worldWidth * scale);
-            const targetHeight = Math.round(worldHeight * scale);
+                // Calculate target canvas size
+                const targetWidth = Math.round(worldWidth * scale);
+                const targetHeight = Math.round(worldHeight * scale);
 
-            // Note: Validation should be done before calling this method
-            // using ExportValidator to prevent reaching browser limits
+                // For large exports, use non-blocking rendering
+                if (targetWidth * targetHeight > 1000000) { // 1M pixels threshold
+                    this.exportPNGNonBlocking(
+                        points, gridConfig, wells, bounds, scale, targetWidth, targetHeight
+                    ).then(resolve).catch(() => resolve(null));
+                    return;
+                }
 
+                // For smaller exports, use synchronous rendering
+                this.exportPNGSync(
+                    points, gridConfig, wells, bounds, scale, targetWidth, targetHeight
+                ).then(resolve).catch(() => resolve(null));
+
+            } catch (error) {
+                console.error('Error in exportPNG:', error);
+                resolve(null);
+            }
+        });
+    }
+
+    private async exportPNGSync(
+        points: GridPoint[],
+        gridConfig: GridConfig,
+        wells: Well[],
+        bounds: { minX: number; minY: number; maxX: number; maxY: number },
+        scale: number,
+        targetWidth: number,
+        targetHeight: number
+    ): Promise<Blob | null> {
+        // Create high-resolution export canvas
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = targetWidth;
+        exportCanvas.height = targetHeight;
+
+        const ctx = exportCanvas.getContext('2d');
+        if (!ctx) {
+            console.error('Failed to get 2D context');
+            return null;
+        }
+
+        // Enable image smoothing for better quality
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        // Create viewport that centers the grid in the export canvas
+        const exportViewport: Viewport = {
+            x: -bounds.minX * scale,
+            y: -bounds.minY * scale,
+            zoom: scale,
+        };
+
+        // Render the grid at high resolution
+        const renderer = new CanvasRenderer(ctx, exportViewport);
+        renderer.render(points, gridConfig, wells, false, null);
+
+        return new Promise((resolve) => {
+            exportCanvas.toBlob(resolve, 'image/png', 1.0);
+        });
+    }
+
+    private async exportPNGNonBlocking(
+        points: GridPoint[],
+        gridConfig: GridConfig,
+        wells: Well[],
+        bounds: { minX: number; minY: number; maxX: number; maxY: number },
+        scale: number,
+        targetWidth: number,
+        targetHeight: number
+    ): Promise<Blob | null> {
+        return new Promise((resolve) => {
             // Create high-resolution export canvas
             const exportCanvas = document.createElement('canvas');
             exportCanvas.width = targetWidth;
@@ -55,7 +124,8 @@ export class ExportManager {
             const ctx = exportCanvas.getContext('2d');
             if (!ctx) {
                 console.error('Failed to get 2D context');
-                return Promise.resolve(null);
+                resolve(null);
+                return;
             }
 
             // Enable image smoothing for better quality
@@ -69,17 +139,34 @@ export class ExportManager {
                 zoom: scale,
             };
 
-            // Render the grid at high resolution
+            // Use requestIdleCallback to render in chunks
             const renderer = new CanvasRenderer(ctx, exportViewport);
-            renderer.render(points, gridConfig, wells, false, null); // false = don't show wells, null = no hover
 
-            return new Promise((resolve) => {
-                exportCanvas.toBlob(resolve, 'image/png', 1.0);
-            });
-        } catch (error) {
-            console.error('Error in exportPNG:', error);
-            return Promise.resolve(null);
-        }
+            // Render in idle time to avoid blocking the main thread
+            const renderInChunks = () => {
+                // Render the grid at high resolution
+                renderer.render(points, gridConfig, wells, false, null);
+
+                // Convert to blob in the next idle cycle
+                const convertToBlob = () => {
+                    exportCanvas.toBlob(resolve, 'image/png', 1.0);
+                };
+
+                // Use requestIdleCallback if available, otherwise setTimeout
+                if (window.requestIdleCallback) {
+                    requestIdleCallback(convertToBlob);
+                } else {
+                    setTimeout(convertToBlob, 0);
+                }
+            };
+
+            // Start rendering in the next idle cycle
+            if (window.requestIdleCallback) {
+                requestIdleCallback(renderInChunks);
+            } else {
+                setTimeout(renderInChunks, 0);
+            }
+        });
     }
 
     exportSVG(
@@ -112,7 +199,7 @@ export class ExportManager {
             pointMap.set(point.id, point);
         }
 
-        if (gridConfig.showLines) {
+        if (gridConfig.lineOpacity > 0) {
             const linesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             linesGroup.setAttribute('stroke', gridConfig.lineColor);
             linesGroup.setAttribute('stroke-width', gridConfig.lineWidth.toString());
@@ -135,7 +222,7 @@ export class ExportManager {
             svg.appendChild(linesGroup);
         }
 
-        if (gridConfig.showPoints) {
+        if (gridConfig.pointOpacity > 0) {
             const pointsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             pointsGroup.setAttribute('fill', gridConfig.pointColor);
             pointsGroup.setAttribute('opacity', gridConfig.pointOpacity.toString());
@@ -156,11 +243,16 @@ export class ExportManager {
 
     /**
      * Download a blob with modern File System Access API when available
-     * Default filename is a content hash if not provided
+     * Default filename is a state-based hash if not provided
      */
-    async downloadBlob(blob: Blob, filename?: string, mimeType?: string): Promise<void> {
-        // Generate default filename from content hash if not provided
-        const hash = await this.hashBlob(blob);
+    async downloadBlob(
+        blob: Blob,
+        filename?: string,
+        mimeType?: string,
+        stateHash?: string
+    ): Promise<void> {
+        // Generate default filename from state hash if not provided
+        const hash = stateHash || await this.hashBlob(blob);
         const extension = mimeType === 'image/png' ? '.png' : '.svg';
         const defaultFilename = filename || `${hash}${extension}`;
 
@@ -208,9 +300,14 @@ export class ExportManager {
     /**
      * Download text content (e.g., SVG) with modern File System Access API when available
      */
-    async downloadText(text: string, filename?: string, mimeType: string = 'image/svg+xml'): Promise<void> {
+    async downloadText(
+        text: string,
+        filename?: string,
+        mimeType: string = 'image/svg+xml',
+        stateHash?: string
+    ): Promise<void> {
         const blob = new Blob([text], { type: mimeType });
-        await this.downloadBlob(blob, filename, mimeType);
+        await this.downloadBlob(blob, filename, mimeType, stateHash);
     }
 }
 

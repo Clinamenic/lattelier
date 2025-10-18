@@ -5,21 +5,21 @@ import { DistortionPanel } from './components/DistortionPanel';
 
 function App() {
     return (
-        <div className="h-screen flex flex-col">
+        <div className="app-container">
             <Toolbar />
-            <div className="flex-1 relative overflow-hidden">
+            <div className="app-content">
                 {/* Canvas - fills entire area, behind sidebars */}
-                <div className="absolute inset-0">
+                <div className="app-canvas">
                     <Canvas />
                 </div>
 
                 {/* Left sidebar - overlays on top of canvas */}
-                <div className="absolute left-0 top-0 bottom-0 z-10">
+                <div className="app-sidebar-left">
                     <CanvasSettingsPanel />
                 </div>
 
                 {/* Right sidebar - overlays on top of canvas */}
-                <div className="absolute right-0 top-0 bottom-0 z-10">
+                <div className="app-sidebar-right">
                     <DistortionPanel />
                 </div>
             </div>

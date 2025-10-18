@@ -18,7 +18,7 @@ export interface ConfigMetadata {
 }
 
 export interface GridSettings {
-    type: 'square' | 'triangular' | 'hexagonal';
+    type: 'square' | 'triangular';
     rows: number;
     columns: number;
     spacing: number;
@@ -58,7 +58,6 @@ export interface DistortionSettings {
         falloff: 'linear' | 'quadratic' | 'exponential' | 'smooth';
         distortion: number;
         enabled: boolean;
-        showRadialLines: boolean;
     }>;
 }
 

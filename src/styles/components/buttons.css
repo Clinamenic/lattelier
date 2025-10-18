@@ -1,0 +1,105 @@
+/* Button components */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition);
+    text-decoration: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Button variants */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--color-gray-100);
+    color: var(--color-text);
+    border-color: var(--color-gray-200);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-gray-200);
+    border-color: var(--color-gray-300);
+}
+
+.btn-success {
+    background-color: var(--color-success);
+    color: white;
+    border-color: var(--color-success);
+}
+
+.btn-success:hover:not(:disabled) {
+    background-color: var(--color-success-hover);
+    border-color: var(--color-success-hover);
+}
+
+.btn-danger {
+    background-color: var(--color-error);
+    color: white;
+    border-color: var(--color-error);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: var(--color-error-hover);
+    border-color: var(--color-error-hover);
+}
+
+.btn-purple {
+    background-color: var(--color-secondary);
+    color: white;
+    border-color: var(--color-secondary);
+}
+
+.btn-purple:hover:not(:disabled) {
+    background-color: var(--color-secondary-hover);
+    border-color: var(--color-secondary-hover);
+}
+
+.btn-indigo {
+    background-color: var(--color-info);
+    color: white;
+    border-color: var(--color-info);
+}
+
+.btn-indigo:hover:not(:disabled) {
+    background-color: var(--color-info-hover);
+    border-color: var(--color-info-hover);
+}
+
+/* Button sizes */
+.btn-sm {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+}
+
+.btn-lg {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+}
+
+/* Button states */
+.btn-active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}

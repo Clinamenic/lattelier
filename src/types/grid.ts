@@ -1,4 +1,4 @@
-export type GridType = 'square' | 'triangular' | 'hexagonal';
+export type GridType = 'square' | 'triangular';
 export type BlendMode = 'normal' | 'multiply' | 'screen' | 'overlay';
 
 export interface GridConfig {

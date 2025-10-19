@@ -5,6 +5,29 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.0 - 2025-10-18
+
+### Added
+- **Dynamic Version Display**: Added version display in toolbar that automatically reads from package.json
+- **Versioning System Integration**: Integrated with workspace versioning system via post-hook scripts
+- **Version Utility**: New utility system for dynamic version management and display formatting
+- **Enhanced Modal Styling**: Improved GuideModal with semantic CSS classes replacing utility classes
+
+### Changed
+- **GuideModal Component**: Enhanced with semantic styling and improved accessibility
+- **Toolbar Component**: Added version display with subtle badge styling
+- **CSS Architecture**: Extended with version display styling and semantic improvements
+
+### Fixed
+- **TypeScript Errors**: Fixed unused imports and function call issues across core modules
+- **Code Quality**: Removed unused variables and cleaned up import statements
+- **Build System**: Resolved all TypeScript compilation errors
+
+### Technical
+- **Version Management**: Automated version display updates via version bump script integration
+- **CSS Architecture**: Enhanced with version display styling and semantic class improvements
+- **Build Process**: Improved TypeScript compilation and error handling
+
 ## 0.2.0 - 2025-10-17
 
 ### Added

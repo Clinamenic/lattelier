@@ -7,15 +7,13 @@ import { ImportPreviewModal } from './ImportPreviewModal';
 import { ErrorModal } from './ErrorModal';
 import { GuideModal } from './GuideModal';
 import { generateStateHash } from '../utils/state-hash';
+import { getVersionDisplay } from '../utils/version';
 import { useState, useEffect, useRef } from 'react';
 
 const exportManager = new ExportManager();
 const configManager = new ConfigManager();
 
 export function Toolbar() {
-    const showWells = useAppStore((state) => state.showWells);
-    const setShowWells = useAppStore((state) => state.setShowWells);
-    const wellCount = useAppStore((state) => state.deformation.wells.length);
     const deformedGrid = useAppStore((state) => state.deformedGrid);
     const gridConfig = useAppStore((state) => state.gridConfig);
     const viewport = useAppStore((state) => state.viewport);
@@ -222,12 +220,6 @@ export function Toolbar() {
         setImportErrors(null);
     };
 
-    const handleReset = () => {
-        if (confirm('Clear all wells?')) {
-            const wells = useAppStore.getState().deformation.wells;
-            wells.forEach(w => useAppStore.getState().removeWell(w.id));
-        }
-    };
 
     // Helper to get status icon for export option
     const getStatusIcon = (scale: number): string => {
@@ -261,6 +253,7 @@ export function Toolbar() {
                 <div className="toolbar-left">
                     <div className="toolbar-brand">
                         <h1 className="toolbar-title">Lattelier</h1>
+                        <span className="toolbar-version">{getVersionDisplay()}</span>
                         <button
                             onClick={() => setShowGuide(true)}
                             className="toolbar-help"

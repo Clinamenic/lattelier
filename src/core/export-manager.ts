@@ -1,8 +1,7 @@
 import { GridPoint, GridConfig, Viewport } from '../types/grid';
 import { ExportConfig } from '../types/export';
 import { CanvasRenderer } from './canvas-renderer';
-import { Well, DeformationConfig } from '../types/attractor';
-import { generateStateHash } from '../utils/state-hash';
+import { Well } from '../types/attractor';
 
 export class ExportManager {
     /**
@@ -153,16 +152,16 @@ export class ExportManager {
                 };
 
                 // Use requestIdleCallback if available, otherwise setTimeout
-                if (window.requestIdleCallback) {
-                    requestIdleCallback(convertToBlob);
+                if (typeof window.requestIdleCallback === 'function') {
+                    window.requestIdleCallback(convertToBlob);
                 } else {
                     setTimeout(convertToBlob, 0);
                 }
             };
 
             // Start rendering in the next idle cycle
-            if (window.requestIdleCallback) {
-                requestIdleCallback(renderInChunks);
+            if (typeof window.requestIdleCallback === 'function') {
+                window.requestIdleCallback(renderInChunks);
             } else {
                 setTimeout(renderInChunks, 0);
             }

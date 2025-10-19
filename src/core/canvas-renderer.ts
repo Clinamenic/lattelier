@@ -1,6 +1,5 @@
 import { GridConfig, GridPoint, Viewport } from '../types/grid';
 import { Well } from '../types/attractor';
-import { distance } from '../utils/math';
 
 export class CanvasRenderer {
     private ctx: CanvasRenderingContext2D;

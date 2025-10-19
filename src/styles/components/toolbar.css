@@ -27,6 +27,15 @@
     color: var(--color-text);
 }
 
+.toolbar-version {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+    background-color: var(--color-gray-100);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-medium);
+}
+
 .toolbar-help {
     width: 1.75rem;
     height: 1.75rem;

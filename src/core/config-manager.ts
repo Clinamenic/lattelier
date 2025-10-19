@@ -1,7 +1,6 @@
 import { GridConfig, Viewport } from '../types/grid';
 import { DeformationConfig } from '../types/attractor';
 import { GridPincherConfig, ConfigMetadata, GridSettings, DistortionSettings } from '../types/config';
-import { generateStateHash } from '../utils/state-hash';
 
 export class ConfigManager {
     /**

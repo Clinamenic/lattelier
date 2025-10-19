@@ -314,7 +314,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     // Shuffle action
     shuffleSettings: () => {
-        const { gridConfig, baseGrid } = get();
+        const { gridConfig } = get();
 
         // Helper functions for random generation
         const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;

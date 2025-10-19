@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.0 - 2025-10-17
 
+https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres/
+
 ### Added
 - Initial release of Lattelier (formerly Grid Pincher)
 - Interactive grid generation with square and triangular patterns

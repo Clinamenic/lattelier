@@ -1,5 +1,19 @@
 # CSS Architecture Documentation
 
+## 0.3.0 - 2025-01-27
+
+### Version Display System
+- **Dynamic Version Display**: Added version display in toolbar that reads from package.json
+- **Versioning Integration**: Integrated with workspace versioning system via post-hook scripts
+- **Semantic Styling**: Enhanced GuideModal with semantic CSS classes replacing utility classes
+- **TypeScript Improvements**: Fixed unused imports and function call issues across core modules
+
+### Impacted Components
+- **Toolbar Component**: Added version display with semantic styling
+- **Version Utility**: New utility system for dynamic version management
+- **GuideModal**: Enhanced with semantic CSS classes and improved accessibility
+- **Core Modules**: Cleaned up TypeScript errors and unused imports
+
 ## 0.2.0 - 2025-01-27
 
 ### Major Architectural Changes

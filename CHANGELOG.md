@@ -5,6 +5,28 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.4.0 - 2025-10-22
+
+### Added
+- **DOAP.json Metadata System**: Integrated DOAP.json as primary source of truth for project metadata
+- **Vite Metadata Plugin**: Added doap-metadata.ts plugin for automatic HTML metadata injection
+- **File Synchronization**: Added doap-sync.sh script for keeping all project files synchronized
+- **Enhanced HTML Metadata**: Added SEO, Open Graph, and Twitter Card metadata placeholders
+- **Deployment Tracking**: Enhanced deployment scripts to track deployments in DOAP.json
+- **Public Metadata Access**: DOAP.json now bundled with deployments for public access
+
+### Changed
+- **Build System**: Updated Vite configuration with metadata injection plugin
+- **Deployment Scripts**: Modified to use DOAP.json as primary metadata source
+- **Version Management**: Enhanced to update DOAP.json and sync across all files
+- **HTML Head**: Enhanced with comprehensive metadata placeholders for SEO and social sharing
+
+### Framework Benefits
+- **Unified Metadata**: Single source of truth for all project information
+- **Enhanced SEO**: Automatic metadata injection for better discoverability
+- **Deployment History**: Complete tracking of all Arweave deployments
+- **Public Access**: Project metadata accessible via Arweave deployment URLs
+
 ## 0.3.0 - 2025-10-18
 
 https://fnf3y7jzivfyvtlaorhdeuuqcrm26uttk6tqo4lt33grxb4otcwa.arweave.net/K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw/

@@ -1,37 +1,40 @@
 {
-    "name": "lattelier",
-    "version": "0.3.0",
-    "type": "module",
-    "description": "Professional web-based lattice distortion and pattern generation tool",
-    "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
-        "preview": "vite preview",
-        "lint": "eslint src --ext ts,tsx",
-        "typecheck": "tsc --noEmit",
-        "deploy": ".workspace/scripts/deploy-to-arweave.sh --prod",
-        "deploy:dev": ".workspace/scripts/deploy-to-arweave.sh --dev",
-        "deploy:quick": ".workspace/scripts/quick-deploy.sh"
-    },
-    "dependencies": {
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zustand": "^4.4.6",
-        "gsap": "^3.12.4",
-        "immer": "^10.0.3"
-    },
-    "devDependencies": {
-        "@types/react": "^18.2.43",
-        "@types/react-dom": "^18.2.17",
-        "@typescript-eslint/eslint-plugin": "^6.14.0",
-        "@typescript-eslint/parser": "^6.14.0",
-        "@vitejs/plugin-react": "^4.2.1",
-        "autoprefixer": "^10.4.16",
-        "eslint": "^8.55.0",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-react-refresh": "^0.4.5",
-        "postcss": "^8.4.32",
-        "typescript": "^5.3.3",
-        "vite": "^5.0.8"
-    }
+  "name": "Lattelier",
+  "version": "0.4.0",
+  "type": "module",
+  "description": "Professional web-based lattice distortion and pattern generation tool for creating parametric graphics",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext ts,tsx",
+    "typecheck": "tsc --noEmit",
+    "deploy": ".workspace/scripts/deploy-to-arweave.sh --prod",
+    "deploy:dev": ".workspace/scripts/deploy-to-arweave.sh --dev",
+    "deploy:quick": ".workspace/scripts/quick-deploy.sh"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.4.6",
+    "gsap": "^3.12.4",
+    "immer": "^10.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.32",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  },
+  "author": "Spencer Saar Cavanaugh",
+  "homepage": "https://www.lattelier.clinamenic.com",
+  "repository": "https://github.com/clinamenic/lattelier"
 }

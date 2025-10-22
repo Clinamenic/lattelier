@@ -1,5 +1,26 @@
 # CSS Architecture Documentation
 
+## 0.4.0 - 2025-10-22
+
+### DOAP.json Framework Integration
+- **Metadata System**: Integrated DOAP.json as primary source of truth for project metadata
+- **Vite Plugin**: Added doap-metadata.ts plugin for automatic HTML metadata injection
+- **Deployment Tracking**: Enhanced deployment scripts to track deployments in DOAP.json
+- **File Synchronization**: Added doap-sync.sh for keeping all project files synchronized
+
+### Impacted Components
+- **Build System**: Vite configuration updated with metadata injection plugin
+- **HTML Head**: Enhanced with SEO, Open Graph, and Twitter Card metadata placeholders
+- **Deployment Scripts**: Updated to use DOAP.json as primary metadata source
+- **Version Management**: Enhanced to update DOAP.json and sync across all files
+- **Public Metadata**: DOAP.json now bundled with deployments for public access
+
+### Framework Benefits
+- **Unified Metadata**: Single source of truth for all project information
+- **Enhanced SEO**: Automatic metadata injection for better discoverability
+- **Deployment History**: Complete tracking of all Arweave deployments
+- **Public Access**: Project metadata accessible via Arweave deployment URLs
+
 ## 0.3.0 - 2025-01-27
 
 ### Version Display System

@@ -40,8 +40,9 @@ NC='\033[0m' # No Color
 # Defaults (can be overridden via config)
 REQUIRE_CLEAN_TREE=${REQUIRE_CLEAN_TREE:-false}
 PACKAGE_JSON_PATH=${PACKAGE_JSON_PATH:-"$REPO_ROOT/package.json"}
+DOAP_JSON_PATH=${DOAP_JSON_PATH:-"$REPO_ROOT/doap.json"}
 UPDATE_DISPLAY_VERSION=${UPDATE_DISPLAY_VERSION:-true}
-DISPLAY_VERSION_HTML_PATH=${DISPLAY_VERSION_HTML_PATH:-"$REPO_ROOT/src/renderer/index.html"}
+DISPLAY_VERSION_HTML_PATH=${DISPLAY_VERSION_HTML_PATH:-"$REPO_ROOT/index.html"}
 
 # Hook paths
 PRE_HOOK=${PRE_HOOK:-"$REPO_ROOT/.workspace/scripts/version-bump.pre.sh"}
@@ -98,9 +99,14 @@ if [ "$REQUIRE_CLEAN_TREE" = true ]; then
   fi
 fi
 
-# Get current version from package.json (absolute path)
-CURRENT_VERSION=$(node -p "require('$PACKAGE_JSON_PATH').version")
-echo -e "${YELLOW}Current version: $CURRENT_VERSION${NC}"
+# Get current version from doap.json (primary) or fallback to package.json
+if [ -f "$DOAP_JSON_PATH" ]; then
+  CURRENT_VERSION=$(node -p "require('$DOAP_JSON_PATH').version")
+  echo -e "${YELLOW}Current version (from doap.json): $CURRENT_VERSION${NC}"
+else
+  CURRENT_VERSION=$(node -p "require('$PACKAGE_JSON_PATH').version")
+  echo -e "${YELLOW}Current version (from package.json): $CURRENT_VERSION${NC}"
+fi
 
 # Run pre-hook if present
 if [ -f "$PRE_HOOK" ]; then
@@ -119,6 +125,25 @@ fi
 NEW_VERSION=${NEW_VERSION#v}
 
 echo -e "${GREEN}New version: $NEW_VERSION${NC}"
+
+# Update doap.json with new version
+if [ -f "$DOAP_JSON_PATH" ]; then
+  echo -e "${YELLOW}Updating doap.json with new version...${NC}"
+  node -e "
+    const fs = require('fs');
+    const doapData = JSON.parse(fs.readFileSync('$DOAP_JSON_PATH', 'utf8'));
+    doapData.version = '$NEW_VERSION';
+    doapData.dateModified = new Date().toISOString();
+    fs.writeFileSync('$DOAP_JSON_PATH', JSON.stringify(doapData, null, 2));
+  "
+  echo -e "${YELLOW}Syncing version to package.json...${NC}"
+  node -e "
+    const fs = require('fs');
+    const packageData = JSON.parse(fs.readFileSync('$PACKAGE_JSON_PATH', 'utf8'));
+    packageData.version = '$NEW_VERSION';
+    fs.writeFileSync('$PACKAGE_JSON_PATH', JSON.stringify(packageData, null, 2));
+  "
+fi
 
 # Update display version if enabled and file exists
 if [ "$UPDATE_DISPLAY_VERSION" = true ] && [ -f "$DISPLAY_VERSION_HTML_PATH" ]; then

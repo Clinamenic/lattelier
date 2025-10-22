@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.3.0 - 2025-10-18
 
+https://fnf3y7jzivfyvtlaorhdeuuqcrm26uttk6tqo4lt33grxb4otcwa.arweave.net/K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw/
+
 ### Added
 - **Dynamic Version Display**: Added version display in toolbar that automatically reads from package.json
 - **Versioning System Integration**: Integrated with workspace versioning system via post-hook scripts
@@ -29,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Build Process**: Improved TypeScript compilation and error handling
 
 ## 0.2.0 - 2025-10-17
+
+https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres/
 
 ### Added
 - **Complete CSS Architecture Overhaul**: Replaced Tailwind CSS with custom, semantic CSS system

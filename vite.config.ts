@@ -1,9 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { doapMetadataPlugin } from './.workspace/scripts/doap-metadata'
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        doapMetadataPlugin({
+            doapPath: './doap.json'
+        })
+    ],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

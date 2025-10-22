@@ -97,11 +97,22 @@ deploy() {
     log_info "Starting deployment to Arweave..."
     cd "$PROJECT_ROOT"
     
-    # Get current version from package.json
-    local version=$(node -p "require('./package.json').version" 2>/dev/null || echo "unknown")
+    # Get current version and app name from doap.json (primary) or fallback to package.json
+    local version="unknown"
+    local app_name="Lattelier"
+    
+    if [[ -f "./doap.json" ]]; then
+        version=$(node -p "require('./doap.json').version" 2>/dev/null || echo "unknown")
+        app_name=$(node -p "require('./doap.json').name" 2>/dev/null || echo "Lattelier")
+        log_info "Using metadata from doap.json"
+    else
+        version=$(node -p "require('./package.json').version" 2>/dev/null || echo "unknown")
+        app_name=$(node -p "require('./package.json').name" 2>/dev/null || echo "Lattelier")
+        log_info "Using metadata from package.json"
+    fi
     
     # Create deployment tags
-    local tags="--tag App-Name Lattelier"
+    local tags="--tag App-Name $app_name"
     tags="$tags --tag App-Version $version"
     tags="$tags --tag Content-Type text/html"
     tags="$tags --tag App-Type web-app"
@@ -132,9 +143,13 @@ deploy() {
             log_success "Transaction ID: $tx_id"
             log_success "Arweave URL: https://arweave.net/$tx_id"
             log_success "Direct URL: https://arweave.net/$tx_id"
+            log_success "Project Metadata: https://arweave.net/$tx_id/doap.json"
             
             # Save deployment info
             save_deployment_info "$tx_id" "$version" "$env_flag"
+            
+            # Update doap.json with deployment info
+            update_doap_deployment "$tx_id" "$version" "$env_flag"
             
             # Optionally open in browser
             if command -v open >/dev/null 2>&1; then
@@ -181,6 +196,54 @@ EOF
     
     # Use a simple approach to add the record
     log_info "Saving deployment information to $deployments_file"
+}
+
+# Update doap.json with deployment information
+update_doap_deployment() {
+    local tx_id="$1"
+    local version="$2"
+    local env="$3"
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    if [[ -f "./doap.json" ]]; then
+        log_info "Updating doap.json with deployment information..."
+
+        node -e "
+            const fs = require('fs');
+            const doapData = JSON.parse(fs.readFileSync('./doap.json', 'utf8'));
+
+            // Create deployment record
+            const deployment = {
+                '@type': 'WebSite',
+                version: '$version',
+                url: 'https://arweave.net/$tx_id',
+                transactionId: '$tx_id',
+                arweaveUrl: 'https://arweave.net/$tx_id',
+                deploymentDate: '$timestamp',
+                environment: '$env',
+                description: 'Permanent deployment on Arweave permaweb',
+                hostingProvider: 'Arweave'
+            };
+
+            // Initialize deployments array if it doesn't exist
+            if (!doapData.deployments) {
+                doapData.deployments = [];
+            }
+
+            // Add new deployment to the beginning of the array
+            doapData.deployments.unshift(deployment);
+
+            // Update dateModified
+            doapData.dateModified = '$timestamp';
+
+            // Write back to file
+            fs.writeFileSync('./doap.json', JSON.stringify(doapData, null, 2));
+        "
+        
+        log_success "Updated doap.json with deployment information"
+    else
+        log_warning "doap.json not found, skipping deployment tracking"
+    fi
 }
 
 # Main execution

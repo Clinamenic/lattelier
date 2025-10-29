@@ -5,6 +5,28 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.5.0 - 2025-10-29
+
+### Added
+
+- **Header Component**: New dedicated Header component with two-tier system (navbar + toolbar)
+- **Icon System**: Centralized icon component (`icons.tsx`) for consistent SVG icon usage across the application
+- **Header Styling**: New header.css with semantic navbar and toolbar styles for improved visual hierarchy
+
+### Changed
+
+- **Component Architecture**: Migrated toolbar functionality from Toolbar component to new Header component
+- **Button System**: Simplified button variants and styling patterns for better maintainability
+- **Form Components**: Streamlined form styling with reduced complexity
+- **Layout Structure**: Enhanced visual hierarchy with fixed navbar and collapsible toolbar sections
+- **Component Organization**: Consolidated toolbar state and actions in Header component for better state management
+
+### Technical
+
+- **CSS Architecture**: Updated header.css with semantic navbar and toolbar styles
+- **Component Refactoring**: Restructured UI components for improved organization and maintainability
+- **Icon Architecture**: Centralized icon definitions in icons.tsx for maintainability and consistency
+
 ## 0.4.0 - 2025-10-22
 
 ### Added

@@ -45,7 +45,7 @@ export function ErrorModal({ title, errors, onClose }: ErrorModalProps) {
                 <div className="modal-footer">
                     <button
                         onClick={onClose}
-                        className="btn btn-secondary"
+                        className="btn"
                     >
                         Close
                     </button>

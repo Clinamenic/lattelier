@@ -229,7 +229,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
                 <div className="modal-footer">
                     <button
                         onClick={onClose}
-                        className="btn btn-primary"
+                        className="btn"
                     >
                         Got It!
                     </button>

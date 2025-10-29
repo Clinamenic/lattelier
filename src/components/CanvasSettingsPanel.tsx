@@ -22,14 +22,12 @@ export function CanvasSettingsPanel() {
     const gridConfig = useAppStore((state) => state.gridConfig);
     const setGridConfig = useAppStore((state) => state.setGridConfig);
     const isCollapsed = useAppStore((state) => state.leftSidebarCollapsed);
-    const toggleCollapse = useAppStore((state) => state.toggleLeftSidebar);
 
     return (
         <CollapsiblePanel
             title="Canvas Settings"
             direction="left"
             isCollapsed={isCollapsed}
-            onToggle={toggleCollapse}
         >
             <div className="space-y-6">
                 {/* Canvas Section */}

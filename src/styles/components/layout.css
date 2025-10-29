@@ -137,6 +137,7 @@
     flex: 1;
     position: relative;
     overflow: hidden;
+    padding-top: var(--header-height);
 }
 
 .app-canvas {
@@ -148,18 +149,22 @@
 }
 
 .app-sidebar-left {
+    transform: translateX(-1px);
     position: absolute;
     left: 0;
-    top: 0;
+    top: var(--header-height);
     bottom: 0;
     z-index: 10;
-    border: none !important;
+
+    border-right: var(--border-width) solid var(--color-border);
 }
 
 .app-sidebar-right {
+    transform: translateX(1px);
     position: absolute;
     right: 0;
-    top: 0;
+    top: var(--header-height);
     bottom: 0;
     z-index: 10;
+    border-left: var(--border-width) solid var(--color-border);
 }

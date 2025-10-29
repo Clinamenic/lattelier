@@ -7,9 +7,9 @@
   "name": "Lattelier",
   "description": "Professional web-based lattice distortion and pattern generation tool for creating parametric graphics",
   "url": "https://github.com/clinamenic/lattelier",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-10-22T19:55:12.156Z",
+  "dateModified": "2025-10-29T15:39:31.054Z",
   "license": "https://opensource.org/licenses/MIT",
   "programmingLanguage": [
     "TypeScript",
@@ -84,8 +84,52 @@
   "deployments": [
     {
       "@type": "WebSite",
+      "version": "0.4.0",
+      "url": "https://arweave.net/ZpwvqqfBOw-eRclSt-lNoxwTZCO47ZHQ0az16UQxQ1k",
+      "transactionId": "ZpwvqqfBOw-eRclSt-lNoxwTZCO47ZHQ0az16UQxQ1k",
+      "arweaveUrl": "https://arweave.net/ZpwvqqfBOw-eRclSt-lNoxwTZCO47ZHQ0az16UQxQ1k",
+      "deploymentDate": "2025-10-22T20:57:24Z",
+      "environment": "--prod",
+      "description": "Permanent deployment on Arweave permaweb",
+      "hostingProvider": "Arweave"
+    },
+    {
+      "@type": "WebSite",
+      "version": "0.4.0",
+      "url": "https://arweave.net/UCs1t02UqGmSSr00sCj9eONgTsusXk3GzyvSth1aLSk",
+      "transactionId": "UCs1t02UqGmSSr00sCj9eONgTsusXk3GzyvSth1aLSk",
+      "arweaveUrl": "https://arweave.net/UCs1t02UqGmSSr00sCj9eONgTsusXk3GzyvSth1aLSk",
+      "deploymentDate": "2025-10-22T20:01:55Z",
+      "environment": "--prod",
+      "description": "Permanent deployment on Arweave permaweb",
+      "hostingProvider": "Arweave"
+    },
+    {
+      "@type": "WebSite",
+      "version": "0.4.0",
+      "url": "https://arweave.net/_mrjqVCh54aFAZs8ZvF1XbDhfSKWlcDlbxNK_0EWggw",
+      "transactionId": "_mrjqVCh54aFAZs8ZvF1XbDhfSKWlcDlbxNK_0EWggw",
+      "arweaveUrl": "https://arweave.net/_mrjqVCh54aFAZs8ZvF1XbDhfSKWlcDlbxNK_0EWggw",
+      "deploymentDate": "2025-10-22T20:00:00Z",
+      "environment": "--prod",
+      "description": "Permanent deployment on Arweave permaweb",
+      "hostingProvider": "Arweave"
+    },
+    {
+      "@type": "WebSite",
+      "version": "0.4.0",
+      "url": "https://arweave.net/H-CnnapHb1dqAP0Eo1-6FSA868Hj9ZwA9z6LQvwScEo",
+      "transactionId": "H-CnnapHb1dqAP0Eo1-6FSA868Hj9ZwA9z6LQvwScEo",
+      "arweaveUrl": "https://arweave.net/H-CnnapHb1dqAP0Eo1-6FSA868Hj9ZwA9z6LQvwScEo",
+      "deploymentDate": "2025-10-22T19:59:16Z",
+      "environment": "--prod",
+      "description": "Permanent deployment on Arweave permaweb",
+      "hostingProvider": "Arweave"
+    },
+    {
+      "@type": "WebSite",
       "version": "0.3.0",
-      "url": "https://fnf3y7jzivfyvtlaorhdeuuqcrm26uttk6tqo4lt33grxb4otcwa.arweave.net/K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw/",
+      "url": "https://arweave.net/K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw",
       "transactionId": "K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw",
       "arweaveUrl": "https://arweave.net/K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw",
       "deploymentDate": "2025-10-18T00:00:00Z",
@@ -96,7 +140,7 @@
     {
       "@type": "WebSite",
       "version": "0.2.0",
-      "url": "https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres/",
+      "url": "https://arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres",
       "transactionId": "EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres",
       "arweaveUrl": "https://arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres",
       "deploymentDate": "2025-10-15T00:00:00Z",

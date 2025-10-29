@@ -1,4 +1,4 @@
-import { Toolbar } from './components/Toolbar';
+import { Header } from './components/Header';
 import { CanvasSettingsPanel } from './components/CanvasSettingsPanel';
 import { Canvas } from './components/Canvas';
 import { DistortionPanel } from './components/DistortionPanel';
@@ -6,7 +6,7 @@ import { DistortionPanel } from './components/DistortionPanel';
 function App() {
     return (
         <div className="app-container">
-            <Toolbar />
+            <Header />
             <div className="app-content">
                 {/* Canvas - fills entire area, behind sidebars */}
                 <div className="app-canvas">

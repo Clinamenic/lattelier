@@ -1,33 +1,36 @@
-/* Toolbar component */
-.toolbar {
-    height: 3.5rem;
+/* Header component - Two-tier system */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-dropdown);
     background-color: var(--color-surface);
-    border-bottom: var(--border-width) solid var(--color-border);
+}
+
+/* Primary navbar */
+.navbar {
+    height: 3.5rem;
     padding: 0 var(--space-lg);
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.toolbar-left {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-}
-
-.toolbar-brand {
+.navbar-left {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
 }
 
-.toolbar-title {
+.navbar-title {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-text);
+    margin: 0;
 }
 
-.toolbar-version {
+.navbar-version {
     font-size: var(--font-size-sm);
     color: var(--color-text-light);
     background-color: var(--color-gray-100);
@@ -36,38 +39,49 @@
     font-weight: var(--font-weight-medium);
 }
 
-.toolbar-help {
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: var(--radius-full);
-    background-color: rgba(59, 130, 246, 0.1);
-    color: var(--color-primary);
-    border: none;
-    cursor: pointer;
+.navbar-right {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-bold);
-    transition: background-color var(--transition);
+    gap: var(--space-sm);
 }
 
-.toolbar-help:hover {
-    background-color: rgba(59, 130, 246, 0.2);
+/* Toolbar */
+.toolbar {
+    height: 2.5rem;
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+    border-bottom: var(--border-width) solid var(--color-border);
+    transition: all var(--transition);
+    overflow: visible;
+    border-top: var(--border-width) solid var(--color-border);
 }
 
-.toolbar-info {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-light);
-}
-
+.toolbar-left,
+.toolbar-center,
 .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.toolbar-center {
+    flex: 1;
+    justify-content: center;
     display: flex;
     align-items: center;
     gap: var(--space-md);
 }
 
-/* Dropdown menu */
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Dropdown menu (moved from toolbar.css) */
 .dropdown {
     position: relative;
 }
@@ -79,10 +93,11 @@
     margin-top: var(--space-sm);
     width: 16rem;
     background-color: var(--color-surface);
-    border: var(--border-width) solid var(--color-border);
+    border: 2px solid red; /* Temporary debugging border */
     border-radius: var(--radius-md);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    z-index: var(--z-dropdown);
+    z-index: var(--z-modal);
+    min-height: 200px; /* Temporary minimum height for debugging */
 }
 
 .dropdown-header {

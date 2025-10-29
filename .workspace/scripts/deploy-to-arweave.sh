@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Lattelier - Streamlined Arweave Deployment Script
-# Usage: ./deploy-to-arweave.sh [--dev|--prod]
+# Usage: ./deploy-to-arweave.sh [--dev|--prod] [--auto-confirm]
 
 set -e  # Exit on any error
 
@@ -252,6 +252,19 @@ main() {
     log_info "=================================="
     
     local env_flag="${1:---prod}"
+    local auto_confirm=false
+    
+    # Parse arguments
+    for arg in "$@"; do
+        case $arg in
+            --auto-confirm)
+                auto_confirm=true
+                ;;
+            --dev|--prod)
+                env_flag="$arg"
+                ;;
+        esac
+    done
     
     # Validate environment flag
     if [[ "$env_flag" != "--dev" && "$env_flag" != "--prod" ]]; then
@@ -269,12 +282,16 @@ main() {
     
     # Confirm deployment
     if [[ "$env_flag" == "--prod" ]]; then
-        log_warning "You are about to deploy to PRODUCTION"
-        read -p "Continue? (y/N): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            log_info "Deployment cancelled"
-            exit 0
+        if [[ "$auto_confirm" == "true" ]]; then
+            log_info "Auto-confirm enabled, proceeding with production deployment"
+        else
+            log_warning "You are about to deploy to PRODUCTION"
+            read -p "Continue? (y/N): " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                log_info "Deployment cancelled"
+                exit 0
+            fi
         fi
     fi
     

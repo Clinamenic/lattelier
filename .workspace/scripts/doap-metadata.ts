@@ -11,8 +11,8 @@ export function doapMetadataPlugin(options: DOAPMetadataOptions): Plugin {
 
     return {
         name: 'doap-metadata',
-        buildStart() {
-            // Copy doap.json to dist directory during build
+        writeBundle() {
+            // Copy doap.json to dist directory after build is complete
             try {
                 const distPath = path.join(process.cwd(), 'dist')
                 const doapDestPath = path.join(distPath, 'doap.json')

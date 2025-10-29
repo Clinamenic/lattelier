@@ -8,6 +8,7 @@ import { ErrorModal } from './ErrorModal';
 import { GuideModal } from './GuideModal';
 import { generateStateHash } from '../utils/state-hash';
 import { getVersionDisplay } from '../utils/version';
+import { ExportIcon, ImportIcon, ShuffleIcon, SaveIcon } from './icons';
 import { useState, useEffect, useRef } from 'react';
 
 const exportManager = new ExportManager();
@@ -269,33 +270,40 @@ export function Toolbar() {
 
                     <button
                         onClick={handleExportConfig}
-                        className="btn btn-purple"
+                        className="btn btn-icon-only"
+                        title="Export Config"
+                        aria-label="Export Config"
                     >
-                        Export Config
+                        <ExportIcon className="icon" size={16} />
                     </button>
 
                     <button
                         onClick={handleImportClick}
-                        className="btn btn-indigo"
+                        className="btn btn-icon-only"
+                        title="Import Config"
+                        aria-label="Import Config"
                     >
-                        Import Config
+                        <ImportIcon className="icon" size={16} />
                     </button>
 
                     <button
                         onClick={shuffleSettings}
-                        className="btn btn-purple"
+                        className="btn btn-icon-only"
                         title="Randomize settings within current dimensions"
+                        aria-label="Shuffle Settings"
                     >
-                        🔄 Shuffle
+                        <ShuffleIcon className="icon" size={16} />
                     </button>
 
                     <div className="dropdown" ref={downloadMenuRef}>
                         <button
                             onClick={() => setShowDownloadMenu(!showDownloadMenu)}
-                            className="btn btn-success"
+                            className="btn btn-icon-only"
                             disabled={isExporting}
+                            title={isExporting ? 'Exporting...' : 'Download'}
+                            aria-label={isExporting ? 'Exporting...' : 'Download'}
                         >
-                            {isExporting ? 'Exporting...' : 'Download'}
+                            <SaveIcon className="icon" size={16} />
                         </button>
 
                         {showDownloadMenu && (

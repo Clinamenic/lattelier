@@ -1,5 +1,28 @@
 # CSS Architecture Documentation
 
+## 0.5.0 - 2025-01-22
+
+### Header Component Restructuring
+- **New Header Component**: Introduced dedicated Header component with two-tier system (navbar + toolbar)
+- **Icon System**: Added centralized icon component (`icons.tsx`) for consistent icon usage
+- **Component Refactoring**: Migrated toolbar functionality from Toolbar component to Header component
+- **CSS Simplification**: Streamlined button system and form components with reduced complexity
+- **Layout Improvements**: Enhanced visual hierarchy with fixed navbar and collapsible toolbar sections
+
+### Impacted Components
+- **Header Component**: New component consolidating navbar branding and toolbar actions
+- **Icons Component**: Centralized SVG icon system for reusable icon components
+- **Toolbar Component**: Refactored to work with new Header structure
+- **CSS Architecture**: Updated header.css with navbar and toolbar styles
+- **Button System**: Simplified button variants and styling patterns
+- **Form Components**: Streamlined form styling with reduced complexity
+
+### Architectural Changes
+- **Component Hierarchy**: Header now wraps both navbar and toolbar sections
+- **State Management**: Consolidated toolbar state and actions in Header component
+- **Styling Architecture**: Added header.css with semantic navbar and toolbar styles
+- **Icon Architecture**: Centralized icon definitions in icons.tsx for maintainability
+
 ## 0.4.0 - 2025-10-22
 
 ### DOAP.json Framework Integration

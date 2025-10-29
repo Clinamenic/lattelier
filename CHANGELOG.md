@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.4.0 - 2025-10-22
 
 ### Added
+
 - **DOAP.json Metadata System**: Integrated DOAP.json as primary source of truth for project metadata
 - **Vite Metadata Plugin**: Added doap-metadata.ts plugin for automatic HTML metadata injection
 - **File Synchronization**: Added doap-sync.sh script for keeping all project files synchronized
@@ -16,12 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Public Metadata Access**: DOAP.json now bundled with deployments for public access
 
 ### Changed
+
 - **Build System**: Updated Vite configuration with metadata injection plugin
 - **Deployment Scripts**: Modified to use DOAP.json as primary metadata source
 - **Version Management**: Enhanced to update DOAP.json and sync across all files
 - **HTML Head**: Enhanced with comprehensive metadata placeholders for SEO and social sharing
 
 ### Framework Benefits
+
 - **Unified Metadata**: Single source of truth for all project information
 - **Enhanced SEO**: Automatic metadata injection for better discoverability
 - **Deployment History**: Complete tracking of all Arweave deployments
@@ -32,22 +35,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 https://fnf3y7jzivfyvtlaorhdeuuqcrm26uttk6tqo4lt33grxb4otcwa.arweave.net/K0u8fTlFS4rNYHROMlKQFFmvUnNXpwdxc97NG4eOmKw/
 
 ### Added
+
 - **Dynamic Version Display**: Added version display in toolbar that automatically reads from package.json
 - **Versioning System Integration**: Integrated with workspace versioning system via post-hook scripts
 - **Version Utility**: New utility system for dynamic version management and display formatting
 - **Enhanced Modal Styling**: Improved GuideModal with semantic CSS classes replacing utility classes
 
 ### Changed
+
 - **GuideModal Component**: Enhanced with semantic styling and improved accessibility
 - **Toolbar Component**: Added version display with subtle badge styling
 - **CSS Architecture**: Extended with version display styling and semantic improvements
 
 ### Fixed
+
 - **TypeScript Errors**: Fixed unused imports and function call issues across core modules
 - **Code Quality**: Removed unused variables and cleaned up import statements
 - **Build System**: Resolved all TypeScript compilation errors
 
 ### Technical
+
 - **Version Management**: Automated version display updates via version bump script integration
 - **CSS Architecture**: Enhanced with version display styling and semantic class improvements
 - **Build Process**: Improved TypeScript compilation and error handling
@@ -57,6 +64,7 @@ https://fnf3y7jzivfyvtlaorhdeuuqcrm26uttk6tqo4lt33grxb4otcwa.arweave.net/K0u8fTl
 https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres/
 
 ### Added
+
 - **Complete CSS Architecture Overhaul**: Replaced Tailwind CSS with custom, semantic CSS system
 - **Component-Based Styling**: Implemented isolated CSS files for each component
 - **Design System**: Comprehensive design tokens with CSS custom properties
@@ -69,12 +77,14 @@ https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoM
   - CSS architecture design documentation
 
 ### Changed
+
 - **Styling System**: Complete migration from Tailwind CSS to custom CSS architecture
 - **Component Structure**: Updated all React components with new CSS classes
 - **Build Configuration**: Updated PostCSS configuration for custom CSS processing
 - **Bundle Size**: Significantly reduced JavaScript bundle size by removing Tailwind dependency
 
 ### Technical
+
 - **CSS Architecture**: Implemented semantic, maintainable CSS with component isolation
 - **Design Tokens**: Established comprehensive design system with CSS variables
 - **Build System**: Updated build pipeline for custom CSS processing
@@ -85,6 +95,7 @@ https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoM
 https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoMKSeFzRVT-Hjhl-pc8OagL4Ih1VjcpiAqpres/
 
 ### Added
+
 - Initial release of Lattelier (formerly Grid Pincher)
 - Interactive grid generation with square and triangular patterns
 - Well-based deformation system with attract/repel forces
@@ -115,15 +126,16 @@ https://cbnokgudbje6c42fkt7b4odf7kltyonibpqiq5kwg4uyqcvjvxvq.arweave.net/EFrlGoM
 - Arweave deployment support for permanent hosting
 
 ### Changed
+
 - Renamed from "Grid Pincher" to "Lattelier"
 - Migrated project structure from nested `grid-pincher-app/` to root level
 - Enhanced README with comprehensive usage guide and Arweave deployment instructions
 
 ### Technical
+
 - React 18 + TypeScript for type-safe development
 - Vite for fast builds and development
 - Zustand for lightweight state management
 - Tailwind CSS for modern styling
 - HTML5 Canvas for high-performance rendering
 - File System Access API for improved file saving (with legacy fallback)
-

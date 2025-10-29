@@ -6,12 +6,9 @@ export function DistortionPanel() {
     const wells = useAppStore((state) => state.deformation.wells);
     const updateWell = useAppStore((state) => state.updateWell);
     const removeWell = useAppStore((state) => state.removeWell);
-    const activeTool = useAppStore((state) => state.activeTool);
-    const setActiveTool = useAppStore((state) => state.setActiveTool);
     const selectWell = useAppStore((state) => state.selectWell);
     const setHoveredWell = useAppStore((state) => state.setHoveredWell);
     const isCollapsed = useAppStore((state) => state.rightSidebarCollapsed);
-    const toggleCollapse = useAppStore((state) => state.toggleRightSidebar);
     const showWells = useAppStore((state) => state.showWells);
     const setShowWells = useAppStore((state) => state.setShowWells);
 
@@ -28,27 +25,8 @@ export function DistortionPanel() {
             title="Distortion Settings"
             direction="right"
             isCollapsed={isCollapsed}
-            onToggle={toggleCollapse}
         >
             <div className="space-y-4">
-                {/* Tools Section - Always Visible */}
-                <section className="distortion-section">
-                    <h3 className="distortion-section-title">Tools</h3>
-                    <div className="tool-buttons">
-                        <button
-                            onClick={() => setActiveTool('pan')}
-                            className={`tool-button ${activeTool === 'pan' ? 'tool-button-active' : 'tool-button-inactive'}`}
-                        >
-                            Pan & Navigate
-                        </button>
-                        <button
-                            onClick={() => setActiveTool('placeWell')}
-                            className={`tool-button ${activeTool === 'placeWell' ? 'tool-button-active' : 'tool-button-inactive'}`}
-                        >
-                            Place Well
-                        </button>
-                    </div>
-                </section>
 
                 {/* Wells Section */}
                 <section className="distortion-section">
@@ -72,22 +50,6 @@ export function DistortionPanel() {
 
                     {!selectedWell ? (
                         <>
-                            <p className="help-text">
-                                Use the Place Well tool to add wells, or select an existing one to edit its properties.
-                            </p>
-
-                            <div className="controls-section">
-                                <h4 className="controls-title">
-                                    Controls
-                                </h4>
-                                <ul className="controls-list">
-                                    <li><strong>Pan Tool:</strong> Click & drag to navigate</li>
-                                    <li><strong>Well Tool:</strong> Click to place, drag to move</li>
-                                    <li><strong>Scroll:</strong> Zoom in/out</li>
-                                    <li><strong>Right Click:</strong> Always pans</li>
-                                </ul>
-                            </div>
-
                             {wells.length > 0 && (
                                 <div className="controls-section">
                                     <h4 className="controls-title">
@@ -236,7 +198,7 @@ export function DistortionPanel() {
 
                             <button
                                 onClick={() => removeWell(selectedWell.id)}
-                                className="btn btn-error"
+                                className="btn"
                             >
                                 Delete Well
                             </button>

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.5.0 - 2025-10-29
 
+https://arweave.net/aXZA2vrOnD5QvOOvRZQYJMlwLSCmECAYrgMU0IQRk7U
+
 ### Added
 
 - **Header Component**: New dedicated Header component with two-tier system (navbar + toolbar)
@@ -26,6 +28,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CSS Architecture**: Updated header.css with semantic navbar and toolbar styles
 - **Component Refactoring**: Restructured UI components for improved organization and maintainability
 - **Icon Architecture**: Centralized icon definitions in icons.tsx for maintainability and consistency
+
+### Deployment
+
+- **Transaction ID**: aXZA2vrOnD5QvOOvRZQYJMlwLSCmECAYrgMU0IQRk7U
+- **URL**: https://arweave.net/aXZA2vrOnD5QvOOvRZQYJMlwLSCmECAYrgMU0IQRk7U
+- **Environment**: production
+- **Deployment Date**: 2025-10-29
 
 ## 0.4.0 - 2025-10-22
 

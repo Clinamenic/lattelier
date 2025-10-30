@@ -88,6 +88,7 @@
     /* Layout dimensions */
     --sidebar-width: 10rem; /* 192px */
     --header-height: 6rem; /* 3.5rem navbar + 3rem toolbar */
+    --navbar-height: 2rem;
     --pill-height: 1rem;
     --pill-text-size: 0.6rem;
 }

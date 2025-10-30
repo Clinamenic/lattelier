@@ -1,6 +1,6 @@
 /* Toolbar component */
 .toolbar {
-    height: 3.5rem;
+    height: var(--navbar-height) !important;
     background-color: var(--color-surface);
     border-bottom: var(--border-width) solid var(--border-color);
     padding: 0 var(--space-md);

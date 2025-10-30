@@ -152,7 +152,7 @@
     transform: translateX(-1px);
     position: absolute;
     left: 0;
-    top: var(--header-height);
+    top: calc(var(--navbar-height) *2);
     bottom: 0;
     z-index: 10;
 
@@ -163,7 +163,7 @@
     transform: translateX(1px);
     position: absolute;
     right: 0;
-    top: var(--header-height);
+    top: calc(var(--navbar-height) *2);
     bottom: 0;
     z-index: 10;
     border-left: var(--border-width) solid var(--border-color);

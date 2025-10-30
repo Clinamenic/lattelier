@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ExportIcon, ImportIcon, ShuffleIcon, SaveIcon, RightSidebarHideIcon, RightSidebarShowIcon, PanIcon, PlaceWellIcon } from './icons';
+import { ExportIcon, ImportIcon, ShuffleIcon, SaveIcon, RightSidebarHideIcon, RightSidebarShowIcon, LeftSidebarHideIcon, LeftSidebarShowIcon, PanIcon, PlaceWellIcon } from './icons';
 import { useAppStore, ImportMode } from '../state/app-store';
 import { ExportManager } from '../core/export-manager';
 import { ConfigManager } from '../core/config-manager';
@@ -273,9 +273,9 @@ export function Header() {
                             aria-label={leftSidebarCollapsed ? 'Show Left Sidebar' : 'Hide Left Sidebar'}
                         >
                             {leftSidebarCollapsed ? (
-                                <RightSidebarHideIcon className="icon" size={16} />
+                                <LeftSidebarShowIcon className="icon" size={18} />
                             ) : (
-                                <RightSidebarShowIcon className="icon" size={16} />
+                                <LeftSidebarHideIcon className="icon" size={18} />
                             )}
                         </button>
                     </div>
@@ -422,9 +422,9 @@ export function Header() {
                             aria-label={rightSidebarCollapsed ? 'Show Right Sidebar' : 'Hide Right Sidebar'}
                         >
                             {rightSidebarCollapsed ? (
-                                <RightSidebarShowIcon className="icon" size={16} />
+                                <RightSidebarShowIcon className="icon" size={18} />
                             ) : (
-                                <RightSidebarHideIcon className="icon" size={16} />
+                                <RightSidebarHideIcon className="icon" size={18} />
                             )}
                         </button>
                     </div>

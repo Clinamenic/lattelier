@@ -32,6 +32,7 @@
     /* Utility colors */
     --color-bg: var(--color-gray-50);
     --color-surface: #00022b;
+    --color-surface-alt: #131642;
     --color-text: var(--color-gray-300);
     --color-text-muted: var(--color-gray-600);
     --color-text-light: var(--color-gray-500);
@@ -74,6 +75,8 @@
     --border-width: 0.5px;
     --border-width-thick: 1px;
 
+    --border-color: var(--color-gray-600);
+
     /* Z-index scale */
     --z-dropdown: 1000;
     --z-modal: 1050;
@@ -85,4 +88,6 @@
     /* Layout dimensions */
     --sidebar-width: 10rem; /* 192px */
     --header-height: 6rem; /* 3.5rem navbar + 3rem toolbar */
+    --pill-height: 1rem;
+    --pill-text-size: 0.6rem;
 }

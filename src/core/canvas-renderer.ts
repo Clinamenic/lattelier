@@ -159,8 +159,9 @@ export class CanvasRenderer {
                 const pairHash = this.hashPair(point.id, neighborId);
                 if (pairHash > config.lineFrequency) continue;
 
-                // If curvature = 0, draw straight lines (fast path)
-                if (config.lineCurvature === 0) {
+                // If curvature = 0.5 (straight), draw straight lines (fast path)
+                // Only use fast path for values very close to 0.5, not for 0.0
+                if (config.lineCurvature > 0.49 && config.lineCurvature < 0.51) {
                     this.ctx.strokeStyle = config.lineColor;
                     this.ctx.lineWidth = config.lineWidth;
                     this.ctx.globalAlpha = config.lineOpacity;
@@ -217,11 +218,12 @@ export class CanvasRenderer {
         const cp2CenterX = x1 + dx * 0.67;
         const cp2CenterY = y1 + dy * 0.67;
 
-        // Calculate curvature offset (how much fatter/thinner the middle gets)
-        const curvatureOffset = length * 0.15;
-
-        // Map curvature: 0 = thin, 0.5 = normal, 1 = fat
-        const curvatureFactor = (curvature - 0.5) * 2 * curvatureOffset;
+        // Calculate curvature factor based on line width
+        // Symmetric bounds: curve can span 0.5 * lineWidth in either direction
+        // -1 (concave extreme) -> -0.5 * lineWidth
+        // 0 (straight) -> 0
+        // 1 (convex extreme) -> +0.5 * lineWidth
+        const curvatureFactor = curvature * lineWidth * 0.5;
 
         this.ctx.fillStyle = color;
         this.ctx.globalAlpha = opacity;

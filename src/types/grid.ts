@@ -9,7 +9,7 @@ export interface GridConfig {
     pointOpacity: number; // 0-1: point transparency
     lineWidth: number;
     lineFrequency: number; // 0-1: percentage of connections to draw
-    lineCurvature: number; // 0-1: amount of curvature (0 = straight, 1 = maximum bulge)
+    lineCurvature: number; // -1 to 1: amount of curvature (-1 = concave, 0 = straight, 1 = convex)
     lineOpacity: number; // 0-1: line transparency
     fillFrequency: number; // 0-1: percentage of fill polygons to draw
     fillOpacity: number; // 0-1: fill transparency

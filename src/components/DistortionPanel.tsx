@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { useAppStore } from '../state/app-store';
 import { CollapsiblePanel } from './CollapsiblePanel';
+import { initializeRangeFills, updateAllRangeFills } from '../utils/range-fill';
 
 export function DistortionPanel() {
     const selectedWellId = useAppStore((state) => state.selectedWellId);
@@ -11,6 +13,16 @@ export function DistortionPanel() {
     const isCollapsed = useAppStore((state) => state.rightSidebarCollapsed);
     const showWells = useAppStore((state) => state.showWells);
     const setShowWells = useAppStore((state) => state.setShowWells);
+
+    // Initialize range fills when component mounts
+    useEffect(() => {
+        initializeRangeFills();
+    }, []);
+
+    // Update range fills when selectedWell changes
+    useEffect(() => {
+        updateAllRangeFills();
+    }, [selectedWellId, wells]);
 
     const selectedWell = wells.find((w) => w.id === selectedWellId);
 
@@ -29,8 +41,8 @@ export function DistortionPanel() {
             <div className="space-y-4">
 
                 {/* Wells Section */}
-                <section className="distortion-section">
-                    <h3 className="distortion-section-title">Wells</h3>
+                <section className="settings-section">
+                    <h3 className="settings-section-title">Wells</h3>
 
                     {/* Wells Control Buttons */}
                     <div className="tool-buttons">
@@ -120,20 +132,22 @@ export function DistortionPanel() {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">
-                                    Strength: {selectedWell.strength.toFixed(2)}
-                                </label>
-                                <input
-                                    type="range"
-                                    min="-1"
-                                    max="1"
-                                    step="0.01"
-                                    value={selectedWell.strength}
-                                    onChange={(e) =>
-                                        updateWell(selectedWell.id, { strength: parseFloat(e.target.value) })
-                                    }
-                                    className="form-range"
-                                />
+                                <div className="form-range-container">
+                                    <input
+                                        type="range"
+                                        min="-1"
+                                        max="1"
+                                        step="0.01"
+                                        value={selectedWell.strength}
+                                        onChange={(e) =>
+                                            updateWell(selectedWell.id, { strength: parseFloat(e.target.value) })
+                                        }
+                                        className="form-range"
+                                    />
+                                    <div className="form-range-display">
+                                        <span className="form-range-label">Strength: {selectedWell.strength.toFixed(2)}</span>
+                                    </div>
+                                </div>
                                 <div className="settings-range-labels">
                                     <span>Repel</span>
                                     <span>Attract</span>
@@ -141,19 +155,21 @@ export function DistortionPanel() {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">
-                                    Radius: {Math.round(selectedWell.radius)}
-                                </label>
-                                <input
-                                    type="range"
-                                    min="50"
-                                    max="500"
-                                    value={selectedWell.radius}
-                                    onChange={(e) =>
-                                        updateWell(selectedWell.id, { radius: parseFloat(e.target.value) })
-                                    }
-                                    className="form-range"
-                                />
+                                <div className="form-range-container">
+                                    <input
+                                        type="range"
+                                        min="50"
+                                        max="500"
+                                        value={selectedWell.radius}
+                                        onChange={(e) =>
+                                            updateWell(selectedWell.id, { radius: parseFloat(e.target.value) })
+                                        }
+                                        className="form-range"
+                                    />
+                                    <div className="form-range-display">
+                                        <span className="form-range-label">Radius: {Math.round(selectedWell.radius)}</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="form-group">
@@ -175,20 +191,22 @@ export function DistortionPanel() {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">
-                                    Distortion: {selectedWell.distortion.toFixed(2)}
-                                </label>
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="1"
-                                    step="0.01"
-                                    value={selectedWell.distortion}
-                                    onChange={(e) =>
-                                        updateWell(selectedWell.id, { distortion: parseFloat(e.target.value) })
-                                    }
-                                    className="form-range"
-                                />
+                                <div className="form-range-container">
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.01"
+                                        value={selectedWell.distortion}
+                                        onChange={(e) =>
+                                            updateWell(selectedWell.id, { distortion: parseFloat(e.target.value) })
+                                        }
+                                        className="form-range"
+                                    />
+                                    <div className="form-range-display">
+                                        <span className="form-range-label">Distortion: {selectedWell.distortion.toFixed(2)}</span>
+                                    </div>
+                                </div>
                                 <div className="settings-range-labels">
                                     <span>None</span>
                                     <span>Chaos</span>

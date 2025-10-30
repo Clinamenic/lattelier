@@ -101,7 +101,7 @@ export const RightSidebarHideIcon: React.FC<IconProps> = ({ className = '', size
     className={className}
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -121,7 +121,7 @@ export const RightSidebarShowIcon: React.FC<IconProps> = ({ className = '', size
     className={className}
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -129,6 +129,46 @@ export const RightSidebarShowIcon: React.FC<IconProps> = ({ className = '', size
     <rect height="16" rx="2" width="16" x="4" y="4"/>
     <path d="M15 4v16"/>
     <path d="M9 10l2 2l-2 2"/>
+  </svg>
+);
+
+export const LeftSidebarHideIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+    <rect height="16" rx="2" width="16" x="4" y="4"/>
+    <path d="M9 4v16"/>
+    <path d="M14 14l2 -2l-2 -2"/>
+  </svg>
+);
+
+export const LeftSidebarShowIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+    <rect height="16" rx="2" width="16" x="4" y="4"/>
+    <path d="M9 4v16"/>
+    <path d="M15 14l-2 -2l2 -2"/>
   </svg>
 );
 

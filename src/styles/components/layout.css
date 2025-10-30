@@ -156,7 +156,7 @@
     bottom: 0;
     z-index: 10;
 
-    border-right: var(--border-width) solid var(--color-border);
+    border-right: var(--border-width) solid var(--border-color);
 }
 
 .app-sidebar-right {
@@ -166,5 +166,5 @@
     top: var(--header-height);
     bottom: 0;
     z-index: 10;
-    border-left: var(--border-width) solid var(--color-border);
+    border-left: var(--border-width) solid var(--border-color);
 }

@@ -3,25 +3,25 @@
     position: relative;
     height: 100%;
     pointer-events: none;
-    border: 0px solid var(--color-border);
+    border: 0px solid var(--border-color);
     margin: 0 !important;
 }
 
 .panel-content {
     height: 100%;
     background-color: var(--color-surface);
-    border: 0px solid var(--color-border);
+    border: 0px solid var(--border-color);
     overflow: hidden;
     transition: all var(--transition-slow);
     pointer-events: auto;
 }
 
 .panel-left {
-    border-right: var(--border-width) solid var(--color-border);
+    border-right: var(--border-width) solid var(--border-color);
 }
 
 .panel-right {
-    border-left: var(--border-width) solid var(--color-border);
+    border-left: var(--border-width) solid var(--border-color);
 }
 
 .panel-collapsed {
@@ -46,8 +46,8 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: var(--color-surface);
-    border-bottom: 0px solid var(--color-border);
+    background-color: var(--color-surface-alt);
+    border-bottom: var(--border-width) solid var(--border-color);
     padding: var(--space-sm);
     display: flex;
     align-items: center;
@@ -83,7 +83,7 @@
 }
 
 .panel-content-area {
-    padding: var(--space-md);
+    padding: 0;
 }
 
 /* Overhanging expand buttons positioned at panel header level */
@@ -94,7 +94,7 @@
     /* Height of panel header */
     width: 2rem;
     background-color: var(--color-surface);
-    border: var(--border-width) solid var(--color-border);
+    border: var(--border-width) solid var(--border-color);
     cursor: pointer;
     transition: all var(--transition);
     pointer-events: auto;

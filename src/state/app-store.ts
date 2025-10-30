@@ -82,7 +82,7 @@ const defaultGridConfig: GridConfig = {
     pointOpacity: 0.8,
     lineWidth: 1.5,
     lineFrequency: 1.0, // 100% = draw all connections
-    lineCurvature: 0.0, // 0% = straight lines
+    lineCurvature: 0, // -100% = concave, 0% = straight, 100% = convex
     lineOpacity: 0.8,
     fillFrequency: 1.0, // 100% = draw all fill polygons
     fillOpacity: 0.3,
@@ -266,7 +266,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     zoomViewport: (delta, centerX, centerY) => {
         set((state) => {
-            const newZoom = Math.max(0.1, Math.min(5, state.viewport.zoom + delta));
+            const newZoom = Math.max(0.05, Math.min(5, state.viewport.zoom + delta));
             const zoomRatio = newZoom / state.viewport.zoom;
 
             return {
@@ -435,10 +435,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         // Calculate optimal zoom to fit the pattern with more breathing room
         const zoomX = canvasWidth / patternWidth;
         const zoomY = canvasHeight / patternHeight;
-        const baseZoom = Math.min(zoomX, zoomY, 2.0); // Cap at 2x zoom max
+        const baseZoom = Math.min(zoomX, zoomY, 6.0); // Cap at 4x zoom max
 
-        // Apply a zoom-out factor to give more breathing room (0.8 = 20% more zoomed out)
-        const optimalZoom = baseZoom * 0.8;
+        // Apply a zoom-out factor to give more breathing room (0.6 = 40% more zoomed out)
+        const optimalZoom = baseZoom * 0.6;
 
         // Center the pattern in the viewport
         const newViewportX = (canvasWidth / 2) - (patternCenterX * optimalZoom);
@@ -449,7 +449,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             viewport: {
                 x: newViewportX,
                 y: newViewportY,
-                zoom: Math.max(0.1, optimalZoom), // Ensure minimum zoom
+                zoom: Math.max(0.025, optimalZoom), // Ensure minimum zoom
             }
         });
     },

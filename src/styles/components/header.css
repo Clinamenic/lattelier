@@ -15,6 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: var(--color-surface-alt);
 }
 
 .navbar-left {
@@ -26,6 +27,7 @@
 .navbar-title {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
+    font-family: "Avara_Bold Italic", sans-serif;
     color: var(--color-text);
     margin: 0;
 }
@@ -53,10 +55,10 @@
     align-items: center;
     justify-content: space-between;
     background-color: transparent;
-    border-bottom: var(--border-width) solid var(--color-border);
+    border-bottom: var(--border-width) solid var(--border-color);
     transition: all var(--transition);
     overflow: visible;
-    border-top: var(--border-width) solid var(--color-border);
+    border-top: var(--border-width) solid var(--border-color);
 }
 
 .toolbar-left,
@@ -114,7 +116,7 @@
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-light);
     text-transform: uppercase;
-    border-bottom: var(--border-width) solid var(--color-border);
+    border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .dropdown-item {

@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { useAppStore } from '../state/app-store';
 import { CollapsiblePanel } from './CollapsiblePanel';
+import { initializeRangeFills, updateAllRangeFills } from '../utils/range-fill';
 
 // Helper function to determine if a color is light or dark
 function getContrastColor(hexColor: string): string {
@@ -23,9 +25,19 @@ export function CanvasSettingsPanel() {
     const setGridConfig = useAppStore((state) => state.setGridConfig);
     const isCollapsed = useAppStore((state) => state.leftSidebarCollapsed);
 
+    // Initialize range fills when component mounts
+    useEffect(() => {
+        initializeRangeFills();
+    }, []);
+
+    // Update range fills when gridConfig changes (e.g., from shuffle)
+    useEffect(() => {
+        updateAllRangeFills();
+    }, [gridConfig]);
+
     return (
         <CollapsiblePanel
-            title="Canvas Settings"
+            title="Lattice Settings"
             direction="left"
             isCollapsed={isCollapsed}
         >
@@ -61,25 +73,22 @@ export function CanvasSettingsPanel() {
                 {/* Grid Section */}
                 <section className="settings-section">
                     <h3 className="settings-section-title">Grid</h3>
-                    <div className="space-y-3">
-                        <div className="form-group">
-                            <label className="form-label">
-                                Grid Type
-                            </label>
-                            <select
-                                value={gridConfig.gridType}
-                                onChange={(e) => setGridConfig({ gridType: e.target.value as any })}
-                                className="form-select"
-                            >
-                                <option value="square">Square</option>
-                                <option value="triangular">Triangular</option>
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label className="form-label">
+                            Grid Type
+                        </label>
+                        <select
+                            value={gridConfig.gridType}
+                            onChange={(e) => setGridConfig({ gridType: e.target.value as any })}
+                            className="form-select"
+                        >
+                            <option value="square">Square</option>
+                            <option value="triangular">Triangular</option>
+                        </select>
+                    </div>
 
-                        <div className="form-group">
-                            <label className="form-label">
-                                Rows: {gridConfig.rows}
-                            </label>
+                    <div className="form-group">
+                        <div className="form-range-container">
                             <input
                                 type="range"
                                 min="5"
@@ -88,12 +97,14 @@ export function CanvasSettingsPanel() {
                                 onChange={(e) => setGridConfig({ rows: parseInt(e.target.value) })}
                                 className="form-range"
                             />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Rows: {gridConfig.rows}</span>
+                            </div>
                         </div>
+                    </div>
 
-                        <div className="form-group">
-                            <label className="form-label">
-                                Columns: {gridConfig.columns}
-                            </label>
+                    <div className="form-group">
+                        <div className="form-range-container">
                             <input
                                 type="range"
                                 min="5"
@@ -102,12 +113,14 @@ export function CanvasSettingsPanel() {
                                 onChange={(e) => setGridConfig({ columns: parseInt(e.target.value) })}
                                 className="form-range"
                             />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Columns: {gridConfig.columns}</span>
+                            </div>
                         </div>
+                    </div>
 
-                        <div className="form-group">
-                            <label className="form-label">
-                                Spacing: {gridConfig.spacing}
-                            </label>
+                    <div className="form-group">
+                        <div className="form-range-container">
                             <input
                                 type="range"
                                 min="5"
@@ -116,6 +129,9 @@ export function CanvasSettingsPanel() {
                                 onChange={(e) => setGridConfig({ spacing: parseInt(e.target.value) })}
                                 className="form-range"
                             />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Spacing: {gridConfig.spacing}</span>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -148,32 +164,36 @@ export function CanvasSettingsPanel() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Size: {gridConfig.pointSize}
-                        </label>
-                        <input
-                            type="range"
-                            min="0.5"
-                            max="5"
-                            step="0.5"
-                            value={gridConfig.pointSize}
-                            onChange={(e) => setGridConfig({ pointSize: parseFloat(e.target.value) })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0"
+                                max="5"
+                                step="0.01"
+                                value={gridConfig.pointSize}
+                                onChange={(e) => setGridConfig({ pointSize: parseFloat(e.target.value) })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Size: {gridConfig.pointSize.toFixed(2)}</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Opacity: {Math.round(gridConfig.pointOpacity * 100)}%
-                        </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={gridConfig.pointOpacity * 100}
-                            onChange={(e) => setGridConfig({ pointOpacity: parseInt(e.target.value) / 100 })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={gridConfig.pointOpacity * 100}
+                                onChange={(e) => setGridConfig({ pointOpacity: parseInt(e.target.value) / 100 })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Opacity: {Math.round(gridConfig.pointOpacity * 100)}%</span>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -205,17 +225,19 @@ export function CanvasSettingsPanel() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Frequency: {Math.round(gridConfig.lineFrequency * 100)}%
-                        </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={gridConfig.lineFrequency * 100}
-                            onChange={(e) => setGridConfig({ lineFrequency: parseInt(e.target.value) / 100 })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={gridConfig.lineFrequency * 100}
+                                onChange={(e) => setGridConfig({ lineFrequency: parseInt(e.target.value) / 100 })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Frequency: {Math.round(gridConfig.lineFrequency * 100)}%</span>
+                            </div>
+                        </div>
                         <div className="settings-range-labels">
                             <span>Sparse</span>
                             <span>All</span>
@@ -223,50 +245,57 @@ export function CanvasSettingsPanel() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Curvature: {Math.round(gridConfig.lineCurvature * 100)}%
-                        </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={gridConfig.lineCurvature * 100}
-                            onChange={(e) => setGridConfig({ lineCurvature: parseInt(e.target.value) / 100 })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="-100"
+                                max="100"
+                                value={gridConfig.lineCurvature * 100}
+                                onChange={(e) => setGridConfig({ lineCurvature: parseInt(e.target.value) / 100 })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Curvature: {Math.round(gridConfig.lineCurvature * 100)}%</span>
+                            </div>
+                        </div>
                         <div className="settings-range-labels">
+                            <span>Concave</span>
                             <span>Straight</span>
-                            <span>Curved</span>
+                            <span>Convex</span>
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Width: {gridConfig.lineWidth}
-                        </label>
-                        <input
-                            type="range"
-                            min="0.5"
-                            max="10"
-                            step="0.5"
-                            value={gridConfig.lineWidth}
-                            onChange={(e) => setGridConfig({ lineWidth: parseFloat(e.target.value) })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0.5"
+                                max="10"
+                                step="0.5"
+                                value={gridConfig.lineWidth}
+                                onChange={(e) => setGridConfig({ lineWidth: parseFloat(e.target.value) })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Width: {gridConfig.lineWidth.toFixed(2)}</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Opacity: {Math.round(gridConfig.lineOpacity * 100)}%
-                        </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={gridConfig.lineOpacity * 100}
-                            onChange={(e) => setGridConfig({ lineOpacity: parseInt(e.target.value) / 100 })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={gridConfig.lineOpacity * 100}
+                                onChange={(e) => setGridConfig({ lineOpacity: parseInt(e.target.value) / 100 })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Opacity: {Math.round(gridConfig.lineOpacity * 100)}%</span>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -298,17 +327,19 @@ export function CanvasSettingsPanel() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Frequency: {Math.round(gridConfig.fillFrequency * 100)}%
-                        </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={gridConfig.fillFrequency * 100}
-                            onChange={(e) => setGridConfig({ fillFrequency: parseInt(e.target.value) / 100 })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={gridConfig.fillFrequency * 100}
+                                onChange={(e) => setGridConfig({ fillFrequency: parseInt(e.target.value) / 100 })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Frequency: {Math.round(gridConfig.fillFrequency * 100)}%</span>
+                            </div>
+                        </div>
                         <div className="settings-range-labels">
                             <span>Sparse</span>
                             <span>All</span>
@@ -316,17 +347,19 @@ export function CanvasSettingsPanel() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
-                            Opacity: {Math.round(gridConfig.fillOpacity * 100)}%
-                        </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={gridConfig.fillOpacity * 100}
-                            onChange={(e) => setGridConfig({ fillOpacity: parseInt(e.target.value) / 100 })}
-                            className="form-range"
-                        />
+                        <div className="form-range-container">
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={gridConfig.fillOpacity * 100}
+                                onChange={(e) => setGridConfig({ fillOpacity: parseInt(e.target.value) / 100 })}
+                                className="form-range"
+                            />
+                            <div className="form-range-display">
+                                <span className="form-range-label">Opacity: {Math.round(gridConfig.fillOpacity * 100)}%</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="form-group">

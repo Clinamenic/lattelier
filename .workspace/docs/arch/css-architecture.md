@@ -1,5 +1,27 @@
 # CSS Architecture Documentation
 
+## 0.5.1 - 2025-01-29
+
+### UI/UX Enhancements and Form Controls
+- **Range Fill System**: Added comprehensive range slider fill visualization system with real-time updates
+- **Form Control Improvements**: Enhanced form styling with better visual feedback and consistency
+- **Icon System Expansion**: Added new sidebar control icons (left_sidebar_hide.svg, left_sidebar_show.svg)
+- **Component Refinements**: Improved CanvasSettingsPanel with better range control integration
+- **Styling Consistency**: Enhanced form controls with improved border colors and visual hierarchy
+
+### Impacted Components
+- **Range Fill Utility**: New utility system for dynamic range slider visualization
+- **Form Components**: Enhanced styling with improved visual feedback and consistency
+- **Canvas Settings Panel**: Better integration with range fill system and improved UX
+- **Icon System**: Expanded with new sidebar control icons
+- **CSS Architecture**: Refined form controls and visual consistency improvements
+
+### Technical Improvements
+- **Range Fill Visualization**: Real-time visual feedback for range sliders
+- **Form Control Enhancement**: Improved styling consistency across all form elements
+- **Icon Management**: Better organization and expansion of icon system
+- **Component Integration**: Seamless integration of range fill system with existing components
+
 ## 0.5.0 - 2025-01-22
 
 ### Header Component Restructuring

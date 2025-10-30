@@ -1,6 +1,6 @@
 {
   "name": "Lattelier",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "description": "Professional web-based lattice distortion and pattern generation tool for creating parametric graphics",
   "scripts": {

@@ -5,6 +5,31 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.5.1 - 2025-10-29
+
+### Added
+
+- **Range Fill System**: Comprehensive range slider fill visualization with real-time updates
+- **Form Control Enhancements**: Improved visual feedback and consistency across all form elements
+- **Sidebar Control Icons**: New icons for left sidebar hide/show functionality
+- **Range Fill Utility**: New utility system (`src/utils/range-fill.ts`) for dynamic range slider visualization
+
+### Changed
+
+- **Form Styling**: Enhanced form controls with improved border colors and visual hierarchy
+- **Canvas Settings Panel**: Better integration with range fill system and improved user experience
+- **Component Integration**: Seamless integration of range fill system with existing form components
+- **Icon System**: Expanded with new sidebar control icons for better UI consistency
+
+### Technical Improvements
+
+- **Range Fill Visualization**: Real-time visual feedback for range sliders using CSS custom properties
+- **Form Control Enhancement**: Improved styling consistency across all form elements
+- **Component Architecture**: Better separation of concerns with dedicated utility functions
+- **Documentation**: Updated architecture documentation to reflect UI/UX enhancements
+
+**Commit Reference**: 5c78391
+
 ## 0.5.0 - 2025-10-29
 
 https://arweave.net/aXZA2vrOnD5QvOOvRZQYJMlwLSCmECAYrgMU0IQRk7U

@@ -7,9 +7,9 @@
   "name": "Lattelier",
   "description": "Professional web-based lattice distortion and pattern generation tool for creating parametric graphics",
   "url": "https://github.com/clinamenic/lattelier",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-10-30T00:53:03.375Z",
+  "dateModified": "2025-10-31T05:59:36.112Z",
   "license": "https://opensource.org/licenses/MIT",
   "programmingLanguage": [
     "TypeScript",

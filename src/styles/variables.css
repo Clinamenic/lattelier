@@ -86,7 +86,7 @@
     --transition-slow: 300ms ease-in-out;
 
     /* Layout dimensions */
-    --sidebar-width: 10rem; /* 192px */
+    --sidebar-width: 11rem; /* 192px */
     --header-height: 6rem; /* 3.5rem navbar + 3rem toolbar */
     --navbar-height: 2rem;
     --pill-height: 1rem;

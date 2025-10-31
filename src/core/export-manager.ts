@@ -1,9 +1,171 @@
-import { GridPoint, GridConfig, Viewport } from '../types/grid';
+import { GridPoint, GridConfig, Viewport, SegmentedTextureSettings } from '../types/grid';
 import { ExportConfig } from '../types/export';
 import { CanvasRenderer } from './canvas-renderer';
 import { Well } from '../types/attractor';
 
 export class ExportManager {
+    /**
+     * Deterministic hash function for consistent randomness
+     * Improved to produce better distribution for segment variations
+     */
+    private hashPair(id1: string, id2: string): number {
+        const str = `${id1}-${id2}`;
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+            // Add more mixing for better distribution
+            hash = hash ^ (hash >>> 16);
+        }
+        // Use larger modulus and add additional mixing
+        hash = Math.abs(hash);
+        hash = hash ^ (hash << 13);
+        hash = hash ^ (hash >>> 7);
+        hash = Math.abs(hash); // Ensure positive after XOR operations
+        return ((hash % 1000000) / 1000000); // Normalize to 0-1 with better precision
+    }
+
+    /**
+     * Generate segments for segmented texture (same algorithm as renderer)
+     */
+    private generateSegments(
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number,
+        pointId: string,
+        neighborId: string,
+        settings?: SegmentedTextureSettings
+    ): Array<{ x1: number; y1: number; x2: number; y2: number }> {
+        const segSettings = settings || {
+            angleVariation: 1.0,
+            spacingVariation: 0.5,
+            lengthVariation: 1.0,
+        };
+
+        const lineHash = this.hashPair(pointId, neighborId);
+        const segmentCounts = [3, 4, 5];
+        const segmentCountIndex = Math.floor(lineHash * 3);
+        const segmentCount = segmentCounts[segmentCountIndex];
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const totalLength = Math.sqrt(dx * dx + dy * dy);
+
+        if (totalLength === 0) return [];
+
+        const baseAngle = Math.atan2(dy, dx);
+        const unitX = dx / totalLength; // Unit vector X component
+        const unitY = dy / totalLength; // Unit vector Y component
+        
+        // Use 95% of total length for segments + gaps, leave 2.5% at each end
+        const usableLength = totalLength * 0.95;
+        const startOffset = totalLength * 0.025;
+        
+        // Calculate base segment and gap lengths
+        const segmentRatio = 0.6; // 60% of usable length for segments
+        const gapRatio = 0.4; // 40% of usable length for gaps
+        
+        const totalSegmentLength = usableLength * segmentRatio;
+        const totalGapLength = usableLength * gapRatio;
+        
+        const baseSegmentLength = totalSegmentLength / segmentCount;
+        const baseGapLength = totalGapLength / (segmentCount - 1 || 1);
+
+        const maxAngleVariation = 0.05;
+        const maxSpacingVariation = 0.4;
+        const lengthVariationRange = 0.24;
+
+        // Start position: offset from x1, y1 by 2.5% of line length
+        const startX = x1 + unitX * startOffset;
+        const startY = y1 + unitY * startOffset;
+
+        const segments: Array<{ x1: number; y1: number; x2: number; y2: number }> = [];
+        let progressAlongBaseLine = 0; // Track progress along the base line axis
+
+        for (let i = 0; i < segmentCount; i++) {
+            // Use separate hash seeds for angle, length, and spacing to ensure independence
+            const lineId = this.hashPair(pointId, neighborId).toString();
+            const segmentHash = this.hashPair(lineId, `seg-${i}-angle`);
+            const lengthHash = this.hashPair(lineId, `seg-${i}-length`);
+            const nextSegmentHash = i < segmentCount - 1 
+                ? this.hashPair(lineId, `seg-${i + 1}-spacing`) 
+                : 0;
+
+            // Angle variation (scaled by setting) - each segment gets independent angle
+            // The base line axis remains constant - only individual segments angle away from it
+            const angleOffset =
+                (segmentHash - 0.5) * maxAngleVariation * segSettings.angleVariation;
+            const segmentAngle = baseAngle + angleOffset;
+
+            const baseLengthMultiplier = 1.0;
+            const lengthMultiplier =
+                baseLengthMultiplier +
+                (lengthHash - 0.5) * lengthVariationRange * segSettings.lengthVariation;
+            let segmentLength = baseSegmentLength * lengthMultiplier;
+
+            // Calculate how much this segment would advance along the base line
+            const segmentProgress = segmentLength * Math.cos(angleOffset);
+            
+            // Constrain: ensure we don't exceed the 95% boundary
+            const remainingProgress = usableLength - progressAlongBaseLine;
+            if (segmentProgress > remainingProgress) {
+                // Adjust segment length so its projection fits
+                segmentLength = remainingProgress / Math.cos(angleOffset);
+            }
+
+            // Calculate segment start position - ALWAYS on the base line axis
+            // This ensures the base line axis never changes when angleVariation is adjusted
+            const segmentStartX = startX + unitX * progressAlongBaseLine;
+            const segmentStartY = startY + unitY * progressAlongBaseLine;
+
+            // Calculate segment end point (angled away from base line)
+            const segEndX = segmentStartX + Math.cos(segmentAngle) * segmentLength;
+            const segEndY = segmentStartY + Math.sin(segmentAngle) * segmentLength;
+
+            segments.push({
+                x1: segmentStartX,
+                y1: segmentStartY,
+                x2: segEndX,
+                y2: segEndY,
+            });
+
+            // Update progress along base line (projection of segment)
+            const actualSegmentProgress = segmentLength * Math.cos(angleOffset);
+            progressAlongBaseLine += actualSegmentProgress;
+
+            if (i < segmentCount - 1) {
+                const remainingProgressAfterSegment = usableLength - progressAlongBaseLine;
+                
+                // If no space left, stop
+                if (remainingProgressAfterSegment <= 0) {
+                    break;
+                }
+
+                const spacingMultiplier = 1.0 + 
+                    (nextSegmentHash - 0.5) * maxSpacingVariation * segSettings.spacingVariation;
+                let gapLength = baseGapLength * spacingMultiplier;
+
+                // Constrain gap to fit in remaining space
+                if (gapLength > remainingProgressAfterSegment) {
+                    gapLength = remainingProgressAfterSegment;
+                }
+
+                // Move progress along base line for next segment
+                // The next segment will start on the base line axis at this position
+                progressAlongBaseLine += gapLength;
+                
+                // If we've reached the end, stop adding more segments
+                if (progressAlongBaseLine >= usableLength) {
+                    break;
+                }
+            }
+        }
+
+        return segments;
+    }
+
     /**
      * Generate a short hash from string content for unique filenames
      */
@@ -203,16 +365,47 @@ export class ExportManager {
             linesGroup.setAttribute('stroke', gridConfig.lineColor);
             linesGroup.setAttribute('stroke-width', gridConfig.lineWidth.toString());
             linesGroup.setAttribute('opacity', gridConfig.lineOpacity.toString());
+            
+            if (gridConfig.lineTexture === 'segmented') {
+                linesGroup.setAttribute('stroke-linecap', 'butt'); // Sharp ends
+            }
 
             for (const point of points) {
                 for (const neighborId of point.neighbors) {
                     const neighbor = pointMap.get(neighborId);
-                    if (neighbor && neighborId > point.id) {
+                    if (!neighbor || neighborId <= point.id) continue;
+
+                    const x1 = point.currentPosition.x;
+                    const y1 = point.currentPosition.y;
+                    const x2 = neighbor.currentPosition.x;
+                    const y2 = neighbor.currentPosition.y;
+
+                    if (gridConfig.lineTexture === 'segmented') {
+                        // Generate segments for segmented texture
+                        const segments = this.generateSegments(
+                            x1,
+                            y1,
+                            x2,
+                            y2,
+                            point.id,
+                            neighborId,
+                            gridConfig.segmentedTextureSettings
+                        );
+                        segments.forEach((seg) => {
+                            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line.setAttribute('x1', seg.x1.toString());
+                            line.setAttribute('y1', seg.y1.toString());
+                            line.setAttribute('x2', seg.x2.toString());
+                            line.setAttribute('y2', seg.y2.toString());
+                            linesGroup.appendChild(line);
+                        });
+                    } else {
+                        // Solid texture - single line
                         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                        line.setAttribute('x1', point.currentPosition.x.toString());
-                        line.setAttribute('y1', point.currentPosition.y.toString());
-                        line.setAttribute('x2', neighbor.currentPosition.x.toString());
-                        line.setAttribute('y2', neighbor.currentPosition.y.toString());
+                        line.setAttribute('x1', x1.toString());
+                        line.setAttribute('y1', y1.toString());
+                        line.setAttribute('x2', x2.toString());
+                        line.setAttribute('y2', y2.toString());
                         linesGroup.appendChild(line);
                     }
                 }

@@ -225,6 +225,122 @@ export function CanvasSettingsPanel() {
                     </div>
 
                     <div className="form-group">
+                        <label className="form-label">
+                            Texture
+                        </label>
+                        <select
+                            value={gridConfig.lineTexture}
+                            onChange={(e) => setGridConfig({ lineTexture: e.target.value as 'solid' | 'segmented' })}
+                            className="form-select"
+                        >
+                            <option value="solid">Solid</option>
+                            <option value="segmented">Segmented</option>
+                        </select>
+                    </div>
+
+                    {gridConfig.lineTexture === 'solid' && (
+                        <div className="form-group">
+                            <div className="form-range-container">
+                                <input
+                                    type="range"
+                                    min="-100"
+                                    max="100"
+                                    value={gridConfig.lineCurvature * 100}
+                                    onChange={(e) => setGridConfig({ lineCurvature: parseInt(e.target.value) / 100 })}
+                                    className="form-range"
+                                />
+                                <div className="form-range-display">
+                                    <span className="form-range-label">Curvature: {Math.round(gridConfig.lineCurvature * 100)}%</span>
+                                </div>
+                            </div>
+                            <div className="settings-range-labels">
+                                <span>Concave</span>
+                                <span>Straight</span>
+                                <span>Convex</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {gridConfig.lineTexture === 'segmented' && (
+                        <>
+                            <div className="form-group">
+                                <div className="form-range-container">
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={(gridConfig.segmentedTextureSettings?.angleVariation ?? 1.0) * 100}
+                                        onChange={(e) =>
+                                            setGridConfig({
+                                                segmentedTextureSettings: {
+                                                    ...gridConfig.segmentedTextureSettings!,
+                                                    angleVariation: parseInt(e.target.value) / 100,
+                                                },
+                                            })
+                                        }
+                                        className="form-range"
+                                    />
+                                    <div className="form-range-display">
+                                        <span className="form-range-label">
+                                            Angle Var: {Math.round((gridConfig.segmentedTextureSettings?.angleVariation ?? 1.0) * 100)}%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <div className="form-range-container">
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={(gridConfig.segmentedTextureSettings?.spacingVariation ?? 0.5) * 100}
+                                        onChange={(e) =>
+                                            setGridConfig({
+                                                segmentedTextureSettings: {
+                                                    ...gridConfig.segmentedTextureSettings!,
+                                                    spacingVariation: parseInt(e.target.value) / 100,
+                                                },
+                                            })
+                                        }
+                                        className="form-range"
+                                    />
+                                    <div className="form-range-display">
+                                        <span className="form-range-label">
+                                            Spacing Var: {Math.round((gridConfig.segmentedTextureSettings?.spacingVariation ?? 0.5) * 100)}%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <div className="form-range-container">
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={(gridConfig.segmentedTextureSettings?.lengthVariation ?? 1.0) * 100}
+                                        onChange={(e) =>
+                                            setGridConfig({
+                                                segmentedTextureSettings: {
+                                                    ...gridConfig.segmentedTextureSettings!,
+                                                    lengthVariation: parseInt(e.target.value) / 100,
+                                                },
+                                            })
+                                        }
+                                        className="form-range"
+                                    />
+                                    <div className="form-range-display">
+                                        <span className="form-range-label">
+                                            Length Var: {Math.round((gridConfig.segmentedTextureSettings?.lengthVariation ?? 1.0) * 100)}%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    <div className="form-group">
                         <div className="form-range-container">
                             <input
                                 type="range"
@@ -241,27 +357,6 @@ export function CanvasSettingsPanel() {
                         <div className="settings-range-labels">
                             <span>Sparse</span>
                             <span>All</span>
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <div className="form-range-container">
-                            <input
-                                type="range"
-                                min="-100"
-                                max="100"
-                                value={gridConfig.lineCurvature * 100}
-                                onChange={(e) => setGridConfig({ lineCurvature: parseInt(e.target.value) / 100 })}
-                                className="form-range"
-                            />
-                            <div className="form-range-display">
-                                <span className="form-range-label">Curvature: {Math.round(gridConfig.lineCurvature * 100)}%</span>
-                            </div>
-                        </div>
-                        <div className="settings-range-labels">
-                            <span>Concave</span>
-                            <span>Straight</span>
-                            <span>Convex</span>
                         </div>
                     </div>
 

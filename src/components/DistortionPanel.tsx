@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAppStore } from '../state/app-store';
 import { CollapsiblePanel } from './CollapsiblePanel';
 import { initializeRangeFills, updateAllRangeFills } from '../utils/range-fill';
+import { EyeOpenIcon, EyeClosedIcon, CancelIcon } from './icons';
 
 export function DistortionPanel() {
     const selectedWellId = useAppStore((state) => state.selectedWellId);
@@ -44,37 +45,45 @@ export function DistortionPanel() {
                 <section className="settings-section">
                     <h3 className="settings-section-title">Wells</h3>
 
-                    {/* Wells Control Buttons */}
-                    <div className="tool-buttons">
-                        <button
-                            onClick={() => setShowWells(!showWells)}
-                            className={`tool-button ${showWells ? 'tool-button-active' : 'tool-button-inactive'}`}
-                        >
-                            {showWells ? 'Hide' : 'Show'} Wells
-                        </button>
-                        <button
-                            onClick={handleReset}
-                            className="tool-button tool-button-inactive"
-                        >
-                            Clear All
-                        </button>
-                    </div>
-
                     {!selectedWell ? (
                         <>
                             {wells.length > 0 && (
                                 <div className="controls-section">
-                                    <h4 className="controls-title">
-                                        All Wells ({wells.length})
-                                    </h4>
-                                    <ul className="wells-list">
+                                    <div className="controls-title-row">
+                                        <h4 className="controls-title">
+                                            All Wells ({wells.length})
+                                        </h4>
+                                        <div className="controls-title-actions">
+                                            <button
+                                                onClick={() => setShowWells(!showWells)}
+                                                className={`btn btn-icon-only ${showWells ? 'btn-active' : ''}`}
+                                                title={showWells ? 'Hide Wells' : 'Show Wells'}
+                                                aria-label={showWells ? 'Hide Wells' : 'Show Wells'}
+                                            >
+                                                {showWells ? (
+                                                    <EyeOpenIcon className="icon" size={16} />
+                                                ) : (
+                                                    <EyeClosedIcon className="icon" size={16} />
+                                                )}
+                                            </button>
+                                            <button
+                                                onClick={handleReset}
+                                                className="btn btn-icon-only"
+                                                title="Clear All"
+                                                aria-label="Clear All"
+                                            >
+                                                <CancelIcon className="icon" size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ul className="controls-list">
                                         {wells.map((well, index) => (
-                                            <li key={well.id} className="well-list-item">
+                                            <li key={well.id} className="list-item-row">
                                                 <button
                                                     onClick={() => selectWell(well.id)}
                                                     onMouseEnter={() => setHoveredWell(well.id)}
                                                     onMouseLeave={() => setHoveredWell(null)}
-                                                    className="well-item"
+                                                    className={`list-item-btn ${well.id === selectedWellId ? 'active' : ''}`}
                                                 >
                                                     Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
                                                 </button>
@@ -97,13 +106,70 @@ export function DistortionPanel() {
                         </>
                     ) : (
                         <div className="space-y-3">
+                            {wells.length > 1 && (
+                                <div className="controls-section">
+                                    <div className="controls-title-row">
+                                        <h4 className="controls-title">
+                                            All Wells ({wells.length})
+                                        </h4>
+                                        <div className="controls-title-actions">
+                                            <button
+                                                onClick={() => setShowWells(!showWells)}
+                                                className={`btn btn-icon-only ${showWells ? 'btn-active' : ''}`}
+                                                title={showWells ? 'Hide Wells' : 'Show Wells'}
+                                                aria-label={showWells ? 'Hide Wells' : 'Show Wells'}
+                                            >
+                                                {showWells ? (
+                                                    <EyeOpenIcon className="icon" size={16} />
+                                                ) : (
+                                                    <EyeClosedIcon className="icon" size={16} />
+                                                )}
+                                            </button>
+                                            <button
+                                                onClick={handleReset}
+                                                className="btn btn-icon-only"
+                                                title="Clear All"
+                                                aria-label="Clear All"
+                                            >
+                                                <CancelIcon className="icon" size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ul className="controls-list">
+                                        {wells.map((well, index) => (
+                                            <li key={well.id} className="list-item-row">
+                                                <button
+                                                    onClick={() => selectWell(well.id)}
+                                                    onMouseEnter={() => setHoveredWell(well.id)}
+                                                    onMouseLeave={() => setHoveredWell(null)}
+                                                    className={`list-item-btn ${well.id === selectedWellId ? 'active' : ''}`}
+                                                >
+                                                    Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
+                                                </button>
+                                                <label className="form-checkbox">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={well.enabled}
+                                                        onChange={(e) =>
+                                                            updateWell(well.id, { enabled: e.target.checked })
+                                                        }
+                                                        className="form-checkbox"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                </label>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
                             <div className="form-group">
                                 <label className="form-label">
                                     Position
                                 </label>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label className="text-xs text-light">X</label>
+                                <div className="form-input-row">
+                                    <div className="form-input-group">
+                                        <label className="form-input-label">X</label>
                                         <input
                                             type="number"
                                             value={Math.round(selectedWell.position.x)}
@@ -115,8 +181,8 @@ export function DistortionPanel() {
                                             className="form-input"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="text-xs text-light">Y</label>
+                                    <div className="form-input-group">
+                                        <label className="form-input-label">Y</label>
                                         <input
                                             type="number"
                                             value={Math.round(selectedWell.position.y)}
@@ -220,39 +286,6 @@ export function DistortionPanel() {
                             >
                                 Delete Well
                             </button>
-
-                            {wells.length > 1 && (
-                                <div className="controls-section">
-                                    <h4 className="controls-title">
-                                        All Wells ({wells.length})
-                                    </h4>
-                                    <ul className="wells-list">
-                                        {wells.map((well, index) => (
-                                            <li key={well.id} className="well-list-item">
-                                                <button
-                                                    onClick={() => selectWell(well.id)}
-                                                    onMouseEnter={() => setHoveredWell(well.id)}
-                                                    onMouseLeave={() => setHoveredWell(null)}
-                                                    className={`well-item ${well.id === selectedWellId ? 'well-item-selected' : ''}`}
-                                                >
-                                                    Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
-                                                </button>
-                                                <label className="form-checkbox">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={well.enabled}
-                                                        onChange={(e) =>
-                                                            updateWell(well.id, { enabled: e.target.checked })
-                                                        }
-                                                        className="form-checkbox"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    />
-                                                </label>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
                         </div>
                     )}
                 </section>

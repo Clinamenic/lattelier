@@ -1,16 +1,4 @@
-@font-face {
-    font-family: 'Avara_Bold Italic';
-    src:    url('BoldItalic/Avara-Bold_Italic_web.eot');
-    src:    url('BoldItalic/Avara-Bold_Italic_web.eot?#iefix') format('embedded-opentype'),
-            url('BoldItalic/Avara-Bold_Italic_web.woff') format('woff'),
-            url('BoldItalic/Avara-Bold_Italic_web.woff2') format('woff2'),
-            url('BoldItalic/Avara-Bold_Italic_web.ttf') format('truetype'),
-            url('BoldItalic/Avara-Bold_Italic_web.svg#svgFontName') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* Base styles - Reset and typography */
+* Base styles - Reset and typography */
 *,
 *::before,
 *::after {

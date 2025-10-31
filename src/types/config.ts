@@ -32,9 +32,15 @@ export interface GridSettings {
         show: boolean;
         width: number;
         frequency: number;
-        curvature: number;
+        curvature: number; // Only relevant when texture === 'solid'
         color: string;
         opacity: number;
+        texture: 'solid' | 'segmented';
+        segmentedTextureSettings?: {
+            angleVariation: number;
+            spacingVariation: number;
+            lengthVariation: number;
+        };
     };
     fill: {
         show: boolean;

@@ -1,5 +1,6 @@
 import { GridConfig, GridPoint, Viewport } from '../types/grid';
 import { Well } from '../types/attractor';
+import { getTextureRenderer } from './line-textures';
 
 export class CanvasRenderer {
     private ctx: CanvasRenderingContext2D;
@@ -149,7 +150,9 @@ export class CanvasRenderer {
             pointMap.set(point.id, point);
         }
 
-        // Render lines based on frequency and curvature
+        const textureRenderer = getTextureRenderer(config.lineTexture);
+
+        // Render lines based on frequency and texture
         for (const point of points) {
             for (const neighborId of point.neighbors) {
                 const neighbor = pointMap.get(neighborId);
@@ -159,103 +162,49 @@ export class CanvasRenderer {
                 const pairHash = this.hashPair(point.id, neighborId);
                 if (pairHash > config.lineFrequency) continue;
 
-                // If curvature = 0.5 (straight), draw straight lines (fast path)
-                // Only use fast path for values very close to 0.5, not for 0.0
-                if (config.lineCurvature > 0.49 && config.lineCurvature < 0.51) {
-                    this.ctx.strokeStyle = config.lineColor;
-                    this.ctx.lineWidth = config.lineWidth;
-                    this.ctx.globalAlpha = config.lineOpacity;
+                const x1 = point.currentPosition.x;
+                const y1 = point.currentPosition.y;
+                const x2 = neighbor.currentPosition.x;
+                const y2 = neighbor.currentPosition.y;
 
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(point.currentPosition.x, point.currentPosition.y);
-                    this.ctx.lineTo(neighbor.currentPosition.x, neighbor.currentPosition.y);
-                    this.ctx.stroke();
-                } else {
-                    // Draw curved/filled lines (sinew style)
-                    this.renderCurvedLine(
-                        point.currentPosition.x,
-                        point.currentPosition.y,
-                        neighbor.currentPosition.x,
-                        neighbor.currentPosition.y,
+                const lineConfig = {
+                    width: config.lineWidth,
+                    color: config.lineColor,
+                    opacity: config.lineOpacity,
+                    lineId: pairHash.toString(),
+                    segmentedTextureSettings: config.segmentedTextureSettings,
+                };
+
+                // Check if curvature is supported and should be applied
+                // Curvature of 0 = straight, use curved rendering if significantly non-zero
+                const useCurvature =
+                    textureRenderer.supportsCurvature() &&
+                    (config.lineCurvature < -0.01 || config.lineCurvature > 0.01);
+
+                if (useCurvature && textureRenderer.renderCurvedLine) {
+                    textureRenderer.renderCurvedLine(
+                        this.ctx,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
                         config.lineCurvature,
-                        config.lineWidth,
-                        config.lineColor,
-                        config.lineOpacity
+                        lineConfig
+                    );
+                } else {
+                    textureRenderer.renderStraightLine(
+                        this.ctx,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        lineConfig
                     );
                 }
             }
         }
 
         this.ctx.globalAlpha = 1;
-    }
-
-    private renderCurvedLine(
-        x1: number,
-        y1: number,
-        x2: number,
-        y2: number,
-        curvature: number,
-        lineWidth: number,
-        color: string,
-        opacity: number
-    ): void {
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const length = Math.sqrt(dx * dx + dy * dy);
-
-        if (length === 0) return;
-
-        // Perpendicular unit vector
-        const perpX = -dy / length;
-        const perpY = dx / length;
-
-        // Base thickness
-        const halfWidth = lineWidth / 2;
-
-        // Calculate control points along the STRAIGHT centerline
-        const cp1CenterX = x1 + dx * 0.33;
-        const cp1CenterY = y1 + dy * 0.33;
-        const cp2CenterX = x1 + dx * 0.67;
-        const cp2CenterY = y1 + dy * 0.67;
-
-        // Calculate curvature factor based on line width
-        // Symmetric bounds: curve can span 0.5 * lineWidth in either direction
-        // -1 (concave extreme) -> -0.5 * lineWidth
-        // 0 (straight) -> 0
-        // 1 (convex extreme) -> +0.5 * lineWidth
-        const curvatureFactor = curvature * lineWidth * 0.5;
-
-        this.ctx.fillStyle = color;
-        this.ctx.globalAlpha = opacity;
-
-        // Create a closed path with two curves that bulge in/out
-        this.ctx.beginPath();
-
-        // Top edge: starts at base offset, bulges at control points
-        this.ctx.moveTo(x1 + perpX * halfWidth, y1 + perpY * halfWidth);
-        this.ctx.bezierCurveTo(
-            cp1CenterX + perpX * (halfWidth + curvatureFactor),
-            cp1CenterY + perpY * (halfWidth + curvatureFactor),
-            cp2CenterX + perpX * (halfWidth + curvatureFactor),
-            cp2CenterY + perpY * (halfWidth + curvatureFactor),
-            x2 + perpX * halfWidth,
-            y2 + perpY * halfWidth
-        );
-
-        // Bottom edge: starts at base offset, bulges oppositely at control points
-        this.ctx.lineTo(x2 - perpX * halfWidth, y2 - perpY * halfWidth);
-        this.ctx.bezierCurveTo(
-            cp2CenterX - perpX * (halfWidth + curvatureFactor),
-            cp2CenterY - perpY * (halfWidth + curvatureFactor),
-            cp1CenterX - perpX * (halfWidth + curvatureFactor),
-            cp1CenterY - perpY * (halfWidth + curvatureFactor),
-            x1 - perpX * halfWidth,
-            y1 - perpY * halfWidth
-        );
-
-        this.ctx.closePath();
-        this.ctx.fill();
-        this.ctx.globalAlpha = 1.0;
     }
 
     private hashPair(id1: string, id2: string): number {

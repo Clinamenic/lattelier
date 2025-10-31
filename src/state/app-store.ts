@@ -84,6 +84,12 @@ const defaultGridConfig: GridConfig = {
     lineFrequency: 1.0, // 100% = draw all connections
     lineCurvature: 0, // -100% = concave, 0% = straight, 100% = convex
     lineOpacity: 0.8,
+    lineTexture: 'solid',
+    segmentedTextureSettings: {
+        angleVariation: 1.0, // full ±3 degree variation
+        spacingVariation: 0.5, // 15% spacing variation
+        lengthVariation: 1.0, // full ±12% length variation
+    },
     fillFrequency: 1.0, // 100% = draw all fill polygons
     fillOpacity: 0.3,
     showPoints: true,
@@ -341,6 +347,9 @@ export const useAppStore = create<AppState>((set, get) => ({
             return { minX, minY, maxX, maxY };
         };
 
+        // Randomize texture type
+        const randomTexture = randomChoice(['solid', 'segmented'] as const);
+
         // Generate random grid config (preserving dimensions)
         const newGridConfig: GridConfig = {
             ...gridConfig,
@@ -351,8 +360,14 @@ export const useAppStore = create<AppState>((set, get) => ({
             pointOpacity: randomFloat(0, 1),
             lineWidth: randomFloat(0.5, 10),
             lineFrequency: randomFloat(0, 1),
-            lineCurvature: randomFloat(0, 1),
+            lineCurvature: randomTexture === 'solid' ? randomFloat(-1, 1) : gridConfig.lineCurvature,
             lineOpacity: randomFloat(0, 1),
+            lineTexture: randomTexture,
+            segmentedTextureSettings: randomTexture === 'segmented' ? {
+                angleVariation: randomFloat(0, 1),
+                spacingVariation: randomFloat(0, 1),
+                lengthVariation: randomFloat(0, 1),
+            } : gridConfig.segmentedTextureSettings,
             fillFrequency: randomFloat(0, 1),
             fillOpacity: randomFloat(0, 1),
             pointColor: randomHexColor(),

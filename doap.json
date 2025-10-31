@@ -9,7 +9,7 @@
   "url": "https://github.com/clinamenic/lattelier",
   "version": "0.7.0",
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-10-31T18:17:28.595Z",
+  "dateModified": "2025-10-31T18:21:40Z",
   "license": "https://opensource.org/licenses/MIT",
   "programmingLanguage": [
     "TypeScript",
@@ -82,6 +82,17 @@
     }
   ],
   "deployments": [
+    {
+      "@type": "WebSite",
+      "version": "0.7.0",
+      "url": "https://arweave.net/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo",
+      "transactionId": "Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo",
+      "arweaveUrl": "https://arweave.net/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo",
+      "deploymentDate": "2025-10-31T18:21:40Z",
+      "environment": "--prod",
+      "description": "Permanent deployment on Arweave permaweb",
+      "hostingProvider": "Arweave"
+    },
     {
       "@type": "WebSite",
       "version": "0.5.0",

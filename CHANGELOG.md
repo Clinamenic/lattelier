@@ -33,6 +33,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Code Organization**: Centralized lock state management in app store
 - **Visual Feedback**: Improved lock button states with opacity transitions and color indicators
 
+### Deployment
+
+- **Transaction ID**: Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo
+- **URL**: https://arweave.net/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo
+- **Environment**: Production
+- **Deployment Date**: 2025-10-31
+- **Project Metadata**: https://arweave.net/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo/doap.json
+
 **Commit Reference**: 1fafd98
 
 ## 0.6.0 - 2025-10-31

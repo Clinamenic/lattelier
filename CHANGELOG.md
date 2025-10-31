@@ -5,6 +5,34 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.6.0 - 2025-10-31
+
+### Added
+
+- **Segmented Line Texture System**: New modular line texture rendering architecture with extensible texture system
+- **Segmented Texture Option**: Alternative to solid lines, renders lines as segmented strokes with gaps and variations
+- **Texture Controls**: Configurable angle variation, spacing variation, and length variation for segmented textures
+- **Conditional Settings Pattern**: Context-aware UI that shows different controls based on texture selection
+- **Texture Registry System**: Extensible architecture for adding new texture types in the future
+- **Architecture Documentation**: Comprehensive documentation for conditional settings pattern
+
+### Changed
+
+- **Line Rendering Architecture**: Refactored to use modular texture renderer system with registry pattern
+- **Canvas Settings Panel**: Enhanced with texture selector and conditional style-specific controls
+- **Export Manager**: Enhanced to support segmented textures in both PNG and SVG exports
+- **Config Manager**: Updated to handle texture settings in configuration export/import
+- **Type System**: Extended with LineTexture union type and SegmentedTextureSettings interface
+
+### Technical Improvements
+
+- **Modular Architecture**: Separated texture rendering logic into dedicated renderer classes
+- **Deterministic Rendering**: Segmented texture uses hash-based algorithm for consistent results
+- **Export Compatibility**: SVG export now generates segmented lines matching canvas rendering
+- **Code Organization**: Better separation of concerns with dedicated texture renderer modules
+
+**Commit Reference**: 1b08ff7
+
 ## 0.5.1 - 2025-10-29
 
 ### Added

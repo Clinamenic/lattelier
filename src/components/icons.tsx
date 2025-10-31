@@ -254,3 +254,59 @@ export const CancelIcon: React.FC<IconProps> = ({ className = '', size = 16 }) =
     <line x1="9" y1="9" x2="15" y2="15"/>
   </svg>
 );
+
+export const LockIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="5" y="11" width="14" height="9" rx="2" ry="2" />
+    <path d="M9 11V8a3 3 0 0 1 6 0v3" />
+  </svg>
+);
+
+export const UnlockIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="5" y="11" width="14" height="9" rx="2" ry="2" />
+    <path d="M9 11V8a3 3 0 0 1 4.9-2.35" />
+    <path d="M13 11h2" />
+  </svg>
+);
+
+export const InfoIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="16" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12.01" y2="8" />
+  </svg>
+);

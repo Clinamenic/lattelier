@@ -34,10 +34,11 @@
 }
 
 .modal-header {
+    height: var(--header-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-xl);
+    padding: var(--space-xs) var(--space-md);
     border-bottom: var(--border-width) solid var(--border-color);
 }
 
@@ -70,12 +71,16 @@
 
 .modal-footer {
     display: flex;
+    height: var(--header-height);
     align-items: center;
     justify-content: flex-end;
     gap: var(--space-md);
-    padding: var(--space-xl);
+    padding: var(--space-xs) var(--space-md);
     border-top: var(--border-width) solid var(--border-color);
-    background-color: var(--color-gray-50);
+    > button {
+        background-color: var(--color-surface-alt);
+        height: var(--pill-height);
+    }
 }
 
 /* Error modal specific */

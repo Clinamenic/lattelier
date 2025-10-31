@@ -30,6 +30,7 @@ export function generateStateHash(
             fillOpacity: gridConfig.fillOpacity,
             fillColor: gridConfig.fillColor,
             canvasBackgroundColor: gridConfig.canvasBackgroundColor,
+            canvasOpacity: gridConfig.canvasOpacity,
             blendMode: gridConfig.blendMode,
             // Note: showPoints, showLines, showFill are UI state, not logical state
         },

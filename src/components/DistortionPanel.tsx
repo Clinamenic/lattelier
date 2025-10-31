@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAppStore } from '../state/app-store';
 import { CollapsiblePanel } from './CollapsiblePanel';
 import { initializeRangeFills, updateAllRangeFills } from '../utils/range-fill';
-import { EyeOpenIcon, EyeClosedIcon, CancelIcon } from './icons';
+import { EyeOpenIcon, EyeClosedIcon, CancelIcon, LockIcon, UnlockIcon } from './icons';
 
 export function DistortionPanel() {
     const selectedWellId = useAppStore((state) => state.selectedWellId);
@@ -14,6 +14,8 @@ export function DistortionPanel() {
     const isCollapsed = useAppStore((state) => state.rightSidebarCollapsed);
     const showWells = useAppStore((state) => state.showWells);
     const setShowWells = useAppStore((state) => state.setShowWells);
+    const wellsLocked = useAppStore((state) => state.wellsLocked);
+    const setWellsLocked = useAppStore((state) => state.setWellsLocked);
 
     // Initialize range fills when component mounts
     useEffect(() => {
@@ -54,6 +56,18 @@ export function DistortionPanel() {
                                             All Wells ({wells.length})
                                         </h4>
                                         <div className="controls-title-actions">
+                                            <button
+                                                onClick={() => setWellsLocked(!wellsLocked)}
+                                                className={`btn btn-icon-only ${wellsLocked ? 'btn-locked' : ''}`}
+                                                title={wellsLocked ? 'Unlock Wells (allow shuffle)' : 'Lock Wells (preserve on shuffle)'}
+                                                aria-label={wellsLocked ? 'Unlock Wells' : 'Lock Wells'}
+                                            >
+                                                {wellsLocked ? (
+                                                    <LockIcon className="icon" size={16} />
+                                                ) : (
+                                                    <UnlockIcon className="icon" size={16} />
+                                                )}
+                                            </button>
                                             <button
                                                 onClick={() => setShowWells(!showWells)}
                                                 className={`btn btn-icon-only ${showWells ? 'btn-active' : ''}`}
@@ -113,6 +127,18 @@ export function DistortionPanel() {
                                             All Wells ({wells.length})
                                         </h4>
                                         <div className="controls-title-actions">
+                                            <button
+                                                onClick={() => setWellsLocked(!wellsLocked)}
+                                                className={`btn btn-icon-only ${wellsLocked ? 'btn-locked' : ''}`}
+                                                title={wellsLocked ? 'Unlock Wells (allow shuffle)' : 'Lock Wells (preserve on shuffle)'}
+                                                aria-label={wellsLocked ? 'Unlock Wells' : 'Lock Wells'}
+                                            >
+                                                {wellsLocked ? (
+                                                    <LockIcon className="icon" size={16} />
+                                                ) : (
+                                                    <UnlockIcon className="icon" size={16} />
+                                                )}
+                                            </button>
                                             <button
                                                 onClick={() => setShowWells(!showWells)}
                                                 className={`btn btn-icon-only ${showWells ? 'btn-active' : ''}`}

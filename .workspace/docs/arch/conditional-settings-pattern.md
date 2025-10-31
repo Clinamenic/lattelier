@@ -1,5 +1,19 @@
 # Conditional Settings Pattern Architecture
 
+## 0.7.0 - 2025-01-14
+
+**Settings Lock/Unlock System**: Introduced comprehensive lock/unlock functionality for individual settings, allowing users to preserve specific settings during shuffle operations. Added LockButton component for visual lock control. Implemented canvas opacity control with consistent UI placement pattern. Enhanced guide modal with updated feature documentation. All opacity controls now follow consistent pattern of placement immediately after color pickers.
+
+### Impacted Components
+- **Settings State Management**: Added SettingsLocks interface and lock state persistence via localStorage
+- **Shuffle Functionality**: Enhanced to respect individual setting locks and wells master lock
+- **Canvas Settings Panel**: Integrated LockButton components for all lockable settings
+- **Canvas Rendering**: Added canvas opacity support for background transparency control
+- **UI Consistency**: Standardized opacity control placement (immediately after color pickers)
+- **Guide Modal**: Updated with accurate feature documentation and streamlined structure
+- **Config Management**: Enhanced export/import to include lock states
+- **Distortion Panel**: Added wells master lock for preserving well configurations during shuffle
+
 ## 0.6.0 - 2025-10-31
 
 **Segmented Line Texture System**: Introduced modular line texture rendering architecture with extensible texture system. Implemented segmented texture option with conditional settings pattern, allowing users to choose between solid and segmented line textures with style-specific controls. Enhanced export functionality to support segmented textures in both PNG and SVG exports. Added comprehensive architecture documentation for the conditional settings pattern.

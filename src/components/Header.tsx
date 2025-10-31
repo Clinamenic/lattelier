@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ExportIcon, ImportIcon, ShuffleIcon, SaveIcon, RightSidebarHideIcon, RightSidebarShowIcon, LeftSidebarHideIcon, LeftSidebarShowIcon, PanIcon, PlaceWellIcon } from './icons';
+import { ExportIcon, ImportIcon, ShuffleIcon, SaveIcon, RightSidebarHideIcon, RightSidebarShowIcon, LeftSidebarHideIcon, LeftSidebarShowIcon, PanIcon, PlaceWellIcon, InfoIcon } from './icons';
 import { useAppStore, ImportMode } from '../state/app-store';
 import { ExportManager } from '../core/export-manager';
 import { ConfigManager } from '../core/config-manager';
@@ -251,14 +251,6 @@ export function Header() {
                         <span className="navbar-version">{getVersionDisplay()}</span>
                     </div>
                     <div className="navbar-right">
-                        <button
-                            onClick={() => setShowGuide(true)}
-                            className="btn btn-icon-only"
-                            title="Open Guide"
-                            aria-label="Open guide"
-                        >
-                            ?
-                        </button>
                     </div>
                 </nav>
 
@@ -281,6 +273,18 @@ export function Header() {
                     </div>
 
                     <div className="toolbar-center">
+                        {/* Help Group */}
+                        <div className="toolbar-group">
+                            <button
+                                onClick={() => setShowGuide(true)}
+                                className="btn btn-icon-only"
+                                title="Open Guide"
+                                aria-label="Open guide"
+                            >
+                                <InfoIcon className="icon" size={16} />
+                            </button>
+                        </div>
+
                         {/* Import/Export/Download Group */}
                         <div className="toolbar-group">
                             <button

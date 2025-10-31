@@ -148,6 +148,8 @@ export function Toolbar() {
 
     const handleExportConfig = async () => {
         const deformation = useAppStore.getState().deformation;
+        const settingsLocks = useAppStore.getState().settingsLocks;
+        const wellsLocked = useAppStore.getState().wellsLocked;
 
         // Generate state-based hash for consistent naming
         const stateHash = generateStateHash(gridConfig, deformation, viewport);
@@ -158,7 +160,9 @@ export function Toolbar() {
             viewport,
             {
                 name: `Grid Pattern ${new Date().toLocaleDateString()}`,
-            }
+            },
+            settingsLocks,
+            wellsLocked
         );
         await configManager.downloadConfig(config, undefined, stateHash);
     };

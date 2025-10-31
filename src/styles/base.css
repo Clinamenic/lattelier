@@ -1,4 +1,41 @@
-* Base styles - Reset and typography */
+/* Maple Mono Light*/
+@font-face {
+    font-family: "MapleMono";
+    src: url("https://arweave.net/9M6Kw2z01K7F7xvB922HSyHhgc47hVGsML_sXn47vfk") format("truetype");
+    font-weight: 100;
+  }
+  /* Maple Mono Light Italic*/
+  @font-face {
+    font-family: "MapleMonoItalic";
+    src: url("https://arweave.net/ij5gAnbv0TwKIy15AWkCLf6uP_g-MtukjDcW_AaFieA") format("truetype");
+    font-weight: 100;
+  }
+  /* Maple Mono*/
+  @font-face {
+    font-family: "MapleMono";
+    src: url("https://arweave.net/TWoeXug6rU14GP9aVH4o5HRojlmI3UKC1TUxxK9EOHs") format("truetype");
+    font-weight: 200;
+  }
+  /* Maple Mono Italic*/
+  @font-face {
+    font-family: "MapleMonoItalic";
+    src: url("https://arweave.net/AgSvkeq2Ah23Gs9H-n2j6HdTPb2o4tWXcvqjs_lYB7c") format("truetype");
+    font-weight: 200;
+  }
+  /* Maple Mono Bold*/
+  @font-face {
+    font-family: "MapleMono";
+    src: url("https://arweave.net/WERfoVZUunnNYvLlq1d8dI6EimZ8okYSWSxokeXqv_A") format("truetype");
+    font-weight: 300;
+  }
+  /* Maple Mono Bold Italic*/
+  @font-face {
+    font-family: "MapleMonoItalic";
+    src: url("https://arweave.net/CyV4HglmMOQ2HenXa89tfZehfRNL30Y4mmrhD644o90") format("truetype");
+    font-weight: 300;
+  }
+
+/* Base styles - Reset and typography */
 *,
 *::before,
 *::after {
@@ -143,4 +180,37 @@ button {
     border: none;
     background: none;
     padding: 0;
+}
+
+/* Scrollbar styling */
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gray-700) transparent;
+}
+
+/* WebKit browsers (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px;
+}
+
+*::-webkit-scrollbar:hover {
+    width: 8px !important;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--color-gray-700);
+    border-radius: var(--radius-sm);
+    border: none;
+    width: 2px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-gray-400) !important;
 }

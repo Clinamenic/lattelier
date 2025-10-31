@@ -1,6 +1,6 @@
 export type GridType = 'square' | 'triangular';
 export type BlendMode = 'normal' | 'multiply' | 'screen' | 'overlay';
-export type LineTexture = 'solid' | 'segmented';
+export type LineStyle = 'solid' | 'segmented';
 
 export interface SegmentedTextureSettings {
     angleVariation: number; // 0-1, maps to ±3 degrees in radians (0.05 rad)
@@ -18,8 +18,8 @@ export interface GridConfig {
     lineFrequency: number; // 0-1: percentage of connections to draw
     lineCurvature: number; // -1 to 1: amount of curvature (-1 = concave, 0 = straight, 1 = convex)
     lineOpacity: number; // 0-1: line transparency
-    lineTexture: LineTexture;
-    segmentedTextureSettings?: SegmentedTextureSettings; // Optional, only used when lineTexture === 'segmented'
+    lineStyle: LineStyle;
+    segmentedTextureSettings?: SegmentedTextureSettings; // Optional, only used when lineStyle === 'segmented'
     fillFrequency: number; // 0-1: percentage of fill polygons to draw
     fillOpacity: number; // 0-1: fill transparency
     showPoints: boolean;
@@ -29,6 +29,7 @@ export interface GridConfig {
     lineColor: string;
     fillColor: string;
     canvasBackgroundColor: string;
+    canvasOpacity: number; // 0-1: canvas background transparency
     gridType: GridType;
     blendMode: BlendMode;
 }
@@ -44,5 +45,41 @@ export interface Viewport {
     x: number;
     y: number;
     zoom: number;
+}
+
+export interface SettingsLocks {
+    // Canvas settings
+    canvasBackgroundColor: boolean; // true = locked, false = unlocked
+    canvasOpacity: boolean;
+
+    // Grid settings
+    gridType: boolean;
+    rows: boolean;
+    columns: boolean;
+    spacing: boolean;
+
+    // Points settings
+    pointColor: boolean;
+    pointSize: boolean;
+    pointOpacity: boolean;
+
+    // Lines settings
+    lineColor: boolean;
+    lineStyle: boolean;
+    lineCurvature: boolean;
+    segmentedTextureSettings: {
+        angleVariation: boolean;
+        spacingVariation: boolean;
+        lengthVariation: boolean;
+    };
+    lineFrequency: boolean;
+    lineWidth: boolean;
+    lineOpacity: boolean;
+
+    // Fill settings
+    fillColor: boolean;
+    fillFrequency: boolean;
+    fillOpacity: boolean;
+    blendMode: boolean;
 }
 

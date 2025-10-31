@@ -1,5 +1,21 @@
 # CSS Architecture Documentation
 
+## 0.7.0 - 2025-01-14
+
+### Settings Lock/Unlock and UI Consistency
+- **Lock Button Styling**: Added `.btn-lock` and `.btn-locked` classes for settings lock buttons
+- **Form Group Row Layout**: Introduced `.form-group-row` for inline lock button placement
+- **Opacity Control Consistency**: Standardized opacity control placement pattern (immediately after color pickers)
+- **Modal Styling**: Enhanced guide modal with streamlined structure using global styles
+- **Visual Feedback**: Improved lock button states with opacity transitions and color indicators
+
+### Impacted Components
+- **Forms CSS**: Added form-group-row layout and lock button styling
+- **Canvas Settings Panel**: Integrated lock buttons with consistent form row layout
+- **Guide Modal**: Refactored to use global styles exclusively, removing purpose-specific classes
+- **Distortion Panel**: Added wells lock button with consistent styling
+- **Button System**: Extended with lock-specific button variants
+
 ## 0.5.1 - 2025-01-29
 
 ### UI/UX Enhancements and Form Controls

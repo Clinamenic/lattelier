@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GridConfig, GridPoint, Viewport } from '../types/grid';
+import { GridConfig, GridPoint, Viewport, SettingsLocks } from '../types/grid';
 import { Well, DeformationConfig } from '../types/attractor';
 import { GridEngine } from '../core/grid-engine';
 import { PinchCalculator } from '../core/pinch-calculator';
@@ -16,6 +16,10 @@ interface AppState {
 
     // Deformation
     deformation: DeformationConfig;
+
+    // Settings locks
+    settingsLocks: SettingsLocks;
+    wellsLocked: boolean;
 
     // UI
     viewport: Viewport;
@@ -57,6 +61,10 @@ interface AppState {
     // Shuffle action
     shuffleSettings: () => void;
 
+    // Lock actions
+    toggleSettingLock: (settingKey: string) => void;
+    setWellsLocked: (locked: boolean) => void;
+
     // Viewport adjustment
     adjustViewportToFit: () => void;
 }
@@ -74,6 +82,66 @@ const loadSidebarState = (key: string, defaultValue: boolean): boolean => {
     }
 };
 
+// Default settings locks (all unlocked)
+const defaultSettingsLocks: SettingsLocks = {
+    canvasBackgroundColor: false,
+    canvasOpacity: false,
+    gridType: false,
+    rows: false,
+    columns: false,
+    spacing: false,
+    pointColor: false,
+    pointSize: false,
+    pointOpacity: false,
+    lineColor: false,
+    lineStyle: false,
+    lineCurvature: false,
+    segmentedTextureSettings: {
+        angleVariation: false,
+        spacingVariation: false,
+        lengthVariation: false,
+    },
+    lineFrequency: false,
+    lineWidth: false,
+    lineOpacity: false,
+    fillColor: false,
+    fillFrequency: false,
+    fillOpacity: false,
+    blendMode: false,
+};
+
+// Load settings locks from localStorage
+const loadSettingsLocks = (): SettingsLocks => {
+    try {
+        const stored = localStorage.getItem('settingsLocks');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            // Merge with defaults to handle new settings added in future
+            return {
+                ...defaultSettingsLocks,
+                ...parsed,
+                segmentedTextureSettings: {
+                    ...defaultSettingsLocks.segmentedTextureSettings,
+                    ...(parsed.segmentedTextureSettings || {}),
+                },
+            };
+        }
+    } catch {
+        // Ignore errors
+    }
+    return defaultSettingsLocks;
+};
+
+// Load wells locked state from localStorage
+const loadWellsLocked = (): boolean => {
+    try {
+        const stored = localStorage.getItem('wellsLocked');
+        return stored !== null ? JSON.parse(stored) : false;
+    } catch {
+        return false;
+    }
+};
+
 const defaultGridConfig: GridConfig = {
     rows: 30,
     columns: 30,
@@ -84,7 +152,7 @@ const defaultGridConfig: GridConfig = {
     lineFrequency: 1.0, // 100% = draw all connections
     lineCurvature: 0, // -100% = concave, 0% = straight, 100% = convex
     lineOpacity: 0.8,
-    lineTexture: 'solid',
+    lineStyle: 'solid',
     segmentedTextureSettings: {
         angleVariation: 1.0, // full ±3 degree variation
         spacingVariation: 0.5, // 15% spacing variation
@@ -99,6 +167,7 @@ const defaultGridConfig: GridConfig = {
     lineColor: '#6366f1',
     fillColor: '#3b82f6',
     canvasBackgroundColor: '#f9fafb', // Default light gray (tailwind gray-50)
+    canvasOpacity: 1.0, // Default to fully opaque
     gridType: 'square',
     blendMode: 'normal',
 };
@@ -113,6 +182,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         wells: [],
         globalStrength: 1,
     },
+
+    settingsLocks: loadSettingsLocks(),
+    wellsLocked: loadWellsLocked(),
 
     viewport: {
         x: 50,
@@ -163,10 +235,34 @@ export const useAppStore = create<AppState>((set, get) => ({
                 ? { x: config.viewport.x, y: config.viewport.y, zoom: config.viewport.zoom }
                 : get().viewport;
 
+            // Restore lock states if present in config
+            let newSettingsLocks = get().settingsLocks;
+            let newWellsLocked = get().wellsLocked;
+
+            if (config.locks) {
+                // Merge with defaults to handle new settings added in future
+                const defaultLocks = loadSettingsLocks();
+                newSettingsLocks = {
+                    ...defaultLocks,
+                    ...config.locks.settings,
+                    segmentedTextureSettings: {
+                        ...defaultLocks.segmentedTextureSettings,
+                        ...(config.locks.settings.segmentedTextureSettings || {}),
+                    },
+                };
+                newWellsLocked = config.locks.wells ?? false;
+
+                // Persist to localStorage
+                localStorage.setItem('settingsLocks', JSON.stringify(newSettingsLocks));
+                localStorage.setItem('wellsLocked', JSON.stringify(newWellsLocked));
+            }
+
             set({
                 gridConfig,
                 deformation,
                 viewport,
+                settingsLocks: newSettingsLocks,
+                wellsLocked: newWellsLocked,
                 selectedWellId: null,
             });
 
@@ -318,9 +414,40 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
     },
 
+    // Lock actions
+    toggleSettingLock: (settingKey: string) => {
+        set((state) => {
+            // Handle nested keys (e.g., "segmentedTextureSettings.angleVariation")
+            if (settingKey.includes('.')) {
+                const [parent, child] = settingKey.split('.');
+                const newLocks = {
+                    ...state.settingsLocks,
+                    [parent]: {
+                        ...(state.settingsLocks[parent as keyof SettingsLocks] as any),
+                        [child]: !(state.settingsLocks[parent as keyof SettingsLocks] as any)[child],
+                    },
+                };
+                localStorage.setItem('settingsLocks', JSON.stringify(newLocks));
+                return { settingsLocks: newLocks };
+            }
+
+            const newLocks = {
+                ...state.settingsLocks,
+                [settingKey]: !state.settingsLocks[settingKey as keyof SettingsLocks],
+            };
+            localStorage.setItem('settingsLocks', JSON.stringify(newLocks));
+            return { settingsLocks: newLocks };
+        });
+    },
+
+    setWellsLocked: (locked: boolean) => {
+        set({ wellsLocked: locked });
+        localStorage.setItem('wellsLocked', JSON.stringify(locked));
+    },
+
     // Shuffle action
     shuffleSettings: () => {
-        const { gridConfig } = get();
+        const { gridConfig, settingsLocks, wellsLocked } = get();
 
         // Helper functions for random generation
         const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -347,67 +474,95 @@ export const useAppStore = create<AppState>((set, get) => ({
             return { minX, minY, maxX, maxY };
         };
 
-        // Randomize texture type
-        const randomTexture = randomChoice(['solid', 'segmented'] as const);
+        // Randomize style type only if unlocked
+        const randomStyle = settingsLocks.lineStyle
+            ? gridConfig.lineStyle
+            : randomChoice(['solid', 'segmented'] as const);
 
-        // Generate random grid config (preserving dimensions)
+        // Generate new grid config - respect locks
         const newGridConfig: GridConfig = {
             ...gridConfig,
-            // Randomize visual settings
-            gridType: randomChoice(['square', 'triangular']),
-            spacing: randomInt(5, 100),
-            pointSize: randomFloat(0.5, 5),
-            pointOpacity: randomFloat(0, 1),
-            lineWidth: randomFloat(0.5, 10),
-            lineFrequency: randomFloat(0, 1),
-            lineCurvature: randomTexture === 'solid' ? randomFloat(-1, 1) : gridConfig.lineCurvature,
-            lineOpacity: randomFloat(0, 1),
-            lineTexture: randomTexture,
-            segmentedTextureSettings: randomTexture === 'segmented' ? {
-                angleVariation: randomFloat(0, 1),
-                spacingVariation: randomFloat(0, 1),
-                lengthVariation: randomFloat(0, 1),
-            } : gridConfig.segmentedTextureSettings,
-            fillFrequency: randomFloat(0, 1),
-            fillOpacity: randomFloat(0, 1),
-            pointColor: randomHexColor(),
-            lineColor: randomHexColor(),
-            fillColor: randomHexColor(),
-            canvasBackgroundColor: randomHexColor(),
-            blendMode: randomChoice(['normal', 'multiply', 'screen', 'overlay']),
+            // Only randomize if unlocked
+            gridType: settingsLocks.gridType ? gridConfig.gridType : randomChoice(['square', 'triangular']),
+            rows: settingsLocks.rows ? gridConfig.rows : randomInt(5, 200),
+            columns: settingsLocks.columns ? gridConfig.columns : randomInt(5, 200),
+            spacing: settingsLocks.spacing ? gridConfig.spacing : randomInt(5, 100),
+            pointSize: settingsLocks.pointSize ? gridConfig.pointSize : randomFloat(0.5, 5),
+            pointOpacity: settingsLocks.pointOpacity ? gridConfig.pointOpacity : randomFloat(0, 1),
+            lineWidth: settingsLocks.lineWidth ? gridConfig.lineWidth : randomFloat(0.5, 10),
+            lineFrequency: settingsLocks.lineFrequency ? gridConfig.lineFrequency : randomFloat(0, 1),
+            lineCurvature: settingsLocks.lineCurvature
+                ? gridConfig.lineCurvature
+                : (randomStyle === 'solid' ? randomFloat(-1, 1) : gridConfig.lineCurvature),
+            lineOpacity: settingsLocks.lineOpacity ? gridConfig.lineOpacity : randomFloat(0, 1),
+            lineStyle: randomStyle,
+            segmentedTextureSettings: randomStyle === 'segmented'
+                ? {
+                      angleVariation: settingsLocks.segmentedTextureSettings.angleVariation
+                          ? gridConfig.segmentedTextureSettings?.angleVariation ?? 1.0
+                          : randomFloat(0, 1),
+                      spacingVariation: settingsLocks.segmentedTextureSettings.spacingVariation
+                          ? gridConfig.segmentedTextureSettings?.spacingVariation ?? 0.5
+                          : randomFloat(0, 1),
+                      lengthVariation: settingsLocks.segmentedTextureSettings.lengthVariation
+                          ? gridConfig.segmentedTextureSettings?.lengthVariation ?? 1.0
+                          : randomFloat(0, 1),
+                  }
+                : gridConfig.segmentedTextureSettings,
+            fillFrequency: settingsLocks.fillFrequency ? gridConfig.fillFrequency : randomFloat(0, 1),
+            fillOpacity: settingsLocks.fillOpacity ? gridConfig.fillOpacity : randomFloat(0, 1),
+            pointColor: settingsLocks.pointColor ? gridConfig.pointColor : randomHexColor(),
+            lineColor: settingsLocks.lineColor ? gridConfig.lineColor : randomHexColor(),
+            fillColor: settingsLocks.fillColor ? gridConfig.fillColor : randomHexColor(),
+            canvasBackgroundColor: settingsLocks.canvasBackgroundColor
+                ? gridConfig.canvasBackgroundColor
+                : randomHexColor(),
+            canvasOpacity: settingsLocks.canvasOpacity ? gridConfig.canvasOpacity : randomFloat(0, 1),
+            blendMode: settingsLocks.blendMode ? gridConfig.blendMode : randomChoice(['normal', 'multiply', 'screen', 'overlay']),
         };
 
-        // Generate random wells (0-8 wells) within actual grid bounds
-        const wellCount = randomInt(0, 8);
-        const wells: Well[] = [];
+        // Handle wells randomization
+        let newWells: Well[] = [];
+        let newGlobalStrength: number;
 
-        // Calculate bounds for the NEW grid configuration
-        // We need to generate a temporary grid to get the correct bounds
-        const tempGrid = gridEngine.generateGrid(newGridConfig);
-        const gridBounds = calculateGridBounds(tempGrid);
+        if (!wellsLocked) {
+            // Randomize wells
+            const wellCount = randomInt(0, 8);
 
-        for (let i = 0; i < wellCount; i++) {
-            const well: Well = {
-                id: `well-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                position: {
-                    x: randomFloat(gridBounds.minX, gridBounds.maxX),
-                    y: randomFloat(gridBounds.minY, gridBounds.maxY),
-                },
-                strength: randomFloat(-1, 1),
-                radius: randomFloat(50, 500),
-                falloff: randomChoice(['linear', 'quadratic', 'exponential', 'smooth']),
-                distortion: randomFloat(0, 1),
-                enabled: Math.random() < 0.8, // 80% enabled
-            };
-            wells.push(well);
+            // Calculate bounds for the NEW grid configuration
+            // We need to generate a temporary grid to get the correct bounds
+            const tempGrid = gridEngine.generateGrid(newGridConfig);
+            const gridBounds = calculateGridBounds(tempGrid);
+
+            for (let i = 0; i < wellCount; i++) {
+                const well: Well = {
+                    id: `well-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    position: {
+                        x: randomFloat(gridBounds.minX, gridBounds.maxX),
+                        y: randomFloat(gridBounds.minY, gridBounds.maxY),
+                    },
+                    strength: randomFloat(-1, 1),
+                    radius: randomFloat(50, 500),
+                    falloff: randomChoice(['linear', 'quadratic', 'exponential', 'smooth']),
+                    distortion: randomFloat(0, 1),
+                    enabled: Math.random() < 0.8, // 80% enabled
+                };
+                newWells.push(well);
+            }
+
+            newGlobalStrength = randomFloat(0.5, 2.0);
+        } else {
+            // Preserve existing wells
+            newWells = get().deformation.wells;
+            newGlobalStrength = get().deformation.globalStrength;
         }
 
         // Apply all changes atomically
         set({
             gridConfig: newGridConfig,
             deformation: {
-                wells,
-                globalStrength: randomFloat(0.5, 2.0),
+                wells: newWells,
+                globalStrength: newGlobalStrength,
             },
             selectedWellId: null, // Clear selection
         });

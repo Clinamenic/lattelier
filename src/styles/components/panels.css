@@ -46,7 +46,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: var(--color-surface-alt);
+    background-color: var(--color-surface);
     border-bottom: var(--border-width) solid var(--border-color);
     padding: var(--space-sm);
     display: flex;

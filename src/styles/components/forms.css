@@ -15,19 +15,35 @@
 .form-input {
     width: 100%;
     height: var(--pill-height);
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
     color: var(--color-text) !important;
     font-size: var(--font-size-sm);
     border: var(--border-width) solid var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: var(--form-radius);
     background-color: var(--color-surface);
     transition: border-color var(--transition), box-shadow var(--transition);
+    text-align: center;
+    justify-content: center;
 }
 
 .form-input:focus {
     outline: none;
     border-color: var(--color-border-focus);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Number input spinner styling - hide all spinners */
+.form-input[type="number"] {
+    -moz-appearance: textfield; /* Firefox - hide spinner */
+    appearance: textfield; /* Standard property for compatibility */
+}
+
+/* WebKit browsers (Chrome, Safari, Edge) - hide spinners */
+.form-input[type="number"]::-webkit-inner-spin-button,
+.form-input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
 }
 
 .form-input-row {
@@ -41,6 +57,7 @@
     align-items: center;
     gap: var(--space-xs);
     flex: 1;
+    position: relative; /* Allow absolute positioning of spinner buttons */
 }
 
 .form-input-label {
@@ -63,8 +80,8 @@
     font-weight: var(--font-weight-medium);
     font-family: var(--font-family-sans);
     border: var(--border-width) solid var(--border-color);
-    border-radius: var(--radius-md);
-    background-color: var(--color-surface);
+    border-radius: var(--form-radius);
+    background-color: transparent;
     cursor: pointer;
     text-transform: uppercase;
     color: var(--color-text) !important;
@@ -80,7 +97,8 @@
     width: 100%;
     height: 4px;
     background: var(--color-gray-200);
-    border-radius: var(--radius-sm);
+    border-radius: var(--form-radius);
+    margin: 0;
     outline: none;
     -webkit-appearance: none;
     appearance: none;
@@ -101,7 +119,7 @@
     position: relative;
     width: 100%;
     height: var(--pill-height); /* Match color picker height */
-    border-radius: var(--radius-md) !important;
+    border-radius: var(--form-radius);
     border: var(--border-width) solid var(--border-color);
     overflow: hidden;
     cursor: pointer;
@@ -905,48 +923,7 @@
     gap: var(--space-lg);
 }
 
-/* Color picker components */
-.color-picker-container {
-    position: relative;
-    width: 100%;
-    border: var(--border-width) solid var(--border-color);
-    border-radius: var(--radius-md) !important;
-}
 
-.color-picker-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 2;
-}
-
-.color-picker-display {
-    width: 100%;
-    height: var(--pill-height);
-    display: flex;
-    border: none !important;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    cursor: pointer;
-    transition: border-color var(--transition);
-}
-
-.color-picker-display:hover {
-    border-color: var(--color-primary);
-}
-
-.color-picker-label {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    pointer-events: none;
-}
 
 /* Position utilities */
 .relative {
@@ -1072,11 +1049,12 @@
 .color-picker-display {
     width: 100%;
     height: var(--pill-height);
-    border-radius: var(--radius-md);
+    border-radius: var(--form-radius);
     border: var(--border-width) solid var(--border-color);
+    padding-left: var(--space-sm);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
     position: relative;
     cursor: pointer;
     transition: border-color var(--transition);
@@ -1087,9 +1065,50 @@
 }
 
 .color-picker-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--pill-text-size);
     font-weight: var(--font-weight-medium);
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     pointer-events: none;
+
+}
+
+/* Form group with inline lock button */
+.form-group-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.form-group-row .form-range-container,
+.form-group-row .color-picker-container,
+.form-group-row .form-select,
+.form-group-row .form-input {
+    flex: 1;
+}
+
+/* Lock button styling */
+.btn-lock {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    min-height: 1rem;
+    padding: 0;
+    opacity: 0.7;
+    color: var(--color-gray-500);
+    transition: opacity var(--transition), color var(--transition);
+}
+
+.btn-lock:hover {
+    opacity: 1;
+    background-color: transparent !important;
+}
+
+.btn-lock.btn-locked {
+    opacity: 1;
+    color: var(--color-gray-100);
+}
+
+.btn-lock.btn-locked:hover {
+    color: var(--color-primary-dark);
 }

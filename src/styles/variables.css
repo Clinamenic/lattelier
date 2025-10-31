@@ -72,10 +72,12 @@
     --radius-xl: 0.75rem;
     --radius-full: 9999px;
 
+    --form-radius: var(--radius-sm);
+
     --border-width: 0.5px;
     --border-width-thick: 1px;
 
-    --border-color: var(--color-gray-600);
+    --border-color: var(--color-gray-700);
 
     /* Z-index scale */
     --z-dropdown: 1000;
@@ -86,9 +88,9 @@
     --transition-slow: 300ms ease-in-out;
 
     /* Layout dimensions */
-    --sidebar-width: 11rem; /* 192px */
+    --sidebar-width: 10rem; /* 192px */
     --header-height: 6rem; /* 3.5rem navbar + 3rem toolbar */
     --navbar-height: 2rem;
     --pill-height: 1rem;
-    --pill-text-size: 0.6rem;
+    --pill-text-size: 0.5rem;
 }

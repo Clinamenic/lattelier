@@ -344,14 +344,15 @@ export class ExportManager {
         svg.setAttribute('viewBox', `${bounds.minX} ${bounds.minY} ${width} ${height}`);
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
-        // Add background rectangle if background color is set
-        if (gridConfig.canvasBackgroundColor) {
+        // Add background rectangle if background color is set and opacity > 0
+        if (gridConfig.canvasBackgroundColor && gridConfig.canvasOpacity > 0) {
             const background = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             background.setAttribute('x', bounds.minX.toString());
             background.setAttribute('y', bounds.minY.toString());
             background.setAttribute('width', width.toString());
             background.setAttribute('height', height.toString());
             background.setAttribute('fill', gridConfig.canvasBackgroundColor);
+            background.setAttribute('opacity', gridConfig.canvasOpacity.toString());
             svg.appendChild(background);
         }
 
@@ -366,7 +367,7 @@ export class ExportManager {
             linesGroup.setAttribute('stroke-width', gridConfig.lineWidth.toString());
             linesGroup.setAttribute('opacity', gridConfig.lineOpacity.toString());
             
-            if (gridConfig.lineTexture === 'segmented') {
+            if (gridConfig.lineStyle === 'segmented') {
                 linesGroup.setAttribute('stroke-linecap', 'butt'); // Sharp ends
             }
 
@@ -380,7 +381,7 @@ export class ExportManager {
                     const x2 = neighbor.currentPosition.x;
                     const y2 = neighbor.currentPosition.y;
 
-                    if (gridConfig.lineTexture === 'segmented') {
+                    if (gridConfig.lineStyle === 'segmented') {
                         // Generate segments for segmented texture
                         const segments = this.generateSegments(
                             x1,

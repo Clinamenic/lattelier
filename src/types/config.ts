@@ -1,11 +1,19 @@
 // Configuration export/import types
 
+import { SettingsLocks } from './grid';
+
 export interface GridPincherConfig {
     version: string;
     metadata: ConfigMetadata;
     grid: GridSettings;
     distortion: DistortionSettings;
     viewport?: ViewportSettings;
+    locks?: SettingsLocksConfig; // Optional for backward compatibility
+}
+
+export interface SettingsLocksConfig {
+    settings: SettingsLocks;
+    wells: boolean;
 }
 
 export interface ConfigMetadata {
@@ -32,10 +40,10 @@ export interface GridSettings {
         show: boolean;
         width: number;
         frequency: number;
-        curvature: number; // Only relevant when texture === 'solid'
+        curvature: number; // Only relevant when style === 'solid'
         color: string;
         opacity: number;
-        texture: 'solid' | 'segmented';
+        style: 'solid' | 'segmented';
         segmentedTextureSettings?: {
             angleVariation: number;
             spacingVariation: number;
@@ -51,6 +59,7 @@ export interface GridSettings {
     };
     canvas: {
         backgroundColor: string;
+        opacity: number;
     };
 }
 

@@ -23,12 +23,25 @@ export class CanvasRenderer {
     }
 
     private renderBackground(points: GridPoint[], config: GridConfig, padding: number = 20): void {
-        if (!config.canvasBackgroundColor) return;
+        if (!config.canvasBackgroundColor || config.canvasOpacity <= 0) return;
 
         // Calculate bounds of the grid
         const bounds = this.calculateGridBounds(points, padding);
 
-        this.ctx.fillStyle = config.canvasBackgroundColor;
+        // Convert hex color to rgba with opacity
+        // Handle both #RRGGBB and #RGB formats
+        let hex = config.canvasBackgroundColor.replace('#', '');
+        if (hex.length === 3) {
+            // Expand short form (#RGB to #RRGGBB)
+            hex = hex.split('').map(char => char + char).join('');
+        }
+        
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        const rgbaColor = `rgba(${r}, ${g}, ${b}, ${config.canvasOpacity})`;
+
+        this.ctx.fillStyle = rgbaColor;
         this.ctx.fillRect(
             bounds.minX,
             bounds.minY,
@@ -150,9 +163,9 @@ export class CanvasRenderer {
             pointMap.set(point.id, point);
         }
 
-        const textureRenderer = getTextureRenderer(config.lineTexture);
+        const textureRenderer = getTextureRenderer(config.lineStyle);
 
-        // Render lines based on frequency and texture
+        // Render lines based on frequency and style
         for (const point of points) {
             for (const neighborId of point.neighbors) {
                 const neighbor = pointMap.get(neighborId);

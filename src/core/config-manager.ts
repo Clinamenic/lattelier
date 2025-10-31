@@ -1,4 +1,4 @@
-import { GridConfig, Viewport } from '../types/grid';
+import { GridConfig, Viewport, SettingsLocks } from '../types/grid';
 import { DeformationConfig } from '../types/attractor';
 import { GridPincherConfig, ConfigMetadata, GridSettings, DistortionSettings } from '../types/config';
 
@@ -10,11 +10,13 @@ export class ConfigManager {
         gridConfig: GridConfig,
         deformation: DeformationConfig,
         viewport: Viewport,
-        metadata: Partial<ConfigMetadata> = {}
+        metadata: Partial<ConfigMetadata> = {},
+        settingsLocks?: SettingsLocks,
+        wellsLocked?: boolean
     ): GridPincherConfig {
         const now = new Date().toISOString();
 
-        return {
+        const config: GridPincherConfig = {
             version: '1.0.0',
             metadata: {
                 name: metadata.name || `Grid Pattern ${new Date().toLocaleString()}`,
@@ -33,6 +35,16 @@ export class ConfigManager {
                 includeInExport: true,
             },
         };
+
+        // Include lock states if provided
+        if (settingsLocks !== undefined && wellsLocked !== undefined) {
+            config.locks = {
+                settings: settingsLocks,
+                wells: wellsLocked,
+            };
+        }
+
+        return config;
     }
 
     /**
@@ -57,7 +69,7 @@ export class ConfigManager {
                 curvature: config.lineCurvature,
                 color: config.lineColor,
                 opacity: config.lineOpacity,
-                texture: config.lineTexture,
+                style: config.lineStyle,
                 segmentedTextureSettings: config.segmentedTextureSettings,
             },
             fill: {
@@ -69,6 +81,7 @@ export class ConfigManager {
             },
             canvas: {
                 backgroundColor: config.canvasBackgroundColor,
+                opacity: config.canvasOpacity,
             },
         };
     }
@@ -196,7 +209,7 @@ export class ConfigManager {
             lineCurvature: Math.max(-1, Math.min(1, settings.lines.curvature)),
             lineColor: settings.lines.color,
             lineOpacity: Math.max(0, Math.min(1, settings.lines.opacity)),
-            lineTexture: settings.lines.texture || 'solid',
+            lineStyle: settings.lines.style || 'solid',
             segmentedTextureSettings: settings.lines.segmentedTextureSettings || {
                 angleVariation: 1.0,
                 spacingVariation: 0.5,
@@ -208,6 +221,7 @@ export class ConfigManager {
             fillOpacity: Math.max(0, Math.min(1, settings.fill.opacity)),
             blendMode: settings.fill.blendMode as any,
             canvasBackgroundColor: settings.canvas.backgroundColor,
+            canvasOpacity: Math.max(0, Math.min(1, settings.canvas.opacity ?? 1.0)),
         };
     }
 

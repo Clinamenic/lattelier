@@ -84,6 +84,20 @@ npm run build
 arkb deploy dist/ --wallet .workspace/config/wallet.json
 ```
 
+## Deployment
+
+Lattelier is deployed on Arweave and accessible at:
+
+- **Primary URL**: https://arweave.net/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo
+- **Project Metadata**: https://arweave.net/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo/doap.json
+- **Version**: 0.7.0
+- **Deployed**: 2025-10-31
+
+### Alternative Access Points
+- https://Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo.arweave.net
+- https://ar.io/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo
+- https://arweave.dev/Y-kcgTzlt3_LY9kQol5dgJ8NkfZ3XEzLu-Hp44T0HAo
+
 **Deployment Guide:**
 
 For detailed instructions, troubleshooting, and best practices, see:

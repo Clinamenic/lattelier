@@ -5,6 +5,36 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.7.0 - 2025-10-31
+
+### Added
+
+- **Settings Lock/Unlock System**: Individual lock buttons for each setting to preserve values during shuffle operations
+- **LockButton Component**: Reusable lock/unlock button component with visual state indicators
+- **Canvas Opacity Control**: New opacity slider for canvas background transparency (0-100%)
+- **Wells Master Lock**: Master lock/unlock button in distortion panel to preserve all well configurations during shuffle
+- **Settings Lock State Persistence**: Lock states saved to localStorage and included in config export/import
+- **Shuffle Functionality**: Enhanced shuffle button that respects individual setting locks and wells lock
+- **Guide Modal Enhancements**: Updated guide with accurate feature documentation, streamlined structure, and removed outdated information
+
+### Changed
+
+- **Opacity Control Placement**: Standardized opacity controls to appear immediately after color pickers in Canvas, Points, Lines, and Fill sections
+- **Shuffle Behavior**: Removed hardcoded preservation of rows/columns; users must manually lock them if desired
+- **Guide Modal**: Refactored to use global styles exclusively, removed purpose-specific classes
+- **Form Layout**: Introduced `.form-group-row` layout pattern for inline lock button placement
+- **State Management**: Enhanced app store with settings lock state and toggle actions
+
+### Technical Improvements
+
+- **State Persistence**: Lock states persist across page refreshes via localStorage
+- **Config Compatibility**: Config export/import includes lock states with backward compatibility
+- **UI Consistency**: Unified opacity control pattern across all sections
+- **Code Organization**: Centralized lock state management in app store
+- **Visual Feedback**: Improved lock button states with opacity transitions and color indicators
+
+**Commit Reference**: 1fafd98
+
 ## 0.6.0 - 2025-10-31
 
 ### Added

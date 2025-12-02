@@ -5,6 +5,29 @@ All notable changes to Lattelier will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.8.0 - 2025-12-01
+
+### Added
+
+- **Hue Variance Controls**: New hue variance sliders for points and lines (0-100%) to introduce subtle color variation around base colors
+- **HSL Color Conversion Utilities**: Added `hexToHsl()` and `hslToHex()` functions for color space conversion
+- **Hue Variance Rendering**: Canvas renderer now applies hue variance to points and lines, creating more organic visual patterns
+- **Hue Variance State Management**: Added `pointHueVariance` and `lineHueVariance` to grid configuration with lock support
+
+### Changed
+
+- **Color Rendering**: Enhanced point and line color rendering to support hue variance calculations
+- **Form Layout**: Added hue variance controls to Canvas Settings Panel with lock button support
+- **Config Export/Import**: Hue variance values included in configuration export/import
+
+### Technical Improvements
+
+- **Math Utilities**: Added comprehensive HSL color conversion functions with proper normalization
+- **Type Safety**: Added hue variance types to grid configuration
+- **State Hash**: Updated state hash calculation to include hue variance values
+
+**Commit Reference**: 672cd3f
+
 ## 0.7.0 - 2025-10-31
 
 ### Added

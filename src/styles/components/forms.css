@@ -182,7 +182,49 @@
 }
 
 .form-checkbox {
-    margin-right: var(--space-sm);
+    margin-right: var(--space-xs);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.form-checkbox input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--radius-full);
+    border: var(--border-width) solid var(--color-gray-600);
+    background-color: transparent !important;
+    cursor: pointer;
+    position: relative;
+    transition: background-color var(--transition), border-color var(--transition);
+    margin: 0;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.form-checkbox input[type="checkbox"]:hover {
+    background-color: var(--color-gray-800) !important;
+    border-color: var(--color-gray-500);
+}
+
+.form-checkbox input[type="checkbox"]:checked {
+    background-color: var(--color-gray-700);
+    border-color: var(--color-gray-500);
+}
+
+.form-checkbox input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 0.3rem;
+    height: 0.5rem;
+    border: solid var(--color-gray-300);
+    border-width: 0 2px 2px 0;
 }
 
 .form-checkbox-group {

@@ -1,6 +1,7 @@
 import { GridConfig, GridPoint, Viewport } from '../types/grid';
 import { Well } from '../types/attractor';
 import { getTextureRenderer } from './line-textures';
+import { applyHueVariance } from '../utils/math';
 
 export class CanvasRenderer {
     private ctx: CanvasRenderingContext2D;
@@ -139,10 +140,18 @@ export class CanvasRenderer {
     }
 
     private renderPoints(points: GridPoint[], config: GridConfig): void {
-        this.ctx.fillStyle = config.pointColor;
         this.ctx.globalAlpha = config.pointOpacity;
 
         for (const point of points) {
+            // Calculate deterministic hash for this point
+            const pointHash = this.hashPoint(point.id);
+
+            // Apply hue variance if enabled
+            const color = config.pointHueVariance > 0
+                ? applyHueVariance(config.pointColor, config.pointHueVariance, pointHash)
+                : config.pointColor;
+
+            this.ctx.fillStyle = color;
             this.ctx.beginPath();
             this.ctx.arc(
                 point.currentPosition.x,
@@ -180,9 +189,14 @@ export class CanvasRenderer {
                 const x2 = neighbor.currentPosition.x;
                 const y2 = neighbor.currentPosition.y;
 
+                // Apply hue variance if enabled
+                const lineColor = config.lineHueVariance > 0
+                    ? applyHueVariance(config.lineColor, config.lineHueVariance, pairHash)
+                    : config.lineColor;
+
                 const lineConfig = {
                     width: config.lineWidth,
-                    color: config.lineColor,
+                    color: lineColor,
                     opacity: config.lineOpacity,
                     lineId: pairHash.toString(),
                     segmentedTextureSettings: config.segmentedTextureSettings,
@@ -231,8 +245,17 @@ export class CanvasRenderer {
         return (Math.abs(hash) % 1000) / 1000; // Normalize to 0-1
     }
 
+    private hashPoint(id: string): number {
+        // Create deterministic hash between 0 and 1 for a single point ID
+        let hash = 0;
+        for (let i = 0; i < id.length; i++) {
+            hash = ((hash << 5) - hash) + id.charCodeAt(i);
+            hash = hash & hash;
+        }
+        return (Math.abs(hash) % 1000) / 1000; // Normalize to 0-1
+    }
+
     private renderFill(points: GridPoint[], config: GridConfig): void {
-        this.ctx.fillStyle = config.fillColor;
         this.ctx.globalAlpha = config.fillOpacity;
         this.ctx.globalCompositeOperation = config.blendMode as GlobalCompositeOperation;
 
@@ -270,6 +293,12 @@ export class CanvasRenderer {
                 const bottomRight = pointMap.get(`${row + 1}-${col + 1}`);
 
                 if (topLeft && topRight && bottomLeft && bottomRight) {
+                    // Apply hue variance if enabled
+                    const fillColor = config.fillHueVariance > 0
+                        ? applyHueVariance(config.fillColor, config.fillHueVariance, fillHash)
+                        : config.fillColor;
+
+                    this.ctx.fillStyle = fillColor;
                     this.ctx.beginPath();
                     this.ctx.moveTo(topLeft.currentPosition.x, topLeft.currentPosition.y);
                     this.ctx.lineTo(topRight.currentPosition.x, topRight.currentPosition.y);
@@ -303,6 +332,12 @@ export class CanvasRenderer {
                         const pt3 = pointMap.get(`${row + 1}-${col}`);
 
                         if (pt1 && pt2 && pt3) {
+                            // Apply hue variance if enabled
+                            const fillColor1 = config.fillHueVariance > 0
+                                ? applyHueVariance(config.fillColor, config.fillHueVariance, fillHash1)
+                                : config.fillColor;
+
+                            this.ctx.fillStyle = fillColor1;
                             this.ctx.beginPath();
                             this.ctx.moveTo(pt1.currentPosition.x, pt1.currentPosition.y);
                             this.ctx.lineTo(pt2.currentPosition.x, pt2.currentPosition.y);
@@ -317,6 +352,12 @@ export class CanvasRenderer {
                         const pt3 = pointMap.get(`${row + 1}-${col + 1}`);
 
                         if (pt1 && pt2 && pt3) {
+                            // Apply hue variance if enabled
+                            const fillColor1 = config.fillHueVariance > 0
+                                ? applyHueVariance(config.fillColor, config.fillHueVariance, fillHash1)
+                                : config.fillColor;
+
+                            this.ctx.fillStyle = fillColor1;
                             this.ctx.beginPath();
                             this.ctx.moveTo(pt1.currentPosition.x, pt1.currentPosition.y);
                             this.ctx.lineTo(pt2.currentPosition.x, pt2.currentPosition.y);
@@ -337,6 +378,12 @@ export class CanvasRenderer {
                         const pt3 = pointMap.get(`${row + 1}-${col}`);
 
                         if (pt1 && pt2 && pt3) {
+                            // Apply hue variance if enabled
+                            const fillColor2 = config.fillHueVariance > 0
+                                ? applyHueVariance(config.fillColor, config.fillHueVariance, fillHash2)
+                                : config.fillColor;
+
+                            this.ctx.fillStyle = fillColor2;
                             this.ctx.beginPath();
                             this.ctx.moveTo(pt1.currentPosition.x, pt1.currentPosition.y);
                             this.ctx.lineTo(pt2.currentPosition.x, pt2.currentPosition.y);
@@ -350,6 +397,12 @@ export class CanvasRenderer {
                         const pt3 = pointMap.get(`${row + 1}-${col}`);
 
                         if (pt1 && pt2 && pt3) {
+                            // Apply hue variance if enabled
+                            const fillColor2 = config.fillHueVariance > 0
+                                ? applyHueVariance(config.fillColor, config.fillHueVariance, fillHash2)
+                                : config.fillColor;
+
+                            this.ctx.fillStyle = fillColor2;
                             this.ctx.beginPath();
                             this.ctx.moveTo(pt1.currentPosition.x, pt1.currentPosition.y);
                             this.ctx.lineTo(pt2.currentPosition.x, pt2.currentPosition.y);

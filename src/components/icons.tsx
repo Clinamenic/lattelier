@@ -310,3 +310,45 @@ export const InfoIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => 
     <line x1="12" y1="8" x2="12.01" y2="8" />
   </svg>
 );
+
+export const AttractIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M1 12h5l-2-3" />
+    <path d="M1 12h5l-2 3" />
+    <path d="M23 12h-5l2-3" />
+    <path d="M23 12h-5l2 3" />
+  </svg>
+);
+
+export const RepelIcon: React.FC<IconProps> = ({ className = '', size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M7 12h-5l2-3" />
+    <path d="M7 12h-5l2 3" />
+    <path d="M17 12h5l-2-3" />
+    <path d="M17 12h5l-2 3" />
+  </svg>
+);

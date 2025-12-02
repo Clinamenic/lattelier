@@ -230,6 +230,32 @@ export function CanvasSettingsPanel() {
                                     type="range"
                                     min="0"
                                     max="100"
+                                    value={gridConfig.pointHueVariance * 100}
+                                    onChange={(e) =>
+                                        setGridConfig({ pointHueVariance: parseInt(e.target.value) / 100 })
+                                    }
+                                    className="form-range"
+                                />
+                                <div className="form-range-display">
+                                    <span className="form-range-label">
+                                        Hue Variance: {Math.round(gridConfig.pointHueVariance * 100)}%
+                                    </span>
+                                </div>
+                            </div>
+                            <LockButton
+                                settingKey="pointHueVariance"
+                                locked={settingsLocks.pointHueVariance}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="form-group-row">
+                            <div className="form-range-container">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
                                     value={gridConfig.pointOpacity * 100}
                                     onChange={(e) => setGridConfig({ pointOpacity: parseInt(e.target.value) / 100 })}
                                     className="form-range"
@@ -298,6 +324,32 @@ export function CanvasSettingsPanel() {
                             <LockButton
                                 settingKey="lineColor"
                                 locked={settingsLocks.lineColor}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="form-group-row">
+                            <div className="form-range-container">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={gridConfig.lineHueVariance * 100}
+                                    onChange={(e) =>
+                                        setGridConfig({ lineHueVariance: parseInt(e.target.value) / 100 })
+                                    }
+                                    className="form-range"
+                                />
+                                <div className="form-range-display">
+                                    <span className="form-range-label">
+                                        Hue Variance: {Math.round(gridConfig.lineHueVariance * 100)}%
+                                    </span>
+                                </div>
+                            </div>
+                            <LockButton
+                                settingKey="lineHueVariance"
+                                locked={settingsLocks.lineHueVariance}
                             />
                         </div>
                     </div>
@@ -545,6 +597,32 @@ export function CanvasSettingsPanel() {
                             <LockButton
                                 settingKey="fillColor"
                                 locked={settingsLocks.fillColor}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="form-group-row">
+                            <div className="form-range-container">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={gridConfig.fillHueVariance * 100}
+                                    onChange={(e) =>
+                                        setGridConfig({ fillHueVariance: parseInt(e.target.value) / 100 })
+                                    }
+                                    className="form-range"
+                                />
+                                <div className="form-range-display">
+                                    <span className="form-range-label">
+                                        Hue Variance: {Math.round(gridConfig.fillHueVariance * 100)}%
+                                    </span>
+                                </div>
+                            </div>
+                            <LockButton
+                                settingKey="fillHueVariance"
+                                locked={settingsLocks.fillHueVariance}
                             />
                         </div>
                     </div>

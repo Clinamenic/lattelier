@@ -26,8 +26,11 @@ export interface GridConfig {
     showLines: boolean;
     showFill: boolean;
     pointColor: string;
+    pointHueVariance: number; // 0-1: hue variation range around pointColor
     lineColor: string;
+    lineHueVariance: number; // 0-1: hue variation range around lineColor
     fillColor: string;
+    fillHueVariance: number; // 0-1: hue variation range around fillColor
     canvasBackgroundColor: string;
     canvasOpacity: number; // 0-1: canvas background transparency
     gridType: GridType;
@@ -60,11 +63,13 @@ export interface SettingsLocks {
 
     // Points settings
     pointColor: boolean;
+    pointHueVariance: boolean;
     pointSize: boolean;
     pointOpacity: boolean;
 
     // Lines settings
     lineColor: boolean;
+    lineHueVariance: boolean;
     lineStyle: boolean;
     lineCurvature: boolean;
     segmentedTextureSettings: {
@@ -78,6 +83,7 @@ export interface SettingsLocks {
 
     // Fill settings
     fillColor: boolean;
+    fillHueVariance: boolean;
     fillFrequency: boolean;
     fillOpacity: boolean;
     blendMode: boolean;

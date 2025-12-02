@@ -62,14 +62,46 @@ export class SegmentedTextureRenderer implements LineTextureRenderer {
         const unitX = dx / totalLength; // Unit vector X component
         const unitY = dy / totalLength; // Unit vector Y component
         
-        // Use 95% of total length for segments + gaps, leave 2.5% at each end
-        const usableLength = totalLength * 0.95;
-        const startOffset = totalLength * 0.025;
+        // Calculate buffer to prevent terminal segments from overlapping at endpoints
+        // Segments can angle away from base line, so we need to account for:
+        // 1. Maximum segment extension perpendicular to the line
+        // 2. Maximum segment length (with length variation)
+        // 3. Fixed safety margin
+        // Buffer is calculated based on worst-case segment extension, independent of grid spacing
+        const maxAngleVariation = 0.05; // ±3 degrees in radians
+        const lengthVariationRange = 0.24; // ±12% of base segment length
+        
+        // Estimate maximum segment length for buffer calculation
+        // Use a conservative initial estimate to calculate buffer, then refine
+        // Assume worst case: 5 segments (shortest segments), full length variation
+        const estimatedSegmentCount = 5;
+        const estimatedUsableLength = totalLength * 0.85; // Conservative initial estimate
+        const estimatedTotalSegmentLength = estimatedUsableLength * 0.6;
+        const estimatedBaseSegmentLength = estimatedTotalSegmentLength / estimatedSegmentCount;
+        const estimatedMaxSegmentLength = estimatedBaseSegmentLength * (1 + lengthVariationRange * (settings.lengthVariation || 1.0));
+        
+        // Maximum perpendicular extension = segment length * sin(max angle)
+        // This is the worst-case distance a segment extends perpendicular to the base line
+        const maxPerpendicularExtension = estimatedMaxSegmentLength * Math.sin(maxAngleVariation * (settings.angleVariation || 1.0));
+        
+        // Fixed buffer: max perpendicular extension + safety margin
+        // Safety margin ensures even segments at max angle/length stay clear of endpoints
+        // This buffer is independent of grid spacing and scales appropriately
+        const fixedBuffer = maxPerpendicularExtension + 4.0; // 4px safety margin
+        
+        // Ensure minimum buffer (for very short lines or small angles)
+        const minBuffer = 6.0;
+        const endBuffer = Math.max(fixedBuffer, minBuffer);
+        
+        // Use total length minus buffers on both ends
+        // This ensures terminal segments stay away from endpoints
+        const usableLength = Math.max(0, totalLength - (endBuffer * 2));
+        const startOffset = endBuffer;
         
         // Calculate base segment and gap lengths
-        // Distribute usable length: segments take ~60%, gaps take ~40% (adjustable)
-        const segmentRatio = 0.6; // 60% of usable length for segments
-        const gapRatio = 0.4; // 40% of usable length for gaps
+        // Distribute usable length: segments take ~75%, gaps take ~25% (adjustable)
+        const segmentRatio = 0.75; // 75% of usable length for segments
+        const gapRatio = 0.25; // 25% of usable length for gaps (reduced from 40% for tighter spacing)
         
         const totalSegmentLength = usableLength * segmentRatio;
         const totalGapLength = usableLength * gapRatio;
@@ -78,11 +110,9 @@ export class SegmentedTextureRenderer implements LineTextureRenderer {
         const baseGapLength = totalGapLength / (segmentCount - 1 || 1); // gaps between segments
 
         // Map settings values (0-1) to actual ranges
-        const maxAngleVariation = 0.05; // ±3 degrees in radians
         const maxSpacingVariation = 0.4; // ±40% variation in gap length
-        const lengthVariationRange = 0.24; // ±12% of base segment length
 
-        // Start position: offset from x1, y1 by 2.5% of line length
+        // Start position: offset from x1, y1 by the calculated buffer
         const startX = x1 + unitX * startOffset;
         const startY = y1 + unitY * startOffset;
         
@@ -121,7 +151,7 @@ export class SegmentedTextureRenderer implements LineTextureRenderer {
             // Calculate how much this segment would advance along the base line
             const segmentProgress = segmentLength * Math.cos(angleOffset);
             
-            // Constrain: ensure we don't exceed the 95% boundary
+            // Constrain: ensure we don't exceed the usable length boundary
             const remainingProgress = usableLength - progressAlongBaseLine;
             if (segmentProgress > remainingProgress) {
                 // Adjust segment length so its projection fits

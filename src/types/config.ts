@@ -34,6 +34,7 @@ export interface GridSettings {
         show: boolean;
         size: number;
         color: string;
+        hueVariance?: number; // Optional for backward compatibility
         opacity: number;
     };
     lines: {
@@ -42,6 +43,7 @@ export interface GridSettings {
         frequency: number;
         curvature: number; // Only relevant when style === 'solid'
         color: string;
+        hueVariance?: number; // Optional for backward compatibility
         opacity: number;
         style: 'solid' | 'segmented';
         segmentedTextureSettings?: {
@@ -54,6 +56,7 @@ export interface GridSettings {
         show: boolean;
         frequency: number;
         color: string;
+        hueVariance?: number; // Optional for backward compatibility
         opacity: number;
         blendMode: string;
     };

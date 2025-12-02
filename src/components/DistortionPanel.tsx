@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAppStore } from '../state/app-store';
 import { CollapsiblePanel } from './CollapsiblePanel';
 import { initializeRangeFills, updateAllRangeFills } from '../utils/range-fill';
-import { EyeOpenIcon, EyeClosedIcon, CancelIcon, LockIcon, UnlockIcon } from './icons';
+import { EyeOpenIcon, EyeClosedIcon, CancelIcon, LockIcon, UnlockIcon, AttractIcon, RepelIcon } from './icons';
 
 export function DistortionPanel() {
     const selectedWellId = useAppStore((state) => state.selectedWellId);
@@ -99,8 +99,17 @@ export function DistortionPanel() {
                                                     onMouseLeave={() => setHoveredWell(null)}
                                                     className={`list-item-btn ${well.id === selectedWellId ? 'active' : ''}`}
                                                 >
-                                                    Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
+                                                    Well {index + 1}
                                                 </button>
+                                                {well.strength >= 0 ? (
+                                                    <span style={{ color: 'var(--color-success)', display: 'inline-flex' }}>
+                                                        <AttractIcon className="icon" size={16} />
+                                                    </span>
+                                                ) : (
+                                                    <span style={{ color: 'var(--color-error)', display: 'inline-flex' }}>
+                                                        <RepelIcon className="icon" size={16} />
+                                                    </span>
+                                                )}
                                                 <label className="form-checkbox">
                                                     <input
                                                         type="checkbox"
@@ -170,8 +179,17 @@ export function DistortionPanel() {
                                                     onMouseLeave={() => setHoveredWell(null)}
                                                     className={`list-item-btn ${well.id === selectedWellId ? 'active' : ''}`}
                                                 >
-                                                    Well {index + 1} {well.strength >= 0 ? '(Attract)' : '(Repel)'}
+                                                    Well {index + 1}
                                                 </button>
+                                                {well.strength >= 0 ? (
+                                                    <span style={{ color: 'var(--color-success)', display: 'inline-flex' }}>
+                                                        <AttractIcon className="icon" size={16} />
+                                                    </span>
+                                                ) : (
+                                                    <span style={{ color: 'var(--color-error)', display: 'inline-flex' }}>
+                                                        <RepelIcon className="icon" size={16} />
+                                                    </span>
+                                                )}
                                                 <label className="form-checkbox">
                                                     <input
                                                         type="checkbox"

@@ -60,6 +60,7 @@ export class ConfigManager {
                 show: config.showPoints,
                 size: config.pointSize,
                 color: config.pointColor,
+                hueVariance: config.pointHueVariance,
                 opacity: config.pointOpacity,
             },
             lines: {
@@ -68,6 +69,7 @@ export class ConfigManager {
                 frequency: config.lineFrequency,
                 curvature: config.lineCurvature,
                 color: config.lineColor,
+                hueVariance: config.lineHueVariance,
                 opacity: config.lineOpacity,
                 style: config.lineStyle,
                 segmentedTextureSettings: config.segmentedTextureSettings,
@@ -76,6 +78,7 @@ export class ConfigManager {
                 show: config.showFill,
                 frequency: config.fillFrequency,
                 color: config.fillColor,
+                hueVariance: config.fillHueVariance,
                 opacity: config.fillOpacity,
                 blendMode: config.blendMode,
             },
@@ -196,18 +199,20 @@ export class ConfigManager {
     mapSettingsToGridConfig(settings: GridSettings): GridConfig {
         return {
             gridType: settings.type,
-            rows: Math.max(5, Math.min(200, settings.rows)),
-            columns: Math.max(5, Math.min(200, settings.columns)),
-            spacing: Math.max(5, Math.min(100, settings.spacing)),
+            rows: Math.max(5, Math.min(100, settings.rows)),
+            columns: Math.max(5, Math.min(100, settings.columns)),
+            spacing: Math.max(5, Math.min(50, settings.spacing)),
             showPoints: settings.points.show,
             pointSize: Math.max(0.5, Math.min(10, settings.points.size)),
             pointColor: settings.points.color,
+            pointHueVariance: Math.max(0, Math.min(1, settings.points.hueVariance ?? 0.0)),
             pointOpacity: Math.max(0, Math.min(1, settings.points.opacity)),
             showLines: settings.lines.show,
             lineWidth: Math.max(0.5, Math.min(10, settings.lines.width)),
             lineFrequency: Math.max(0, Math.min(1, settings.lines.frequency)),
             lineCurvature: Math.max(-1, Math.min(1, settings.lines.curvature)),
             lineColor: settings.lines.color,
+            lineHueVariance: Math.max(0, Math.min(1, settings.lines.hueVariance ?? 0.0)),
             lineOpacity: Math.max(0, Math.min(1, settings.lines.opacity)),
             lineStyle: settings.lines.style || 'solid',
             segmentedTextureSettings: settings.lines.segmentedTextureSettings || {
@@ -218,6 +223,7 @@ export class ConfigManager {
             showFill: settings.fill.show,
             fillFrequency: Math.max(0, Math.min(1, settings.fill.frequency)),
             fillColor: settings.fill.color,
+            fillHueVariance: Math.max(0, Math.min(1, settings.fill.hueVariance ?? 0.0)),
             fillOpacity: Math.max(0, Math.min(1, settings.fill.opacity)),
             blendMode: settings.fill.blendMode as any,
             canvasBackgroundColor: settings.canvas.backgroundColor,
@@ -269,14 +275,14 @@ export class ConfigManager {
         if (!config.grid.type || !['square', 'triangular'].includes(config.grid.type)) {
             errors.push('Invalid or missing grid.type (must be square or triangular)');
         }
-        if (typeof config.grid.rows !== 'number' || config.grid.rows < 5 || config.grid.rows > 200) {
-            errors.push('Invalid grid.rows (must be number between 5 and 200)');
+        if (typeof config.grid.rows !== 'number' || config.grid.rows < 5 || config.grid.rows > 100) {
+            errors.push('Invalid grid.rows (must be number between 5 and 100)');
         }
-        if (typeof config.grid.columns !== 'number' || config.grid.columns < 5 || config.grid.columns > 200) {
-            errors.push('Invalid grid.columns (must be number between 5 and 200)');
+        if (typeof config.grid.columns !== 'number' || config.grid.columns < 5 || config.grid.columns > 100) {
+            errors.push('Invalid grid.columns (must be number between 5 and 100)');
         }
-        if (typeof config.grid.spacing !== 'number' || config.grid.spacing < 5 || config.grid.spacing > 100) {
-            errors.push('Invalid grid.spacing (must be number between 5 and 100)');
+        if (typeof config.grid.spacing !== 'number' || config.grid.spacing < 5 || config.grid.spacing > 50) {
+            errors.push('Invalid grid.spacing (must be number between 5 and 50)');
         }
 
         // Check grid sections exist

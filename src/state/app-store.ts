@@ -91,9 +91,11 @@ const defaultSettingsLocks: SettingsLocks = {
     columns: false,
     spacing: false,
     pointColor: false,
+    pointHueVariance: false,
     pointSize: false,
     pointOpacity: false,
     lineColor: false,
+    lineHueVariance: false,
     lineStyle: false,
     lineCurvature: false,
     segmentedTextureSettings: {
@@ -105,6 +107,7 @@ const defaultSettingsLocks: SettingsLocks = {
     lineWidth: false,
     lineOpacity: false,
     fillColor: false,
+    fillHueVariance: false,
     fillFrequency: false,
     fillOpacity: false,
     blendMode: false,
@@ -164,8 +167,11 @@ const defaultGridConfig: GridConfig = {
     showLines: true,
     showFill: true,
     pointColor: '#1f2937',
+    pointHueVariance: 0.0,
     lineColor: '#6366f1',
+    lineHueVariance: 0.0,
     fillColor: '#3b82f6',
+    fillHueVariance: 0.0,
     canvasBackgroundColor: '#f9fafb', // Default light gray (tailwind gray-50)
     canvasOpacity: 1.0, // Default to fully opaque
     gridType: 'square',
@@ -512,8 +518,11 @@ export const useAppStore = create<AppState>((set, get) => ({
             fillFrequency: settingsLocks.fillFrequency ? gridConfig.fillFrequency : randomFloat(0, 1),
             fillOpacity: settingsLocks.fillOpacity ? gridConfig.fillOpacity : randomFloat(0, 1),
             pointColor: settingsLocks.pointColor ? gridConfig.pointColor : randomHexColor(),
+            pointHueVariance: settingsLocks.pointHueVariance ? gridConfig.pointHueVariance : randomFloat(0, 1),
             lineColor: settingsLocks.lineColor ? gridConfig.lineColor : randomHexColor(),
+            lineHueVariance: settingsLocks.lineHueVariance ? gridConfig.lineHueVariance : randomFloat(0, 1),
             fillColor: settingsLocks.fillColor ? gridConfig.fillColor : randomHexColor(),
+            fillHueVariance: settingsLocks.fillHueVariance ? gridConfig.fillHueVariance : randomFloat(0, 1),
             canvasBackgroundColor: settingsLocks.canvasBackgroundColor
                 ? gridConfig.canvasBackgroundColor
                 : randomHexColor(),

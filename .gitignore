@@ -51,3 +51,11 @@ python-env/
 .quartz-cache
 .replit
 replit.nix
+
+# Beads issue tracker (local cache, not committed)
+.beads/beads.db
+.beads/beads.db-*
+.beads/bd.sock
+.beads/bd.pipe
+.beads/.exclusive-lock
+.git/beads-worktrees/
